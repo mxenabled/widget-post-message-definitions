@@ -483,6 +483,36 @@ function buildPayload(type: Type, metadata: Metadata): Payload {
   }
 }
 
+/**
+ * @see {buildPayload}
+ * @param {String} url
+ * @return {Payload}
+ * @throws {PostMessageUnknownTypeError}
+ * @throws {PostMessageFieldDecodeError}
+ */
+function buildPayloadFromUrl(urlString: string): Payload {
+  const url = parseUrl(urlString, true)
+
+  const namespace = url.host || ""
+  const action = (url.pathname || "").substring(1)
+  const rawType = action ? `mx/${namespace}/${action}` : `mx/${namespace}`
+  let type: Type
+  if (rawType in typeLookup) {
+    type = typeLookup[rawType]
+  } else {
+    throw new PostMessageUnknownTypeError(rawType)
+  }
+
+  const rawMetadataParam = url.query?.["metadata"] || "{}"
+  const rawMetadataString = Array.isArray(rawMetadataParam) ?
+    rawMetadataParam.join("") :
+    rawMetadataParam
+  const metadata = JSON.parse(rawMetadataString)
+  const payload = buildPayload(type, metadata)
+
+  return payload
+}
+
 export type WidgetCallbackProps =
   & BaseCallbackProps
   & EntityCallbackProps
@@ -520,40 +550,6 @@ export type PulseCallbackProps = WidgetCallbackProps & {
   onOverdraftWarningCtaTransferFunds?: (payload: PulseOverdraftWarningCtaTransferFundsPayload) => void
 }
 
-type Message = {
-  type: Type
-  payload: Payload
-}
-
-/**
- * @param {String} url
- * @return {Message}
- * @throws {PostMessageUnknownTypeError}
- * @throws {PostMessageFieldDecodeError}
- */
-function buildMessage(urlString: string): Message {
-  const url = parseUrl(urlString, true)
-
-  const namespace = url.host || ""
-  const action = (url.pathname || "").substring(1)
-  const rawType = action ? `mx/${namespace}/${action}` : `mx/${namespace}`
-  let type: Type
-  if (rawType in typeLookup) {
-    type = typeLookup[rawType]
-  } else {
-    throw new PostMessageUnknownTypeError(rawType)
-  }
-
-  const rawMetadataParam = url.query?.["metadata"] || "{}"
-  const rawMetadataString = Array.isArray(rawMetadataParam) ?
-    rawMetadataParam.join("") :
-    rawMetadataParam
-  const metadata = JSON.parse(rawMetadataString)
-  const payload = buildPayload(type, metadata)
-
-  return { type, payload }
-}
-
 /**
  * @param {String} url
  * @param {unknown} error
@@ -584,28 +580,27 @@ function dispatchError(url: string, error: unknown, callbacks: WidgetCallbackPro
 export function dispatchWidgetPostMessage(url: string, callbacks: WidgetCallbackProps) {
   safeCall([url], callbacks.onMessage)
 
-  let message: Message
   try {
-    message = buildMessage(url)
-    switch (message.payload.type) {
+    const payload = buildPayloadFromUrl(url)
+    switch (payload.type) {
       case Type.Load:
-        safeCall([message.payload], callbacks.onLoad)
+        safeCall([payload], callbacks.onLoad)
         break
 
       case Type.Ping:
-        safeCall([message.payload], callbacks.onPing)
+        safeCall([payload], callbacks.onPing)
         break
 
       case Type.FocusTrap:
-        safeCall([message.payload], callbacks.onFocusTrap)
+        safeCall([payload], callbacks.onFocusTrap)
         break
 
       case Type.AccountCreated:
-        safeCall([message.payload], callbacks.onAccountCreated)
+        safeCall([payload], callbacks.onAccountCreated)
         break
 
       default:
-        throw new PostMessageUnknownTypeError(message.payload.type)
+        throw new PostMessageUnknownTypeError(payload.type)
     }
   } catch (error) {
     dispatchError(url, error, callbacks)
@@ -624,84 +619,83 @@ export function dispatchWidgetPostMessage(url: string, callbacks: WidgetCallback
 export function dispatchConnectPostMessage(url: string, callbacks: ConnectCallbackProps) {
   safeCall([url], callbacks.onMessage)
 
-  let message: Message
   try {
-    message = buildMessage(url)
-    switch (message.payload.type) {
+    const payload = buildPayloadFromUrl(url)
+    switch (payload.type) {
       case Type.Load:
-        safeCall([message.payload], callbacks.onLoad)
+        safeCall([payload], callbacks.onLoad)
         break
 
       case Type.Ping:
-        safeCall([message.payload], callbacks.onPing)
+        safeCall([payload], callbacks.onPing)
         break
 
       case Type.FocusTrap:
-        safeCall([message.payload], callbacks.onFocusTrap)
+        safeCall([payload], callbacks.onFocusTrap)
         break
 
       case Type.AccountCreated:
-        safeCall([message.payload], callbacks.onAccountCreated)
+        safeCall([payload], callbacks.onAccountCreated)
         break
 
       case Type.ConnectLoaded:
-        safeCall([message.payload], callbacks.onLoaded)
+        safeCall([payload], callbacks.onLoaded)
         break
 
       case Type.ConnectEnterCredentials:
-        safeCall([message.payload], callbacks.onEnterCredentials)
+        safeCall([payload], callbacks.onEnterCredentials)
         break
 
       case Type.ConnectInstitutionSearch:
-        safeCall([message.payload], callbacks.onInstitutionSearch)
+        safeCall([payload], callbacks.onInstitutionSearch)
         break
 
       case Type.ConnectSelectedInstitution:
-        safeCall([message.payload], callbacks.onSelectedInstitution)
+        safeCall([payload], callbacks.onSelectedInstitution)
         break
 
       case Type.ConnectMemberConnected:
-        safeCall([message.payload], callbacks.onMemberConnected)
+        safeCall([payload], callbacks.onMemberConnected)
         break
 
       case Type.ConnectConnectedPrimaryAction:
-        safeCall([message.payload], callbacks.onConnectedPrimaryAction)
+        safeCall([payload], callbacks.onConnectedPrimaryAction)
         break
 
       case Type.ConnectMemberDeleted:
-        safeCall([message.payload], callbacks.onMemberDeleted)
+        safeCall([payload], callbacks.onMemberDeleted)
         break
 
       case Type.ConnectCreateMemberError:
-        safeCall([message.payload], callbacks.onCreateMemberError)
+        safeCall([payload], callbacks.onCreateMemberError)
         break
 
       case Type.ConnectMemberStatusUpdate:
-        safeCall([message.payload], callbacks.onMemberStatusUpdate)
+        safeCall([payload], callbacks.onMemberStatusUpdate)
         break
 
       case Type.ConnectOauthError:
-        safeCall([message.payload], callbacks.onOauthError)
+        safeCall([payload], callbacks.onOauthError)
         break
 
       case Type.ConnectOauthRequested:
-        safeCall([message.payload], callbacks.onOauthRequested)
+        safeCall([payload], callbacks.onOauthRequested)
         break
 
       case Type.ConnectStepChange:
-        safeCall([message.payload], callbacks.onStepChange)
+        safeCall([payload], callbacks.onStepChange)
         break
 
       case Type.ConnectSubmitMFA:
-        safeCall([message.payload], callbacks.onSubmitMFA)
+        safeCall([payload], callbacks.onSubmitMFA)
         break
 
       case Type.ConnectUpdateCredentials:
-        safeCall([message.payload], callbacks.onUpdateCredentials)
+        safeCall([payload], callbacks.onUpdateCredentials)
         break
 
       default:
-        throw new PostMessageUnknownTypeError(message.payload.type)
+        throw new PostMessageUnknownTypeError(payload.type)
     }
   } catch (error) {
     dispatchError(url, error, callbacks)
@@ -719,32 +713,31 @@ export function dispatchConnectPostMessage(url: string, callbacks: ConnectCallba
 export function dispatchPulsePostMessage(url: string, callbacks: PulseCallbackProps) {
   safeCall([url], callbacks.onMessage)
 
-  let message: Message
   try {
-    message = buildMessage(url)
-    switch (message.payload.type) {
+    const payload = buildPayloadFromUrl(url)
+    switch (payload.type) {
       case Type.Load:
-        safeCall([message.payload], callbacks.onLoad)
+        safeCall([payload], callbacks.onLoad)
         break
 
       case Type.Ping:
-        safeCall([message.payload], callbacks.onPing)
+        safeCall([payload], callbacks.onPing)
         break
 
       case Type.FocusTrap:
-        safeCall([message.payload], callbacks.onFocusTrap)
+        safeCall([payload], callbacks.onFocusTrap)
         break
 
       case Type.AccountCreated:
-        safeCall([message.payload], callbacks.onAccountCreated)
+        safeCall([payload], callbacks.onAccountCreated)
         break
 
       case Type.PulseOverdraftWarningCtaTransferFunds:
-        safeCall([message.payload], callbacks.onOverdraftWarningCtaTransferFunds)
+        safeCall([payload], callbacks.onOverdraftWarningCtaTransferFunds)
         break
 
       default:
-        throw new PostMessageUnknownTypeError(message.payload.type)
+        throw new PostMessageUnknownTypeError(payload.type)
     }
   } catch (error) {
     dispatchError(url, error, callbacks)

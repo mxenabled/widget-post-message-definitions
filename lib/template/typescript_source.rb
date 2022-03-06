@@ -80,6 +80,36 @@ class Template::TypescriptSource < Template::Base
     |  }
     |}
     |
+    |/**
+    | * @see {buildPayload}
+    | * @param {String} url
+    | * @return {Payload}
+    | * @throws {PostMessageUnknownTypeError}
+    | * @throws {PostMessageFieldDecodeError}
+    | */
+    |function buildPayloadFromUrl(urlString: string): Payload {
+    |  const url = parseUrl(urlString, true)
+    |
+    |  const namespace = url.host || ""
+    |  const action = (url.pathname || "").substring(1)
+    |  const rawType = action ? `mx/${namespace}/${action}` : `mx/${namespace}`
+    |  let type: Type
+    |  if (rawType in typeLookup) {
+    |    type = typeLookup[rawType]
+    |  } else {
+    |    throw new PostMessageUnknownTypeError(rawType)
+    |  }
+    |
+    |  const rawMetadataParam = url.query?.["metadata"] || "{}"
+    |  const rawMetadataString = Array.isArray(rawMetadataParam) ?
+    |    rawMetadataParam.join("") :
+    |    rawMetadataParam
+    |  const metadata = JSON.parse(rawMetadataString)
+    |  const payload = buildPayload(type, metadata)
+    |
+    |  return payload
+    |}
+    |
     |export type <%= callback_props_group_type_name(:widget) %> =
     |  & BaseCallbackProps
     |  & EntityCallbackProps
@@ -104,40 +134,6 @@ class Template::TypescriptSource < Template::Base
     |  <%- end -%>
     |}
     |<%- end -%>
-    |
-    |type Message = {
-    |  type: Type
-    |  payload: Payload
-    |}
-    |
-    |/**
-    | * @param {String} url
-    | * @return {Message}
-    | * @throws {PostMessageUnknownTypeError}
-    | * @throws {PostMessageFieldDecodeError}
-    | */
-    |function buildMessage(urlString: string): Message {
-    |  const url = parseUrl(urlString, true)
-    |
-    |  const namespace = url.host || ""
-    |  const action = (url.pathname || "").substring(1)
-    |  const rawType = action ? `mx/${namespace}/${action}` : `mx/${namespace}`
-    |  let type: Type
-    |  if (rawType in typeLookup) {
-    |    type = typeLookup[rawType]
-    |  } else {
-    |    throw new PostMessageUnknownTypeError(rawType)
-    |  }
-    |
-    |  const rawMetadataParam = url.query?.["metadata"] || "{}"
-    |  const rawMetadataString = Array.isArray(rawMetadataParam) ?
-    |    rawMetadataParam.join("") :
-    |    rawMetadataParam
-    |  const metadata = JSON.parse(rawMetadataString)
-    |  const payload = buildPayload(type, metadata)
-    |
-    |  return { type, payload }
-    |}
     |
     |/**
     | * @param {String} url
@@ -169,18 +165,17 @@ class Template::TypescriptSource < Template::Base
     |export function <%= dispatch_function_name(:widget) %>(url: string, callbacks: <%= callback_props_group_type_name(:widget) %>) {
     |  safeCall([url], callbacks.onMessage)
     |
-    |  let message: Message
     |  try {
-    |    message = buildMessage(url)
-    |    switch (message.payload.type) {
+    |    const payload = buildPayloadFromUrl(url)
+    |    switch (payload.type) {
     |      <%- (generic_post_message_definitions + entity_post_message_definitions).each do |post_message| -%>
     |      case <%= qualified_enum_key(post_message) %>:
-    |        safeCall([message.payload], callbacks.<%= callback_function_name(post_message) %>)
+    |        safeCall([payload], callbacks.<%= callback_function_name(post_message) %>)
     |        break
     |
     |      <%- end -%>
     |      default:
-    |        throw new PostMessageUnknownTypeError(message.payload.type)
+    |        throw new PostMessageUnknownTypeError(payload.type)
     |    }
     |  } catch (error) {
     |    dispatchError(url, error, callbacks)
@@ -199,24 +194,23 @@ class Template::TypescriptSource < Template::Base
     |export function <%= dispatch_function_name(subgroup) %>(url: string, callbacks: <%= callback_props_group_type_name(subgroup) %>) {
     |  safeCall([url], callbacks.onMessage)
     |
-    |  let message: Message
     |  try {
-    |    message = buildMessage(url)
-    |    switch (message.payload.type) {
+    |    const payload = buildPayloadFromUrl(url)
+    |    switch (payload.type) {
     |      <%- (generic_post_message_definitions + entity_post_message_definitions).each do |post_message| -%>
     |      case <%= qualified_enum_key(post_message) %>:
-    |        safeCall([message.payload], callbacks.<%= callback_function_name(post_message) %>)
+    |        safeCall([payload], callbacks.<%= callback_function_name(post_message) %>)
     |        break
     |
     |      <%- end -%>
     |      <%- post_messages.each do |post_message| -%>
     |      case <%= qualified_enum_key(post_message) %>:
-    |        safeCall([message.payload], callbacks.<%= callback_function_name(post_message) %>)
+    |        safeCall([payload], callbacks.<%= callback_function_name(post_message) %>)
     |        break
     |
     |      <%- end -%>
     |      default:
-    |        throw new PostMessageUnknownTypeError(message.payload.type)
+    |        throw new PostMessageUnknownTypeError(payload.type)
     |    }
     |  } catch (error) {
     |    dispatchError(url, error, callbacks)
