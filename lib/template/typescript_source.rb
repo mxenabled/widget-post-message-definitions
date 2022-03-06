@@ -1,4 +1,4 @@
-class Template::Typescript < Template::Base
+class Template::TypescriptSource < Template::Base
   CONTENT = <<-EOS
     |import { parse as parseUrl } from "url"
     |
