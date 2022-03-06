@@ -1,5 +1,5 @@
 class Typescript < Template
-  content <<-EOS
+  CONTENT = <<-EOS
     |import { parse as parseUrl } from "url"
     |
     |import {
