@@ -242,10 +242,9 @@ class Template::Typescript < Template::Base
   # @param [PostMessageDefinition] post_message_definition
   # @return [String]
   def enum_key(post_message)
-    label = post_message.label.to_s.gsub("/", "_")
     post_message.grouped? ?
-      "#{post_message.subgroup}_#{label}".classify :
-      label.to_s.classify
+      "#{post_message.subgroup}_#{post_message.label}".classify :
+      post_message.label.to_s.classify
   end
 
   # @see enum_key
@@ -257,7 +256,7 @@ class Template::Typescript < Template::Base
 
   # @example
   #
-  #   enum_value(PostMessageDefinition.new(:widgets, :connect, :memberDeleted))
+  #   enum_value(PostMessageDefinition.new(:widget, :connect, :memberDeleted))
   #   # => "mx/connect/memberDeleted"
   #
   # @param [PostMessageDefinition] post_message_definition
@@ -291,7 +290,7 @@ class Template::Typescript < Template::Base
 
   # @example
   #
-  #   uri_friendly_lookup(PostMessageDefinition.new(:widgets, :generic, :focusTrap))
+  #   uri_friendly_lookup(PostMessageDefinition.new(:widget, :generic, :focusTrap))
   #   # => "mx/focustrap"
   #
   # @param [PostMessageDefinition] post_message_definition
@@ -302,7 +301,7 @@ class Template::Typescript < Template::Base
 
   # @example
   #
-  #   payload_type_name(PostMessageDefinition.new(:widgets, :connect, :memberDeleted))
+  #   payload_type_name(PostMessageDefinition.new(:widget, :connect, :memberDeleted))
   #   # => "ConnectMemberDeletedPayload"
   #
   # @param [PostMessageDefinition] post_message_definition
@@ -335,13 +334,23 @@ class Template::Typescript < Template::Base
 
   # @example
   #
-  #   callback_function_name(PostMessageDefinition.new(:widgets, :connect, :memberDeleted))
-  #   # => "onConnectMemberDeleted"
+  #   callback_function_name(PostMessageDefinition.new(:widget, :connect, :memberDeleted))
+  #   # => "onMemberDeleted"
+  #
+  #   callback_function_name(PostMessageDefinition.new(:widget, :generic, :load))
+  #   # => "onLoad"
+  #
+  #   callback_function_name(PostMessageDefinition.new(:entity, :account, :created))
+  #   # => "onAccountCreated"
   #
   # @param [PostMessageDefinition] post_message
   # @return [String]
   def callback_function_name(post_message)
-    "on#{enum_key(post_message)}"
+    if post_message.entity?
+      "on#{enum_key(post_message)}"
+    else
+      "on#{post_message.label.to_s.classify}"
+    end
   end
 
   # @example

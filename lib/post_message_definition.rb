@@ -47,4 +47,9 @@ class PostMessageDefinition
   def generic?
     subgroup == :generic
   end
+
+  # @return [Boolean]
+  def entity?
+    group == :entity
+  end
 end

@@ -30,7 +30,7 @@ class String
   #
   # @return [String]
   def classify
-    self.to_s.split("_").collect do |word|
+    self.gsub("/", "_").split("_").collect do |word|
       head = word[0].upcase
       tail = word.split("").drop(1)
       head + tail.join

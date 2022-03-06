@@ -77,7 +77,6 @@ post_messages:
           code: string
           guid: string
     pulse:
-      load: {}
       overdraftWarning/cta/transferFunds:
         account_guid: string
         amount: number

@@ -37,7 +37,6 @@ export enum Type {
   ConnectStepChange = "mx/connect/stepChange",
   ConnectSubmitMFA = "mx/connect/submitMFA",
   ConnectUpdateCredentials = "mx/connect/updateCredentials",
-  PulseLoad = "mx/pulse/load",
   PulseOverdraftWarningCtaTransferFunds = "mx/pulse/overdraftWarning/cta/transferFunds",
   AccountCreated = "mx/account/created",
 }
@@ -74,7 +73,6 @@ export const typeLookup: Record<string, Type> = {
   "mx/connect/submitmfa": Type.ConnectSubmitMFA,
   [Type.ConnectUpdateCredentials]: Type.ConnectUpdateCredentials,
   "mx/connect/updatecredentials": Type.ConnectUpdateCredentials,
-  [Type.PulseLoad]: Type.PulseLoad,
   [Type.PulseOverdraftWarningCtaTransferFunds]: Type.PulseOverdraftWarningCtaTransferFunds,
   "mx/pulse/overdraftwarning/cta/transferfunds": Type.PulseOverdraftWarningCtaTransferFunds,
   [Type.AccountCreated]: Type.AccountCreated,
@@ -202,10 +200,6 @@ export type ConnectUpdateCredentialsPayload = {
   institution: { code: string, guid: string },
 }
 
-export type PulseLoadPayload = {
-  type: Type.PulseLoad,
-}
-
 export type PulseOverdraftWarningCtaTransferFundsPayload = {
   type: Type.PulseOverdraftWarningCtaTransferFunds,
   account_guid: string,
@@ -236,7 +230,6 @@ export type WidgetPayload =
   | ConnectStepChangePayload
   | ConnectSubmitMFAPayload
   | ConnectUpdateCredentialsPayload
-  | PulseLoadPayload
   | PulseOverdraftWarningCtaTransferFundsPayload
 
 export type EntityPayload =
@@ -467,12 +460,6 @@ function buildPayload(type: Type, metadata: Metadata): Payload {
         institution: metadata.institution as { code: string, guid: string },
       }
 
-    case Type.PulseLoad:
-
-      return {
-        type,
-      }
-
     case Type.PulseOverdraftWarningCtaTransferFunds:
       assertMessageProp(metadata, "mx/pulse/overdraftWarning/cta/transferFunds", "account_guid", "string")
       assertMessageProp(metadata, "mx/pulse/overdraftWarning/cta/transferFunds", "amount", "number")
@@ -513,25 +500,24 @@ export type GenericCallbackProps = {
 
 
 export type ConnectCallbackProps = WidgetCallbackProps & {
-  onConnectLoaded?: (payload: ConnectLoadedPayload) => void
-  onConnectEnterCredentials?: (payload: ConnectEnterCredentialsPayload) => void
-  onConnectInstitutionSearch?: (payload: ConnectInstitutionSearchPayload) => void
-  onConnectSelectedInstitution?: (payload: ConnectSelectedInstitutionPayload) => void
-  onConnectMemberConnected?: (payload: ConnectMemberConnectedPayload) => void
-  onConnectConnectedPrimaryAction?: (payload: ConnectConnectedPrimaryActionPayload) => void
-  onConnectMemberDeleted?: (payload: ConnectMemberDeletedPayload) => void
-  onConnectCreateMemberError?: (payload: ConnectCreateMemberErrorPayload) => void
-  onConnectMemberStatusUpdate?: (payload: ConnectMemberStatusUpdatePayload) => void
-  onConnectOauthError?: (payload: ConnectOauthErrorPayload) => void
-  onConnectOauthRequested?: (payload: ConnectOauthRequestedPayload) => void
-  onConnectStepChange?: (payload: ConnectStepChangePayload) => void
-  onConnectSubmitMFA?: (payload: ConnectSubmitMFAPayload) => void
-  onConnectUpdateCredentials?: (payload: ConnectUpdateCredentialsPayload) => void
+  onLoaded?: (payload: ConnectLoadedPayload) => void
+  onEnterCredentials?: (payload: ConnectEnterCredentialsPayload) => void
+  onInstitutionSearch?: (payload: ConnectInstitutionSearchPayload) => void
+  onSelectedInstitution?: (payload: ConnectSelectedInstitutionPayload) => void
+  onMemberConnected?: (payload: ConnectMemberConnectedPayload) => void
+  onConnectedPrimaryAction?: (payload: ConnectConnectedPrimaryActionPayload) => void
+  onMemberDeleted?: (payload: ConnectMemberDeletedPayload) => void
+  onCreateMemberError?: (payload: ConnectCreateMemberErrorPayload) => void
+  onMemberStatusUpdate?: (payload: ConnectMemberStatusUpdatePayload) => void
+  onOauthError?: (payload: ConnectOauthErrorPayload) => void
+  onOauthRequested?: (payload: ConnectOauthRequestedPayload) => void
+  onStepChange?: (payload: ConnectStepChangePayload) => void
+  onSubmitMFA?: (payload: ConnectSubmitMFAPayload) => void
+  onUpdateCredentials?: (payload: ConnectUpdateCredentialsPayload) => void
 }
 
 export type PulseCallbackProps = WidgetCallbackProps & {
-  onPulseLoad?: (payload: PulseLoadPayload) => void
-  onPulseOverdraftWarningCtaTransferFunds?: (payload: PulseOverdraftWarningCtaTransferFundsPayload) => void
+  onOverdraftWarningCtaTransferFunds?: (payload: PulseOverdraftWarningCtaTransferFundsPayload) => void
 }
 
 type Message = {
@@ -659,59 +645,59 @@ export function dispatchConnectPostMessage(callbacks: ConnectCallbackProps, url:
         break
 
       case Type.ConnectLoaded:
-        safeCall([message.payload], callbacks.onConnectLoaded)
+        safeCall([message.payload], callbacks.onLoaded)
         break
 
       case Type.ConnectEnterCredentials:
-        safeCall([message.payload], callbacks.onConnectEnterCredentials)
+        safeCall([message.payload], callbacks.onEnterCredentials)
         break
 
       case Type.ConnectInstitutionSearch:
-        safeCall([message.payload], callbacks.onConnectInstitutionSearch)
+        safeCall([message.payload], callbacks.onInstitutionSearch)
         break
 
       case Type.ConnectSelectedInstitution:
-        safeCall([message.payload], callbacks.onConnectSelectedInstitution)
+        safeCall([message.payload], callbacks.onSelectedInstitution)
         break
 
       case Type.ConnectMemberConnected:
-        safeCall([message.payload], callbacks.onConnectMemberConnected)
+        safeCall([message.payload], callbacks.onMemberConnected)
         break
 
       case Type.ConnectConnectedPrimaryAction:
-        safeCall([message.payload], callbacks.onConnectConnectedPrimaryAction)
+        safeCall([message.payload], callbacks.onConnectedPrimaryAction)
         break
 
       case Type.ConnectMemberDeleted:
-        safeCall([message.payload], callbacks.onConnectMemberDeleted)
+        safeCall([message.payload], callbacks.onMemberDeleted)
         break
 
       case Type.ConnectCreateMemberError:
-        safeCall([message.payload], callbacks.onConnectCreateMemberError)
+        safeCall([message.payload], callbacks.onCreateMemberError)
         break
 
       case Type.ConnectMemberStatusUpdate:
-        safeCall([message.payload], callbacks.onConnectMemberStatusUpdate)
+        safeCall([message.payload], callbacks.onMemberStatusUpdate)
         break
 
       case Type.ConnectOauthError:
-        safeCall([message.payload], callbacks.onConnectOauthError)
+        safeCall([message.payload], callbacks.onOauthError)
         break
 
       case Type.ConnectOauthRequested:
-        safeCall([message.payload], callbacks.onConnectOauthRequested)
+        safeCall([message.payload], callbacks.onOauthRequested)
         break
 
       case Type.ConnectStepChange:
-        safeCall([message.payload], callbacks.onConnectStepChange)
+        safeCall([message.payload], callbacks.onStepChange)
         break
 
       case Type.ConnectSubmitMFA:
-        safeCall([message.payload], callbacks.onConnectSubmitMFA)
+        safeCall([message.payload], callbacks.onSubmitMFA)
         break
 
       case Type.ConnectUpdateCredentials:
-        safeCall([message.payload], callbacks.onConnectUpdateCredentials)
+        safeCall([message.payload], callbacks.onUpdateCredentials)
         break
 
       default:
@@ -753,12 +739,8 @@ export function dispatchPulsePostMessage(callbacks: PulseCallbackProps, url: str
         safeCall([message.payload], callbacks.onAccountCreated)
         break
 
-      case Type.PulseLoad:
-        safeCall([message.payload], callbacks.onPulseLoad)
-        break
-
       case Type.PulseOverdraftWarningCtaTransferFunds:
-        safeCall([message.payload], callbacks.onPulseOverdraftWarningCtaTransferFunds)
+        safeCall([message.payload], callbacks.onOverdraftWarningCtaTransferFunds)
         break
 
       default:
