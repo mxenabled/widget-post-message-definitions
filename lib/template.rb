@@ -1,6 +1,8 @@
 class Template
   include StringUtils
 
+  attr_reader :post_message_definitions
+
   @@content = ""
   @@header = <<-TEXT
     |/**
@@ -26,7 +28,7 @@ class Template
   # @param [Hash] kwargs
   # @return [String]
   def self.render(**kwargs)
-    scope = Scope.create(new, **kwargs)
+    scope = Scope.create(new(**kwargs))
     "#{erb(@@header, scope)}\n\n#{erb(@@content, scope)}"
   end
 
@@ -38,5 +40,10 @@ class Template
   # @return [String]
   def self.erb(template, scope)
     ERB.new(StringUtils.strip_margin(template), trim_mode: "-").result(scope)
+  end
+
+  # @param [Array<PostMessageDefinition>] post_message_definitions
+  def initialize(post_message_definitions:)
+    @post_message_definitions = post_message_definitions
   end
 end

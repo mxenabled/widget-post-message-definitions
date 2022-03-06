@@ -20,7 +20,19 @@ class Typescript < Template
     |  <%= property %>: <%= payload_property_type(rhs) %>,
     |  <%- end -%>
     |}
-    |<% end %>
+    |<%- end -%>
+    |
+    |<% post_message_definitions_by_group.each do |group, post_message_definitions| %>
+    |export type <%= payload_group_type(group) %> =
+    |  <%- post_message_definitions.each do |post_message| -%>
+    |  | <%= payload_type(post_message) %>
+    |  <%- end -%>
+    |<%- end -%>
+    |
+    |export type <%= payload_group_type(nil) %> =
+    |  <%- post_message_definitions_by_group.each do |(group)| -%>
+    |  | <%= payload_group_type(group) %>
+    |  <%- end -%>
   EOS
 
   # Generates the enum type key for a give post message.
@@ -88,6 +100,12 @@ class Typescript < Template
     "#{enum_key(post_message)}Payload"
   end
 
+  # @param [String] group
+  # @return [String]
+  def payload_group_type(group)
+    "#{classify(group)}Payload"
+  end
+
   # @example
   #
   #   payload_property_type("string")
@@ -119,5 +137,10 @@ class Typescript < Template
     else
       raise StandardError, "unable to convert `#{raw}` into a TypeScript type"
     end
+  end
+
+  # @return [Hash]
+  def post_message_definitions_by_group
+    post_message_definitions.group_by(&:group)
   end
 end

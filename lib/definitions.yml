@@ -6,11 +6,7 @@ user_session_properties: &user_session_properties
   session_guid: string
 
 post_messages:
-  entities:
-    account:
-      created: *account_properties
-
-  widgets:
+  widget:
     generic:
       load: {}
       ping:
@@ -85,3 +81,7 @@ post_messages:
       overdraftWarning/cta/transferFunds:
         account_guid: string
         amount: number
+
+  entity:
+    account:
+      created: *account_properties
