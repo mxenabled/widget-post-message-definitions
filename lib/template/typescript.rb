@@ -183,8 +183,8 @@ class Template::Typescript < Template::Base
   def enum_key(post_message)
     label = post_message.label.to_s.gsub("/", "_")
     post_message.grouped? ?
-      classify("#{post_message.subgroup}_#{label}") :
-      classify(label)
+      "#{post_message.subgroup}_#{label}".classify :
+      label.to_s.classify
   end
 
   # @see enum_key
@@ -238,7 +238,7 @@ class Template::Typescript < Template::Base
   # @param [String] group
   # @return [String]
   def payload_group_type(group)
-    "#{classify(group)}Payload"
+    "#{group.to_s.classify}Payload"
   end
 
   # @param [PostMessageDefinition] post_message
@@ -275,15 +275,15 @@ class Template::Typescript < Template::Base
     in [:string, :type]
       raw
     in [:string, :code]
-      surround(raw, "\"")
+      raw.surround("\"")
     in [:array, :type]
-      raw.map { |s| surround(s, "\"") }.join(" | ")
+      raw.map { |s| s.surround("\"") }.join(" | ")
     in [:array, :code]
-      values = raw.map { |s| surround(s, "\"") }.join(", ")
-      surround(values, "[", "]")
+      values = raw.map { |s| s.surround("\"") }.join(", ")
+      values.surround("[", "]")
     in [:hash, :type | :code]
       props = raw.map { |key, value| "#{key}: #{payload_property_type(value, format)}" }.join(", ")
-      surround(props, "{ ", " }")
+      props.surround("{ ", " }")
     else
       raise StandardError, "unable to convert `#{raw}` into TypeScript #{format}"
     end

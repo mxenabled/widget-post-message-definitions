@@ -1,7 +1,5 @@
 module Template
   class Base
-    include StringUtils
-
     attr_reader :post_message_definitions
 
     CONTENT = ""
@@ -30,7 +28,7 @@ module Template
     # @param [Binding] ctx
     # @return [String]
     def self.erb(template, ctx)
-      ERB.new(StringUtils.strip_margin(template), trim_mode: "-").result(ctx)
+      ERB.new(template.strip_margin, trim_mode: "-").result(ctx)
     end
 
     # @param [String] file_path
