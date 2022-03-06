@@ -1,5 +1,7 @@
 class Typescript < Template
   content <<-EOS
+    |import { UnknownPostMessageError, Metadata, assertMessageProp } from "./lib"
+    |
     |export enum Type {
     |  <%- post_message_definitions.each do |post_message| -%>
     |  <%= enum_key(post_message) %> = "<%= enum_value(post_message) %>",
@@ -35,6 +37,27 @@ class Typescript < Template
     |  <%- post_message_definitions_by_group.each do |(group)| -%>
     |  | <%= payload_group_type(group) %>
     |  <%- end -%>
+    |
+    |export function buildPayload(type: Type, metadata: Metadata): Payload {
+    |  switch (type) {
+    |    <%- post_message_definitions.each do |post_message| -%>
+    |    case <%= qualified_enum_key(post_message) %>:
+    |      <%- post_message.properties.each do |property, rhs| -%>
+    |      assertMessageProp(metadata, "<%= post_message %>", "<%= property %>", <%= payload_property_type(rhs, :code) %>)
+    |      <%- end -%>
+    |
+    |      return {
+    |        type,
+    |        <%- post_message.properties.each do |property, rhs| -%>
+    |        <%= property %>: metadata.<%= property %> as <%= payload_property_type(rhs) %>,
+    |        <%- end -%>
+    |      }
+    |
+    |    <%- end -%>
+    |    default:
+    |      throw new UnknownPostMessageError(type)
+    |  }
+    |}
   EOS
 
   # Generates the enum type key for a give post message.
@@ -119,31 +142,40 @@ class Typescript < Template
   #   payload_property_type("string")
   #   # => "string"
   #
-  #   payload_property_type("number")
+  #   payload_property_type("number", :type)
   #   # => "number"
   #
-  #   payload_property_type(["one", "two", "three"])
+  #   payload_property_type(["one", "two", "three"], :type)
   #   # => '"one" | "two" | "three"'
   #
-  #   payload_property_type({ name: string, age: number })
+  #   payload_property_type({ name: string, age: number }, :type)
   #   # => "{ name: string, age: number }"
   #
+  #   payload_property_type(["one", "two", "three"], :code)
+  #   # => '["one", "two", "three"]'
+  #
+  #   payload_property_type({ name: string, age: number }, :code)
+  #   # => '{ name: "string", age: "number" }'
+  #
   # @param [String, Hash, Array<String>] raw
+  # @param [Symbol] type (default: type, supports: code, type)
   # @return [String]
-  def payload_property_type(raw)
-    case raw.class.to_s.downcase.to_sym
-    when :string
+  def payload_property_type(raw, format = :type)
+    case [raw.class.to_s.downcase.to_sym, format]
+    in [:string, :type]
       raw
-    when :array
+    in [:string, :code]
+      surround(raw, "\"")
+    in [:array, :type]
       raw.map { |s| surround(s, "\"") }.join(" | ")
-    when :hash
-      props = raw.map do |key, value|
-        "#{key}: #{payload_property_type(value)}"
-      end.join(", ")
-
+    in [:array, :code]
+      values = raw.map { |s| surround(s, "\"") }.join(", ")
+      surround(values, "[", "]")
+    in [:hash, :type | :code]
+      props = raw.map { |key, value| "#{key}: #{payload_property_type(value, format)}" }.join(", ")
       surround(props, "{ ", " }")
     else
-      raise StandardError, "unable to convert `#{raw}` into a TypeScript type"
+      raise StandardError, "unable to convert `#{raw}` into TypeScript #{format}"
     end
   end
 

@@ -7,6 +7,8 @@
  * project.
  */
 
+import { UnknownPostMessageError, Metadata, assertMessageProp } from "./lib"
+
 export enum Type {
   Load = "mx/load",
   Ping = "mx/ping",
@@ -233,3 +235,242 @@ export type EntityPayload =
 export type Payload =
   | WidgetPayload
   | EntityPayload
+
+export function buildPayload(type: Type, metadata: Metadata): Payload {
+  switch (type) {
+    case Type.Load:
+
+      return {
+        type,
+      }
+
+    case Type.Ping:
+      assertMessageProp(metadata, "mx/ping", "user_guid", "string")
+      assertMessageProp(metadata, "mx/ping", "session_guid", "string")
+
+      return {
+        type,
+        user_guid: metadata.user_guid as string,
+        session_guid: metadata.session_guid as string,
+      }
+
+    case Type.Focustrap:
+      assertMessageProp(metadata, "mx/focusTrap", "user_guid", "string")
+      assertMessageProp(metadata, "mx/focusTrap", "session_guid", "string")
+
+      return {
+        type,
+        user_guid: metadata.user_guid as string,
+        session_guid: metadata.session_guid as string,
+      }
+
+    case Type.ConnectLoaded:
+      assertMessageProp(metadata, "mx/connect/loaded", "user_guid", "string")
+      assertMessageProp(metadata, "mx/connect/loaded", "session_guid", "string")
+      assertMessageProp(metadata, "mx/connect/loaded", "initial_step", ["search", "selectMember", "enterCreds", "mfa", "connected", "loginError", "disclosure"])
+
+      return {
+        type,
+        user_guid: metadata.user_guid as string,
+        session_guid: metadata.session_guid as string,
+        initial_step: metadata.initial_step as "search" | "selectMember" | "enterCreds" | "mfa" | "connected" | "loginError" | "disclosure",
+      }
+
+    case Type.ConnectEntercredentials:
+      assertMessageProp(metadata, "mx/connect/enterCredentials", "user_guid", "string")
+      assertMessageProp(metadata, "mx/connect/enterCredentials", "session_guid", "string")
+      assertMessageProp(metadata, "mx/connect/enterCredentials", "institution", { code: "string", guid: "string" })
+
+      return {
+        type,
+        user_guid: metadata.user_guid as string,
+        session_guid: metadata.session_guid as string,
+        institution: metadata.institution as { code: string, guid: string },
+      }
+
+    case Type.ConnectInstitutionsearch:
+      assertMessageProp(metadata, "mx/connect/institutionSearch", "user_guid", "string")
+      assertMessageProp(metadata, "mx/connect/institutionSearch", "session_guid", "string")
+      assertMessageProp(metadata, "mx/connect/institutionSearch", "query", "string")
+
+      return {
+        type,
+        user_guid: metadata.user_guid as string,
+        session_guid: metadata.session_guid as string,
+        query: metadata.query as string,
+      }
+
+    case Type.ConnectSelectedinstitution:
+      assertMessageProp(metadata, "mx/connect/selectedInstitution", "user_guid", "string")
+      assertMessageProp(metadata, "mx/connect/selectedInstitution", "session_guid", "string")
+      assertMessageProp(metadata, "mx/connect/selectedInstitution", "code", "string")
+      assertMessageProp(metadata, "mx/connect/selectedInstitution", "guid", "string")
+      assertMessageProp(metadata, "mx/connect/selectedInstitution", "name", "string")
+      assertMessageProp(metadata, "mx/connect/selectedInstitution", "url", "string")
+
+      return {
+        type,
+        user_guid: metadata.user_guid as string,
+        session_guid: metadata.session_guid as string,
+        code: metadata.code as string,
+        guid: metadata.guid as string,
+        name: metadata.name as string,
+        url: metadata.url as string,
+      }
+
+    case Type.ConnectMemberconnected:
+      assertMessageProp(metadata, "mx/connect/memberConnected", "user_guid", "string")
+      assertMessageProp(metadata, "mx/connect/memberConnected", "session_guid", "string")
+      assertMessageProp(metadata, "mx/connect/memberConnected", "member_guid", "string")
+
+      return {
+        type,
+        user_guid: metadata.user_guid as string,
+        session_guid: metadata.session_guid as string,
+        member_guid: metadata.member_guid as string,
+      }
+
+    case Type.ConnectConnectedPrimaryaction:
+      assertMessageProp(metadata, "mx/connect/connected/primaryAction", "user_guid", "string")
+      assertMessageProp(metadata, "mx/connect/connected/primaryAction", "session_guid", "string")
+
+      return {
+        type,
+        user_guid: metadata.user_guid as string,
+        session_guid: metadata.session_guid as string,
+      }
+
+    case Type.ConnectMemberdeleted:
+      assertMessageProp(metadata, "mx/connect/memberDeleted", "user_guid", "string")
+      assertMessageProp(metadata, "mx/connect/memberDeleted", "session_guid", "string")
+      assertMessageProp(metadata, "mx/connect/memberDeleted", "member_guid", "string")
+
+      return {
+        type,
+        user_guid: metadata.user_guid as string,
+        session_guid: metadata.session_guid as string,
+        member_guid: metadata.member_guid as string,
+      }
+
+    case Type.ConnectCreatemembererror:
+      assertMessageProp(metadata, "mx/connect/createMemberError", "user_guid", "string")
+      assertMessageProp(metadata, "mx/connect/createMemberError", "session_guid", "string")
+      assertMessageProp(metadata, "mx/connect/createMemberError", "institution_guid", "string")
+      assertMessageProp(metadata, "mx/connect/createMemberError", "institution_code", "string")
+
+      return {
+        type,
+        user_guid: metadata.user_guid as string,
+        session_guid: metadata.session_guid as string,
+        institution_guid: metadata.institution_guid as string,
+        institution_code: metadata.institution_code as string,
+      }
+
+    case Type.ConnectMemberstatusupdate:
+      assertMessageProp(metadata, "mx/connect/memberStatusUpdate", "user_guid", "string")
+      assertMessageProp(metadata, "mx/connect/memberStatusUpdate", "session_guid", "string")
+      assertMessageProp(metadata, "mx/connect/memberStatusUpdate", "member_guid", "string")
+      assertMessageProp(metadata, "mx/connect/memberStatusUpdate", "connection_status", "number")
+
+      return {
+        type,
+        user_guid: metadata.user_guid as string,
+        session_guid: metadata.session_guid as string,
+        member_guid: metadata.member_guid as string,
+        connection_status: metadata.connection_status as number,
+      }
+
+    case Type.ConnectOautherror:
+      assertMessageProp(metadata, "mx/connect/oauthError", "user_guid", "string")
+      assertMessageProp(metadata, "mx/connect/oauthError", "session_guid", "string")
+      assertMessageProp(metadata, "mx/connect/oauthError", "member_guid", "string")
+
+      return {
+        type,
+        user_guid: metadata.user_guid as string,
+        session_guid: metadata.session_guid as string,
+        member_guid: metadata.member_guid as string,
+      }
+
+    case Type.ConnectOauthrequested:
+      assertMessageProp(metadata, "mx/connect/oauthRequested", "user_guid", "string")
+      assertMessageProp(metadata, "mx/connect/oauthRequested", "session_guid", "string")
+      assertMessageProp(metadata, "mx/connect/oauthRequested", "url", "string")
+      assertMessageProp(metadata, "mx/connect/oauthRequested", "member_guid", "string")
+
+      return {
+        type,
+        user_guid: metadata.user_guid as string,
+        session_guid: metadata.session_guid as string,
+        url: metadata.url as string,
+        member_guid: metadata.member_guid as string,
+      }
+
+    case Type.ConnectStepchange:
+      assertMessageProp(metadata, "mx/connect/stepChange", "user_guid", "string")
+      assertMessageProp(metadata, "mx/connect/stepChange", "session_guid", "string")
+      assertMessageProp(metadata, "mx/connect/stepChange", "previous", "string")
+      assertMessageProp(metadata, "mx/connect/stepChange", "current", "string")
+
+      return {
+        type,
+        user_guid: metadata.user_guid as string,
+        session_guid: metadata.session_guid as string,
+        previous: metadata.previous as string,
+        current: metadata.current as string,
+      }
+
+    case Type.ConnectSubmitmfa:
+      assertMessageProp(metadata, "mx/connect/submitMFA", "user_guid", "string")
+      assertMessageProp(metadata, "mx/connect/submitMFA", "session_guid", "string")
+      assertMessageProp(metadata, "mx/connect/submitMFA", "member_guid", "string")
+
+      return {
+        type,
+        user_guid: metadata.user_guid as string,
+        session_guid: metadata.session_guid as string,
+        member_guid: metadata.member_guid as string,
+      }
+
+    case Type.ConnectUpdatecredentials:
+      assertMessageProp(metadata, "mx/connect/updateCredentials", "user_guid", "string")
+      assertMessageProp(metadata, "mx/connect/updateCredentials", "session_guid", "string")
+      assertMessageProp(metadata, "mx/connect/updateCredentials", "member_guid", "string")
+      assertMessageProp(metadata, "mx/connect/updateCredentials", "institution", { code: "string", guid: "string" })
+
+      return {
+        type,
+        user_guid: metadata.user_guid as string,
+        session_guid: metadata.session_guid as string,
+        member_guid: metadata.member_guid as string,
+        institution: metadata.institution as { code: string, guid: string },
+      }
+
+    case Type.PulseLoad:
+
+      return {
+        type,
+      }
+
+    case Type.PulseOverdraftwarningCtaTransferfunds:
+      assertMessageProp(metadata, "mx/pulse/overdraftWarning/cta/transferFunds", "account_guid", "string")
+      assertMessageProp(metadata, "mx/pulse/overdraftWarning/cta/transferFunds", "amount", "number")
+
+      return {
+        type,
+        account_guid: metadata.account_guid as string,
+        amount: metadata.amount as number,
+      }
+
+    case Type.AccountCreated:
+      assertMessageProp(metadata, "mx/account/created", "guid", "string")
+
+      return {
+        type,
+        guid: metadata.guid as string,
+      }
+
+    default:
+      throw new UnknownPostMessageError(type)
+  }
+}

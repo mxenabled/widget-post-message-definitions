@@ -33,7 +33,7 @@ export function assertMessageProp(container: Metadata, postMessageType: string, 
   }
 }
 
-// This is an internal error. Throw when we are decoding a post message's
+// This is an internal error. Thrown when we are decoding a post message's
 // metadata and we encourntered a missing field or an invalid value. This
 // likely means there has been a change to the definition of a post message
 // that we do not know about.
@@ -52,6 +52,22 @@ export class PostMessageFieldDecodeError extends Error {
     this.gotValue = gotValue
 
     Object.setPrototypeOf(this, PostMessageFieldDecodeError.prototype);
+  }
+}
+
+
+// This is an internal error. Thrown when we get a post message we don't konw
+// about. This likely means there is a new post message that this package needs
+// to define.
+export class UnknownPostMessageError extends Error {
+  public postMessageType: string
+
+  constructor(postMessageType: string) {
+    super(`Unknown post message: ${postMessageType}`)
+
+    this.postMessageType = postMessageType
+
+    Object.setPrototypeOf(this, UnknownPostMessageError.prototype);
   }
 }
 
