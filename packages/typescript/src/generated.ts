@@ -7,7 +7,17 @@
  * project.
  */
 
-import { UnknownPostMessageError, Metadata, assertMessageProp } from "./lib"
+import { parse as parseUrl } from "url"
+
+import {
+  BaseCallbackProps,
+  Metadata,
+  PostMessageCallbackDispatchError,
+  PostMessageFieldDecodeError,
+  PostMessageUnknownTypeError,
+  assertMessageProp,
+  safeCall,
+} from "./lib"
 
 export enum Type {
   Load = "mx/load",
@@ -243,11 +253,11 @@ export type Payload =
  *
  * @param {Type} type
  * @param {Metadata, Object} metadata
- * @throws {UnknownPostMessageError}
- * @throws {PostMessageFieldDecodeError}
  * @return {Payload}
+ * @throws {PostMessageUnknownTypeError}
+ * @throws {PostMessageFieldDecodeError}
  */
-export function buildPayload(type: Type, metadata: Metadata): Payload {
+function buildPayload(type: Type, metadata: Metadata): Payload {
   switch (type) {
     case Type.Load:
 
@@ -482,9 +492,14 @@ export function buildPayload(type: Type, metadata: Metadata): Payload {
       }
 
     default:
-      throw new UnknownPostMessageError(type)
+      throw new PostMessageUnknownTypeError(type)
   }
 }
+
+export type WidgetCallbackProps =
+  & BaseCallbackProps
+  & EntityCallbackProps
+  & GenericCallbackProps
 
 export type EntityCallbackProps = {
   onAccountCreated?: (payload: AccountCreatedPayload) => void
@@ -494,4 +509,85 @@ export type GenericCallbackProps = {
   onLoad?: (payload: LoadPayload) => void
   onPing?: (payload: PingPayload) => void
   onFocusTrap?: (payload: FocusTrapPayload) => void
+}
+
+
+export type ConnectPayload = {
+  onConnectLoaded?: (payload: ConnectLoadedPayload) => void
+  onConnectEnterCredentials?: (payload: ConnectEnterCredentialsPayload) => void
+  onConnectInstitutionSearch?: (payload: ConnectInstitutionSearchPayload) => void
+  onConnectSelectedInstitution?: (payload: ConnectSelectedInstitutionPayload) => void
+  onConnectMemberConnected?: (payload: ConnectMemberConnectedPayload) => void
+  onConnectConnectedPrimaryAction?: (payload: ConnectConnectedPrimaryActionPayload) => void
+  onConnectMemberDeleted?: (payload: ConnectMemberDeletedPayload) => void
+  onConnectCreateMemberError?: (payload: ConnectCreateMemberErrorPayload) => void
+  onConnectMemberStatusUpdate?: (payload: ConnectMemberStatusUpdatePayload) => void
+  onConnectOauthError?: (payload: ConnectOauthErrorPayload) => void
+  onConnectOauthRequested?: (payload: ConnectOauthRequestedPayload) => void
+  onConnectStepChange?: (payload: ConnectStepChangePayload) => void
+  onConnectSubmitMFA?: (payload: ConnectSubmitMFAPayload) => void
+  onConnectUpdateCredentials?: (payload: ConnectUpdateCredentialsPayload) => void
+}
+
+export type PulsePayload = {
+  onPulseLoad?: (payload: PulseLoadPayload) => void
+  onPulseOverdraftWarningCtaTransferFunds?: (payload: PulseOverdraftWarningCtaTransferFundsPayload) => void
+}
+
+type Message = {
+  type: Type
+  payload: Payload
+}
+
+/**
+ * Given a url string, parse it and extract the post message's type and payload.
+ *
+ * @param {String} url
+ * @return {Message}
+ * @throws {PostMessageUnknownTypeError}
+ * @throws {PostMessageFieldDecodeError}
+ */
+function buildMessage(urlString: string): Message {
+  const url = parseUrl(urlString, true)
+
+  const namespace = url.host || ""
+  const action = (url.pathname || "").substring(1)
+  const rawType = action ? `mx/${namespace}/${action}` : `mx/${namespace}`
+  let type: Type
+  if (rawType in typeLookup) {
+    type = typeLookup[rawType]
+  } else {
+    throw new PostMessageUnknownTypeError(rawType)
+  }
+
+  const rawMetadataParam = url.query?.["metadata"] || "{}"
+  const rawMetadataString = Array.isArray(rawMetadataParam) ?
+    rawMetadataParam.join("") :
+    rawMetadataParam
+  const metadata = JSON.parse(rawMetadataString)
+  const payload = buildPayload(type, metadata)
+
+  return { type, payload }
+}
+
+function dispatchError(callbacks: WidgetCallbackProps, url: string, error: unknown) {
+  if (error instanceof PostMessageFieldDecodeError) {
+    safeCall([url, error], callbacks.onMessageUnknownError)
+  } else if (error instanceof PostMessageCallbackDispatchError) {
+    safeCall([url, error], callbacks.onMessageDispatchError)
+  } else {
+    throw error
+  }
+}
+
+export function dispatchWidgetPostMessage(callbacks: WidgetCallbackProps, url: string) {
+  safeCall([url], callbacks.onMessage)
+
+  let message: Message
+  try {
+    message = buildMessage(url)
+    console.log(message)
+  } catch (error) {
+    dispatchError(callbacks, url, error)
+  }
 }

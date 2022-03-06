@@ -1,6 +1,16 @@
 class Typescript < Template
   content <<-EOS
-    |import { UnknownPostMessageError, Metadata, assertMessageProp } from "./lib"
+    |import { parse as parseUrl } from "url"
+    |
+    |import {
+    |  BaseCallbackProps,
+    |  Metadata,
+    |  PostMessageCallbackDispatchError,
+    |  PostMessageFieldDecodeError,
+    |  PostMessageUnknownTypeError,
+    |  assertMessageProp,
+    |  safeCall,
+    |} from "./lib"
     |
     |export enum Type {
     |  <%- post_message_definitions.each do |post_message| -%>
@@ -45,11 +55,11 @@ class Typescript < Template
     | *
     | * @param {Type} type
     | * @param {Metadata, Object} metadata
-    | * @throws {UnknownPostMessageError}
-    | * @throws {PostMessageFieldDecodeError}
     | * @return {Payload}
+    | * @throws {PostMessageUnknownTypeError}
+    | * @throws {PostMessageFieldDecodeError}
     | */
-    |export function buildPayload(type: Type, metadata: Metadata): Payload {
+    |function buildPayload(type: Type, metadata: Metadata): Payload {
     |  switch (type) {
     |    <%- post_message_definitions.each do |post_message| -%>
     |    case <%= qualified_enum_key(post_message) %>:
@@ -66,20 +76,91 @@ class Typescript < Template
     |
     |    <%- end -%>
     |    default:
-    |      throw new UnknownPostMessageError(type)
+    |      throw new PostMessageUnknownTypeError(type)
     |  }
     |}
     |
+    |export type WidgetCallbackProps =
+    |  & BaseCallbackProps
+    |  & EntityCallbackProps
+    |  & GenericCallbackProps
+    |
     |export type EntityCallbackProps = {
-    |<%- post_message_definitions_of_group(:entity).each do |post_messages| -%>
+    |<%- entity_post_message_definitions.each do |post_messages| -%>
     |  <%= callback_name(post_messages) %>?: (payload: <%= payload_type(post_messages) %>) => void
     |<%- end -%>
     |}
     |
     |export type GenericCallbackProps = {
-    |<%- post_message_definitions_of_subgroup(:generic).each do |post_messages| -%>
+    |<%- generic_post_message_definitions.each do |post_messages| -%>
     |  <%= callback_name(post_messages) %>?: (payload: <%= payload_type(post_messages) %>) => void
     |<%- end -%>
+    |}
+    |
+    |<% post_message_definitions_by_widget.each do |subgroup, post_messages| %>
+    |export type <%= payload_group_type(subgroup) %> = {
+    |  <%- post_messages.each do |post_messages| -%>
+    |  <%= callback_name(post_messages) %>?: (payload: <%= payload_type(post_messages) %>) => void
+    |  <%- end -%>
+    |}
+    |<%- end -%>
+    |
+    |type Message = {
+    |  type: Type
+    |  payload: Payload
+    |}
+    |
+    |/**
+    | * Given a url string, parse it and extract the post message's type and payload.
+    | *
+    | * @param {String} url
+    | * @return {Message}
+    | * @throws {PostMessageUnknownTypeError}
+    | * @throws {PostMessageFieldDecodeError}
+    | */
+    |function buildMessage(urlString: string): Message {
+    |  const url = parseUrl(urlString, true)
+    |
+    |  const namespace = url.host || ""
+    |  const action = (url.pathname || "").substring(1)
+    |  const rawType = action ? `mx/${namespace}/${action}` : `mx/${namespace}`
+    |  let type: Type
+    |  if (rawType in typeLookup) {
+    |    type = typeLookup[rawType]
+    |  } else {
+    |    throw new PostMessageUnknownTypeError(rawType)
+    |  }
+    |
+    |  const rawMetadataParam = url.query?.["metadata"] || "{}"
+    |  const rawMetadataString = Array.isArray(rawMetadataParam) ?
+    |    rawMetadataParam.join("") :
+    |    rawMetadataParam
+    |  const metadata = JSON.parse(rawMetadataString)
+    |  const payload = buildPayload(type, metadata)
+    |
+    |  return { type, payload }
+    |}
+    |
+    |function dispatchError(callbacks: WidgetCallbackProps, url: string, error: unknown) {
+    |  if (error instanceof PostMessageFieldDecodeError) {
+    |    safeCall([url, error], callbacks.onMessageUnknownError)
+    |  } else if (error instanceof PostMessageCallbackDispatchError) {
+    |    safeCall([url, error], callbacks.onMessageDispatchError)
+    |  } else {
+    |    throw error
+    |  }
+    |}
+    |
+    |export function dispatchWidgetPostMessage(callbacks: WidgetCallbackProps, url: string) {
+    |  safeCall([url], callbacks.onMessage)
+    |
+    |  let message: Message
+    |  try {
+    |    message = buildMessage(url)
+    |    console.log(message)
+    |  } catch (error) {
+    |    dispatchError(callbacks, url, error)
+    |  }
     |}
   EOS
 
@@ -209,8 +290,30 @@ class Typescript < Template
   end
 
   # @return [Hash]
+  def entity_post_message_definitions
+    post_message_definitions_of_group(:entity)
+  end
+
+  # @return [Hash]
+  def generic_post_message_definitions
+    post_message_definitions_of_subgroup(:generic)
+  end
+
+  # @return [Hash]
+  def post_message_definitions_by_widget
+    post_message_definitions_of_group(:widget).filter do |post_message|
+      not post_message.generic?
+    end.group_by(&:subgroup)
+  end
+
+  # @return [Hash]
   def post_message_definitions_by_group
     post_message_definitions.group_by(&:group)
+  end
+
+  # @return [Hash]
+  def post_message_definitions_by_subgroup
+    post_message_definitions.group_by(&:subgroup)
   end
 
   # @return [Symbol] group

@@ -40,6 +40,11 @@ class PostMessageDefinition
 
   # @return [Boolean]
   def grouped?
-    subgroup != :generic
+    not generic?
+  end
+
+  # @return [Boolean]
+  def generic?
+    subgroup == :generic
   end
 end
