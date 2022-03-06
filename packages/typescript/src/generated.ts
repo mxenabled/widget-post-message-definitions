@@ -512,7 +512,7 @@ export type GenericCallbackProps = {
 }
 
 
-export type ConnectPayload = {
+export type ConnectCallbackProps = WidgetCallbackProps & {
   onConnectLoaded?: (payload: ConnectLoadedPayload) => void
   onConnectEnterCredentials?: (payload: ConnectEnterCredentialsPayload) => void
   onConnectInstitutionSearch?: (payload: ConnectInstitutionSearchPayload) => void
@@ -529,7 +529,7 @@ export type ConnectPayload = {
   onConnectUpdateCredentials?: (payload: ConnectUpdateCredentialsPayload) => void
 }
 
-export type PulsePayload = {
+export type PulseCallbackProps = WidgetCallbackProps & {
   onPulseLoad?: (payload: PulseLoadPayload) => void
   onPulseOverdraftWarningCtaTransferFunds?: (payload: PulseOverdraftWarningCtaTransferFundsPayload) => void
 }
@@ -540,8 +540,6 @@ type Message = {
 }
 
 /**
- * Given a url string, parse it and extract the post message's type and payload.
- *
  * @param {String} url
  * @return {Message}
  * @throws {PostMessageUnknownTypeError}
@@ -570,6 +568,13 @@ function buildMessage(urlString: string): Message {
   return { type, payload }
 }
 
+/**
+ * @param {WidgetCallbackProps} callbacks
+ * @param {String} url
+ * @param {unknown} error
+ * @throws {Error}
+ * @throws {unknown}
+ */
 function dispatchError(callbacks: WidgetCallbackProps, url: string, error: unknown) {
   if (error instanceof PostMessageFieldDecodeError) {
     safeCall([url, error], callbacks.onMessageUnknownError)
@@ -580,13 +585,185 @@ function dispatchError(callbacks: WidgetCallbackProps, url: string, error: unkno
   }
 }
 
+/**
+ * Dispatch a post message from any widget. Does not handle widget
+ * specific post messages. See other dispatch methods for widget
+ * specific dispatching.
+ *
+ * @param {WidgetCallbackProps} callbacks
+ * @param {String} url
+ * @throws {Error}
+ * @throws {unknown}
+ */
 export function dispatchWidgetPostMessage(callbacks: WidgetCallbackProps, url: string) {
   safeCall([url], callbacks.onMessage)
 
   let message: Message
   try {
     message = buildMessage(url)
-    console.log(message)
+    switch (message.payload.type) {
+      case Type.Load:
+        safeCall([message.payload], callbacks.onLoad)
+        break
+
+      case Type.Ping:
+        safeCall([message.payload], callbacks.onPing)
+        break
+
+      case Type.FocusTrap:
+        safeCall([message.payload], callbacks.onFocusTrap)
+        break
+
+      case Type.AccountCreated:
+        safeCall([message.payload], callbacks.onAccountCreated)
+        break
+
+      default:
+        throw new PostMessageUnknownTypeError(message.payload.type)
+    }
+  } catch (error) {
+    dispatchError(callbacks, url, error)
+  }
+}
+
+
+/**
+ * Dispatch a post message from the Connect Widget.
+ *
+ * @param {ConnectCallbackProps} callbacks
+ * @param {String} url
+ * @throws {Error}
+ * @throws {unknown}
+ */
+export function dispatchConnectPostMessage(callbacks: ConnectCallbackProps, url: string) {
+  safeCall([url], callbacks.onMessage)
+
+  let message: Message
+  try {
+    message = buildMessage(url)
+    switch (message.payload.type) {
+      case Type.Load:
+        safeCall([message.payload], callbacks.onLoad)
+        break
+
+      case Type.Ping:
+        safeCall([message.payload], callbacks.onPing)
+        break
+
+      case Type.FocusTrap:
+        safeCall([message.payload], callbacks.onFocusTrap)
+        break
+
+      case Type.AccountCreated:
+        safeCall([message.payload], callbacks.onAccountCreated)
+        break
+
+      case Type.ConnectLoaded:
+        safeCall([message.payload], callbacks.onConnectLoaded)
+        break
+
+      case Type.ConnectEnterCredentials:
+        safeCall([message.payload], callbacks.onConnectEnterCredentials)
+        break
+
+      case Type.ConnectInstitutionSearch:
+        safeCall([message.payload], callbacks.onConnectInstitutionSearch)
+        break
+
+      case Type.ConnectSelectedInstitution:
+        safeCall([message.payload], callbacks.onConnectSelectedInstitution)
+        break
+
+      case Type.ConnectMemberConnected:
+        safeCall([message.payload], callbacks.onConnectMemberConnected)
+        break
+
+      case Type.ConnectConnectedPrimaryAction:
+        safeCall([message.payload], callbacks.onConnectConnectedPrimaryAction)
+        break
+
+      case Type.ConnectMemberDeleted:
+        safeCall([message.payload], callbacks.onConnectMemberDeleted)
+        break
+
+      case Type.ConnectCreateMemberError:
+        safeCall([message.payload], callbacks.onConnectCreateMemberError)
+        break
+
+      case Type.ConnectMemberStatusUpdate:
+        safeCall([message.payload], callbacks.onConnectMemberStatusUpdate)
+        break
+
+      case Type.ConnectOauthError:
+        safeCall([message.payload], callbacks.onConnectOauthError)
+        break
+
+      case Type.ConnectOauthRequested:
+        safeCall([message.payload], callbacks.onConnectOauthRequested)
+        break
+
+      case Type.ConnectStepChange:
+        safeCall([message.payload], callbacks.onConnectStepChange)
+        break
+
+      case Type.ConnectSubmitMFA:
+        safeCall([message.payload], callbacks.onConnectSubmitMFA)
+        break
+
+      case Type.ConnectUpdateCredentials:
+        safeCall([message.payload], callbacks.onConnectUpdateCredentials)
+        break
+
+      default:
+        throw new PostMessageUnknownTypeError(message.payload.type)
+    }
+  } catch (error) {
+    dispatchError(callbacks, url, error)
+  }
+}
+
+/**
+ * Dispatch a post message from the Pulse Widget.
+ *
+ * @param {PulseCallbackProps} callbacks
+ * @param {String} url
+ * @throws {Error}
+ * @throws {unknown}
+ */
+export function dispatchPulsePostMessage(callbacks: PulseCallbackProps, url: string) {
+  safeCall([url], callbacks.onMessage)
+
+  let message: Message
+  try {
+    message = buildMessage(url)
+    switch (message.payload.type) {
+      case Type.Load:
+        safeCall([message.payload], callbacks.onLoad)
+        break
+
+      case Type.Ping:
+        safeCall([message.payload], callbacks.onPing)
+        break
+
+      case Type.FocusTrap:
+        safeCall([message.payload], callbacks.onFocusTrap)
+        break
+
+      case Type.AccountCreated:
+        safeCall([message.payload], callbacks.onAccountCreated)
+        break
+
+      case Type.PulseLoad:
+        safeCall([message.payload], callbacks.onPulseLoad)
+        break
+
+      case Type.PulseOverdraftWarningCtaTransferFunds:
+        safeCall([message.payload], callbacks.onPulseOverdraftWarningCtaTransferFunds)
+        break
+
+      default:
+        throw new PostMessageUnknownTypeError(message.payload.type)
+    }
   } catch (error) {
     dispatchError(callbacks, url, error)
   }

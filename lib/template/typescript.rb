@@ -28,7 +28,7 @@ class Template::Typescript < Template::Base
     |}
     |
     |<% post_message_definitions.each do |post_message| %>
-    |export type <%= payload_type(post_message) %> = {
+    |export type <%= payload_type_name(post_message) %> = {
     |  type: <%= qualified_enum_key(post_message) %>,
     |  <%- post_message.properties.each do |property, rhs| -%>
     |  <%= property %>: <%= payload_property_type(rhs) %>,
@@ -37,15 +37,15 @@ class Template::Typescript < Template::Base
     |<%- end -%>
     |
     |<% post_message_definitions_by_group.each do |group, post_message_definitions| %>
-    |export type <%= payload_group_type(group) %> =
+    |export type <%= payload_group_type_name(group) %> =
     |  <%- post_message_definitions.each do |post_message| -%>
-    |  | <%= payload_type(post_message) %>
+    |  | <%= payload_type_name(post_message) %>
     |  <%- end -%>
     |<%- end -%>
     |
-    |export type <%= payload_group_type(nil) %> =
+    |export type <%= payload_group_type_name(nil) %> =
     |  <%- post_message_definitions_by_group.each do |(group)| -%>
-    |  | <%= payload_group_type(group) %>
+    |  | <%= payload_group_type_name(group) %>
     |  <%- end -%>
     |
     |/**
@@ -80,27 +80,27 @@ class Template::Typescript < Template::Base
     |  }
     |}
     |
-    |export type WidgetCallbackProps =
+    |export type <%= callback_props_group_type_name(:widget) %> =
     |  & BaseCallbackProps
     |  & EntityCallbackProps
     |  & GenericCallbackProps
     |
-    |export type EntityCallbackProps = {
-    |<%- entity_post_message_definitions.each do |post_messages| -%>
-    |  <%= callback_name(post_messages) %>?: (payload: <%= payload_type(post_messages) %>) => void
+    |export type <%= callback_props_group_type_name(:entity) %> = {
+    |<%- entity_post_message_definitions.each do |post_message| -%>
+    |  <%= callback_function_name(post_message) %>?: (payload: <%= payload_type_name(post_message) %>) => void
     |<%- end -%>
     |}
     |
-    |export type GenericCallbackProps = {
-    |<%- generic_post_message_definitions.each do |post_messages| -%>
-    |  <%= callback_name(post_messages) %>?: (payload: <%= payload_type(post_messages) %>) => void
+    |export type <%= callback_props_group_type_name(:generic) %> = {
+    |<%- generic_post_message_definitions.each do |post_message| -%>
+    |  <%= callback_function_name(post_message) %>?: (payload: <%= payload_type_name(post_message) %>) => void
     |<%- end -%>
     |}
     |
     |<% post_message_definitions_by_widget.each do |subgroup, post_messages| %>
-    |export type <%= payload_group_type(subgroup) %> = {
+    |export type <%= callback_props_group_type_name(subgroup) %> = <%= callback_props_group_type_name(:widget) %> & {
     |  <%- post_messages.each do |post_messages| -%>
-    |  <%= callback_name(post_messages) %>?: (payload: <%= payload_type(post_messages) %>) => void
+    |  <%= callback_function_name(post_messages) %>?: (payload: <%= payload_type_name(post_messages) %>) => void
     |  <%- end -%>
     |}
     |<%- end -%>
@@ -111,8 +111,6 @@ class Template::Typescript < Template::Base
     |}
     |
     |/**
-    | * Given a url string, parse it and extract the post message's type and payload.
-    | *
     | * @param {String} url
     | * @return {Message}
     | * @throws {PostMessageUnknownTypeError}
@@ -141,7 +139,14 @@ class Template::Typescript < Template::Base
     |  return { type, payload }
     |}
     |
-    |function dispatchError(callbacks: WidgetCallbackProps, url: string, error: unknown) {
+    |/**
+    | * @param {<%= callback_props_group_type_name(:widget) %>} callbacks
+    | * @param {String} url
+    | * @param {unknown} error
+    | * @throws {Error}
+    | * @throws {unknown}
+    | */
+    |function dispatchError(callbacks: <%= callback_props_group_type_name(:widget) %>, url: string, error: unknown) {
     |  if (error instanceof PostMessageFieldDecodeError) {
     |    safeCall([url, error], callbacks.onMessageUnknownError)
     |  } else if (error instanceof PostMessageCallbackDispatchError) {
@@ -151,17 +156,73 @@ class Template::Typescript < Template::Base
     |  }
     |}
     |
-    |export function dispatchWidgetPostMessage(callbacks: WidgetCallbackProps, url: string) {
+    |/**
+    | * Dispatch a post message from any widget. Does not handle widget
+    | * specific post messages. See other dispatch methods for widget
+    | * specific dispatching.
+    | *
+    | * @param {<%= callback_props_group_type_name(:widget) %>} callbacks
+    | * @param {String} url
+    | * @throws {Error}
+    | * @throws {unknown}
+    | */
+    |export function <%= dispatch_function_name(:widget) %>(callbacks: <%= callback_props_group_type_name(:widget) %>, url: string) {
     |  safeCall([url], callbacks.onMessage)
     |
     |  let message: Message
     |  try {
     |    message = buildMessage(url)
-    |    console.log(message)
+    |    switch (message.payload.type) {
+    |      <%- (generic_post_message_definitions + entity_post_message_definitions).each do |post_message| -%>
+    |      case <%= qualified_enum_key(post_message) %>:
+    |        safeCall([message.payload], callbacks.<%= callback_function_name(post_message) %>)
+    |        break
+    |
+    |      <%- end -%>
+    |      default:
+    |        throw new PostMessageUnknownTypeError(message.payload.type)
+    |    }
     |  } catch (error) {
     |    dispatchError(callbacks, url, error)
     |  }
     |}
+    |
+    |<% post_message_definitions_by_widget.each do |subgroup, post_messages| %>
+    |/**
+    | * Dispatch a post message from the <%= widget_name(subgroup) %>.
+    | *
+    | * @param {<%= callback_props_group_type_name(subgroup) %>} callbacks
+    | * @param {String} url
+    | * @throws {Error}
+    | * @throws {unknown}
+    | */
+    |export function <%= dispatch_function_name(subgroup) %>(callbacks: <%= callback_props_group_type_name(subgroup) %>, url: string) {
+    |  safeCall([url], callbacks.onMessage)
+    |
+    |  let message: Message
+    |  try {
+    |    message = buildMessage(url)
+    |    switch (message.payload.type) {
+    |      <%- (generic_post_message_definitions + entity_post_message_definitions).each do |post_message| -%>
+    |      case <%= qualified_enum_key(post_message) %>:
+    |        safeCall([message.payload], callbacks.<%= callback_function_name(post_message) %>)
+    |        break
+    |
+    |      <%- end -%>
+    |      <%- post_messages.each do |post_message| -%>
+    |      case <%= qualified_enum_key(post_message) %>:
+    |        safeCall([message.payload], callbacks.<%= callback_function_name(post_message) %>)
+    |        break
+    |
+    |      <%- end -%>
+    |      default:
+    |        throw new PostMessageUnknownTypeError(message.payload.type)
+    |    }
+    |  } catch (error) {
+    |    dispatchError(callbacks, url, error)
+    |  }
+    |}
+    |<%- end -%>
   EOS
 
   # Generates the enum type key for a give post message.
@@ -231,20 +292,38 @@ class Template::Typescript < Template::Base
 
   # @param [PostMessageDefinition] post_message_definition
   # @return [String]
-  def payload_type(post_message)
+  def payload_type_name(post_message)
     "#{enum_key(post_message)}Payload"
   end
 
   # @param [String] group
   # @return [String]
-  def payload_group_type(group)
+  def payload_group_type_name(group)
     "#{group.to_s.classify}Payload"
+  end
+
+  # @param [String] group
+  # @return [String]
+  def callback_props_group_type_name(group)
+    "#{group.to_s.classify}CallbackProps"
   end
 
   # @param [PostMessageDefinition] post_message
   # @return [String]
-  def callback_name(post_message)
+  def callback_function_name(post_message)
     "on#{enum_key(post_message)}"
+  end
+
+  # @param [String] group
+  # @return [String]
+  def dispatch_function_name(group)
+    "dispatch#{group.to_s.classify}PostMessage"
+  end
+
+  # @param [String] group
+  # @return [String]
+  def widget_name(group)
+    "#{group.to_s.classify} Widget"
   end
 
   # @example
