@@ -26,7 +26,7 @@ class PostMessageDefinition
   # @param [Symbol] subgroup (eg, :generic, :connect)
   # @param [Symbol] label (eg, :submitMFA, :overdraftWarning/cta/transferFunds)
   # @param [Hash] properties (eg, {url: string})
-  def initialize(group, subgroup, label, properties)
+  def initialize(group, subgroup, label, properties = {})
     @group = group.to_sym
     @subgroup = subgroup.to_sym
     @label = label.to_sym

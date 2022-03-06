@@ -255,6 +255,11 @@ class Template::Typescript < Template::Base
     "Type.#{enum_key(post_message)}"
   end
 
+  # @example
+  #
+  #   enum_value(PostMessageDefinition.new(:widgets, :connect, :memberDeleted))
+  #   # => "mx/connect/memberDeleted"
+  #
   # @param [PostMessageDefinition] post_message_definition
   # @return [String]
   def enum_value(post_message)
@@ -284,42 +289,77 @@ class Template::Typescript < Template::Base
     uri_friendly_lookup(post_message) != post_message.to_s
   end
 
+  # @example
+  #
+  #   uri_friendly_lookup(PostMessageDefinition.new(:widgets, :generic, :focusTrap))
+  #   # => "mx/focustrap"
+  #
   # @param [PostMessageDefinition] post_message_definition
   # @return [String]
   def uri_friendly_lookup(post_message)
     post_message.to_s.downcase
   end
 
+  # @example
+  #
+  #   payload_type_name(PostMessageDefinition.new(:widgets, :connect, :memberDeleted))
+  #   # => "ConnectMemberDeletedPayload"
+  #
   # @param [PostMessageDefinition] post_message_definition
   # @return [String]
   def payload_type_name(post_message)
     "#{enum_key(post_message)}Payload"
   end
 
+  # @example
+  #
+  #   payload_group_type_name(:widget)
+  #   # => "WidgetPayload"
+  #
   # @param [String] group
   # @return [String]
   def payload_group_type_name(group)
     "#{group.to_s.classify}Payload"
   end
 
+  # @example
+  #
+  #   callback_props_group_type_name(:widget)
+  #   # => "WidgetCallbackProps"
+  #
   # @param [String] group
   # @return [String]
   def callback_props_group_type_name(group)
     "#{group.to_s.classify}CallbackProps"
   end
 
+  # @example
+  #
+  #   callback_function_name(PostMessageDefinition.new(:widgets, :connect, :memberDeleted))
+  #   # => "onConnectMemberDeleted"
+  #
   # @param [PostMessageDefinition] post_message
   # @return [String]
   def callback_function_name(post_message)
     "on#{enum_key(post_message)}"
   end
 
+  # @example
+  #
+  #   dispatch_function_name(:generic)
+  #   # => "dispatchWidgetPostMessage"
+  #
   # @param [String] group
   # @return [String]
   def dispatch_function_name(group)
     "dispatch#{group.to_s.classify}PostMessage"
   end
 
+  # @example
+  #
+  #   widget_name(:connect)
+  #   # => "Connect Widget"
+  #
   # @param [String] group
   # @return [String]
   def widget_name(group)
