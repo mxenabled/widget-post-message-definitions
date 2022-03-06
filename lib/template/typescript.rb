@@ -8,8 +8,10 @@ class Typescript < Template
     |
     |export const typeLookup: Record<string, Type> = {
     |  <%- post_message_definitions.each do |post_message| -%>
-    |  [<%= qualified_enum_key(post_message) %>] = <%= qualified_enum_key(post_message) %>,
-    |  "<%= uri_friendly_lookup(post_message) %>" = <%= qualified_enum_key(post_message) %>,
+    |  [<%= qualified_enum_key(post_message) %>]: <%= qualified_enum_key(post_message) %>,
+    |  <%- if needs_uri_friendly_lookup?(post_message) -%>
+    |  "<%= uri_friendly_lookup(post_message) %>": <%= qualified_enum_key(post_message) %>,
+    |  <%- end -%>
     |  <%- end -%>
     |}
     |
@@ -88,6 +90,12 @@ class Typescript < Template
   # uppercase letter. Other messages with uppercase letters only have them in
   # the path (eg, "mx/connect/memberDeleted"), so those are fine.
   #
+  # @param [PostMessageDefinition] post_message_definition
+  # @return [Boolean]
+  def needs_uri_friendly_lookup?(post_message)
+    uri_friendly_lookup(post_message) != post_message.to_s
+  end
+
   # @param [PostMessageDefinition] post_message_definition
   # @return [String]
   def uri_friendly_lookup(post_message)

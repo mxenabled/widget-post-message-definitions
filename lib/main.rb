@@ -10,4 +10,8 @@ require_relative "./template/typescript"
 
 post_message_definitions = PostMessageDefinition.load_file("./lib/definitions.yml")
 
-puts Typescript.render(post_message_definitions: post_message_definitions)
+File.open("packages/typescript/src/generated.ts", "w") do |handle|
+  contents = Typescript.render(post_message_definitions: post_message_definitions)
+  puts contents
+  handle.write(contents)
+end
