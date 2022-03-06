@@ -140,13 +140,13 @@ class Template::TypescriptSource < Template::Base
     |}
     |
     |/**
-    | * @param {<%= callback_props_group_type_name(:widget) %>} callbacks
     | * @param {String} url
     | * @param {unknown} error
+    | * @param {<%= callback_props_group_type_name(:widget) %>} callbacks
     | * @throws {Error}
     | * @throws {unknown}
     | */
-    |function dispatchError(callbacks: <%= callback_props_group_type_name(:widget) %>, url: string, error: unknown) {
+    |function dispatchError(url: string, error: unknown, callbacks: <%= callback_props_group_type_name(:widget) %>) {
     |  if (error instanceof PostMessageFieldDecodeError) {
     |    safeCall([url, error], callbacks.onMessageUnknownError)
     |  } else if (error instanceof PostMessageCallbackDispatchError) {
@@ -161,12 +161,12 @@ class Template::TypescriptSource < Template::Base
     | * specific post messages. See other dispatch methods for widget
     | * specific dispatching.
     | *
-    | * @param {<%= callback_props_group_type_name(:widget) %>} callbacks
     | * @param {String} url
+    | * @param {<%= callback_props_group_type_name(:widget) %>} callbacks
     | * @throws {Error}
     | * @throws {unknown}
     | */
-    |export function <%= dispatch_function_name(:widget) %>(callbacks: <%= callback_props_group_type_name(:widget) %>, url: string) {
+    |export function <%= dispatch_function_name(:widget) %>(url: string, callbacks: <%= callback_props_group_type_name(:widget) %>) {
     |  safeCall([url], callbacks.onMessage)
     |
     |  let message: Message
@@ -183,7 +183,7 @@ class Template::TypescriptSource < Template::Base
     |        throw new PostMessageUnknownTypeError(message.payload.type)
     |    }
     |  } catch (error) {
-    |    dispatchError(callbacks, url, error)
+    |    dispatchError(url, error, callbacks)
     |  }
     |}
     |
@@ -191,12 +191,12 @@ class Template::TypescriptSource < Template::Base
     |/**
     | * Dispatch a post message from the <%= widget_name(subgroup) %>.
     | *
-    | * @param {<%= callback_props_group_type_name(subgroup) %>} callbacks
     | * @param {String} url
+    | * @param {<%= callback_props_group_type_name(subgroup) %>} callbacks
     | * @throws {Error}
     | * @throws {unknown}
     | */
-    |export function <%= dispatch_function_name(subgroup) %>(callbacks: <%= callback_props_group_type_name(subgroup) %>, url: string) {
+    |export function <%= dispatch_function_name(subgroup) %>(url: string, callbacks: <%= callback_props_group_type_name(subgroup) %>) {
     |  safeCall([url], callbacks.onMessage)
     |
     |  let message: Message
@@ -219,7 +219,7 @@ class Template::TypescriptSource < Template::Base
     |        throw new PostMessageUnknownTypeError(message.payload.type)
     |    }
     |  } catch (error) {
-    |    dispatchError(callbacks, url, error)
+    |    dispatchError(url, error, callbacks)
     |  }
     |}
     |<%- end -%>

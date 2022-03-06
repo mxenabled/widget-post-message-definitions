@@ -555,13 +555,13 @@ function buildMessage(urlString: string): Message {
 }
 
 /**
- * @param {WidgetCallbackProps} callbacks
  * @param {String} url
  * @param {unknown} error
+ * @param {WidgetCallbackProps} callbacks
  * @throws {Error}
  * @throws {unknown}
  */
-function dispatchError(callbacks: WidgetCallbackProps, url: string, error: unknown) {
+function dispatchError(url: string, error: unknown, callbacks: WidgetCallbackProps) {
   if (error instanceof PostMessageFieldDecodeError) {
     safeCall([url, error], callbacks.onMessageUnknownError)
   } else if (error instanceof PostMessageCallbackDispatchError) {
@@ -576,12 +576,12 @@ function dispatchError(callbacks: WidgetCallbackProps, url: string, error: unkno
  * specific post messages. See other dispatch methods for widget
  * specific dispatching.
  *
- * @param {WidgetCallbackProps} callbacks
  * @param {String} url
+ * @param {WidgetCallbackProps} callbacks
  * @throws {Error}
  * @throws {unknown}
  */
-export function dispatchWidgetPostMessage(callbacks: WidgetCallbackProps, url: string) {
+export function dispatchWidgetPostMessage(url: string, callbacks: WidgetCallbackProps) {
   safeCall([url], callbacks.onMessage)
 
   let message: Message
@@ -608,7 +608,7 @@ export function dispatchWidgetPostMessage(callbacks: WidgetCallbackProps, url: s
         throw new PostMessageUnknownTypeError(message.payload.type)
     }
   } catch (error) {
-    dispatchError(callbacks, url, error)
+    dispatchError(url, error, callbacks)
   }
 }
 
@@ -616,12 +616,12 @@ export function dispatchWidgetPostMessage(callbacks: WidgetCallbackProps, url: s
 /**
  * Dispatch a post message from the Connect Widget.
  *
- * @param {ConnectCallbackProps} callbacks
  * @param {String} url
+ * @param {ConnectCallbackProps} callbacks
  * @throws {Error}
  * @throws {unknown}
  */
-export function dispatchConnectPostMessage(callbacks: ConnectCallbackProps, url: string) {
+export function dispatchConnectPostMessage(url: string, callbacks: ConnectCallbackProps) {
   safeCall([url], callbacks.onMessage)
 
   let message: Message
@@ -704,19 +704,19 @@ export function dispatchConnectPostMessage(callbacks: ConnectCallbackProps, url:
         throw new PostMessageUnknownTypeError(message.payload.type)
     }
   } catch (error) {
-    dispatchError(callbacks, url, error)
+    dispatchError(url, error, callbacks)
   }
 }
 
 /**
  * Dispatch a post message from the Pulse Widget.
  *
- * @param {PulseCallbackProps} callbacks
  * @param {String} url
+ * @param {PulseCallbackProps} callbacks
  * @throws {Error}
  * @throws {unknown}
  */
-export function dispatchPulsePostMessage(callbacks: PulseCallbackProps, url: string) {
+export function dispatchPulsePostMessage(url: string, callbacks: PulseCallbackProps) {
   safeCall([url], callbacks.onMessage)
 
   let message: Message
@@ -747,6 +747,6 @@ export function dispatchPulsePostMessage(callbacks: PulseCallbackProps, url: str
         throw new PostMessageUnknownTypeError(message.payload.type)
     }
   } catch (error) {
-    dispatchError(callbacks, url, error)
+    dispatchError(url, error, callbacks)
   }
 }
