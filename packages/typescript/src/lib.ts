@@ -71,3 +71,11 @@ export class UnknownPostMessageError extends Error {
   }
 }
 
+// Thrown when we are unable to process an otherwise valid post message
+// request. Used to trigger the `onMessageDispatchError` callback.
+export class CallbackDispatchError extends Error {
+  constructor(msg: string) {
+    super(msg);
+    Object.setPrototypeOf(this, CallbackDispatchError.prototype);
+  }
+}

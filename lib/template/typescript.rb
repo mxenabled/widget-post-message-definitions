@@ -38,6 +38,17 @@ class Typescript < Template
     |  | <%= payload_group_type(group) %>
     |  <%- end -%>
     |
+    |/**
+    | * Given a post message type (eg, "mx/load", "mx/connect/memberConnected") and
+    | * the payload for that message, this function parses the payload object and
+    | * returns a validated and typed object.
+    | *
+    | * @param {Type} type
+    | * @param {Metadata, Object} metadata
+    | * @throws {UnknownPostMessageError}
+    | * @throws {PostMessageFieldDecodeError}
+    | * @return {Payload}
+    | */
     |export function buildPayload(type: Type, metadata: Metadata): Payload {
     |  switch (type) {
     |    <%- post_message_definitions.each do |post_message| -%>
@@ -57,6 +68,18 @@ class Typescript < Template
     |    default:
     |      throw new UnknownPostMessageError(type)
     |  }
+    |}
+    |
+    |export type EntityCallbackProps = {
+    |<%- post_message_definitions_of_group(:entity).each do |post_messages| -%>
+    |  <%= callback_name(post_messages) %>?: (payload: <%= payload_type(post_messages) %>) => void
+    |<%- end -%>
+    |}
+    |
+    |export type GenericCallbackProps = {
+    |<%- post_message_definitions_of_subgroup(:generic).each do |post_messages| -%>
+    |  <%= callback_name(post_messages) %>?: (payload: <%= payload_type(post_messages) %>) => void
+    |<%- end -%>
     |}
   EOS
 
@@ -137,6 +160,12 @@ class Typescript < Template
     "#{classify(group)}Payload"
   end
 
+  # @param [PostMessageDefinition] post_message
+  # @return [String]
+  def callback_name(post_message)
+    "on#{enum_key(post_message)}"
+  end
+
   # @example
   #
   #   payload_property_type("string")
@@ -182,5 +211,21 @@ class Typescript < Template
   # @return [Hash]
   def post_message_definitions_by_group
     post_message_definitions.group_by(&:group)
+  end
+
+  # @return [Symbol] group
+  # @return [Array<PostMessageDefinition>]
+  def post_message_definitions_of_group(group)
+    post_message_definitions.filter do |post_message|
+      post_message.group == group
+    end
+  end
+
+  # @return [Symbol] subgroup
+  # @return [Array<PostMessageDefinition>]
+  def post_message_definitions_of_subgroup(subgroup)
+    post_message_definitions.filter do |post_message|
+      post_message.subgroup == subgroup
+    end
   end
 end

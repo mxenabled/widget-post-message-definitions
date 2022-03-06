@@ -27,11 +27,16 @@ module StringUtils
   # @example
   #
   #   classify("hi_there") # => "HiThere"
+  #   classify("hi_thereMan") # => "HiThereMan"
   #
   # @param [String] string
   # @return [String]
   def classify(string)
-    string.to_s.split("_").collect(&:capitalize).join
+    string.to_s.split("_").collect do |word|
+      head = word[0].upcase
+      tail = word.split("").drop(1)
+      head + tail.join
+    end.join
   end
 
   # @example

@@ -12,61 +12,61 @@ import { UnknownPostMessageError, Metadata, assertMessageProp } from "./lib"
 export enum Type {
   Load = "mx/load",
   Ping = "mx/ping",
-  Focustrap = "mx/focusTrap",
+  FocusTrap = "mx/focusTrap",
   ConnectLoaded = "mx/connect/loaded",
-  ConnectEntercredentials = "mx/connect/enterCredentials",
-  ConnectInstitutionsearch = "mx/connect/institutionSearch",
-  ConnectSelectedinstitution = "mx/connect/selectedInstitution",
-  ConnectMemberconnected = "mx/connect/memberConnected",
-  ConnectConnectedPrimaryaction = "mx/connect/connected/primaryAction",
-  ConnectMemberdeleted = "mx/connect/memberDeleted",
-  ConnectCreatemembererror = "mx/connect/createMemberError",
-  ConnectMemberstatusupdate = "mx/connect/memberStatusUpdate",
-  ConnectOautherror = "mx/connect/oauthError",
-  ConnectOauthrequested = "mx/connect/oauthRequested",
-  ConnectStepchange = "mx/connect/stepChange",
-  ConnectSubmitmfa = "mx/connect/submitMFA",
-  ConnectUpdatecredentials = "mx/connect/updateCredentials",
+  ConnectEnterCredentials = "mx/connect/enterCredentials",
+  ConnectInstitutionSearch = "mx/connect/institutionSearch",
+  ConnectSelectedInstitution = "mx/connect/selectedInstitution",
+  ConnectMemberConnected = "mx/connect/memberConnected",
+  ConnectConnectedPrimaryAction = "mx/connect/connected/primaryAction",
+  ConnectMemberDeleted = "mx/connect/memberDeleted",
+  ConnectCreateMemberError = "mx/connect/createMemberError",
+  ConnectMemberStatusUpdate = "mx/connect/memberStatusUpdate",
+  ConnectOauthError = "mx/connect/oauthError",
+  ConnectOauthRequested = "mx/connect/oauthRequested",
+  ConnectStepChange = "mx/connect/stepChange",
+  ConnectSubmitMFA = "mx/connect/submitMFA",
+  ConnectUpdateCredentials = "mx/connect/updateCredentials",
   PulseLoad = "mx/pulse/load",
-  PulseOverdraftwarningCtaTransferfunds = "mx/pulse/overdraftWarning/cta/transferFunds",
+  PulseOverdraftWarningCtaTransferFunds = "mx/pulse/overdraftWarning/cta/transferFunds",
   AccountCreated = "mx/account/created",
 }
 
 export const typeLookup: Record<string, Type> = {
   [Type.Load]: Type.Load,
   [Type.Ping]: Type.Ping,
-  [Type.Focustrap]: Type.Focustrap,
-  "mx/focustrap": Type.Focustrap,
+  [Type.FocusTrap]: Type.FocusTrap,
+  "mx/focustrap": Type.FocusTrap,
   [Type.ConnectLoaded]: Type.ConnectLoaded,
-  [Type.ConnectEntercredentials]: Type.ConnectEntercredentials,
-  "mx/connect/entercredentials": Type.ConnectEntercredentials,
-  [Type.ConnectInstitutionsearch]: Type.ConnectInstitutionsearch,
-  "mx/connect/institutionsearch": Type.ConnectInstitutionsearch,
-  [Type.ConnectSelectedinstitution]: Type.ConnectSelectedinstitution,
-  "mx/connect/selectedinstitution": Type.ConnectSelectedinstitution,
-  [Type.ConnectMemberconnected]: Type.ConnectMemberconnected,
-  "mx/connect/memberconnected": Type.ConnectMemberconnected,
-  [Type.ConnectConnectedPrimaryaction]: Type.ConnectConnectedPrimaryaction,
-  "mx/connect/connected/primaryaction": Type.ConnectConnectedPrimaryaction,
-  [Type.ConnectMemberdeleted]: Type.ConnectMemberdeleted,
-  "mx/connect/memberdeleted": Type.ConnectMemberdeleted,
-  [Type.ConnectCreatemembererror]: Type.ConnectCreatemembererror,
-  "mx/connect/createmembererror": Type.ConnectCreatemembererror,
-  [Type.ConnectMemberstatusupdate]: Type.ConnectMemberstatusupdate,
-  "mx/connect/memberstatusupdate": Type.ConnectMemberstatusupdate,
-  [Type.ConnectOautherror]: Type.ConnectOautherror,
-  "mx/connect/oautherror": Type.ConnectOautherror,
-  [Type.ConnectOauthrequested]: Type.ConnectOauthrequested,
-  "mx/connect/oauthrequested": Type.ConnectOauthrequested,
-  [Type.ConnectStepchange]: Type.ConnectStepchange,
-  "mx/connect/stepchange": Type.ConnectStepchange,
-  [Type.ConnectSubmitmfa]: Type.ConnectSubmitmfa,
-  "mx/connect/submitmfa": Type.ConnectSubmitmfa,
-  [Type.ConnectUpdatecredentials]: Type.ConnectUpdatecredentials,
-  "mx/connect/updatecredentials": Type.ConnectUpdatecredentials,
+  [Type.ConnectEnterCredentials]: Type.ConnectEnterCredentials,
+  "mx/connect/entercredentials": Type.ConnectEnterCredentials,
+  [Type.ConnectInstitutionSearch]: Type.ConnectInstitutionSearch,
+  "mx/connect/institutionsearch": Type.ConnectInstitutionSearch,
+  [Type.ConnectSelectedInstitution]: Type.ConnectSelectedInstitution,
+  "mx/connect/selectedinstitution": Type.ConnectSelectedInstitution,
+  [Type.ConnectMemberConnected]: Type.ConnectMemberConnected,
+  "mx/connect/memberconnected": Type.ConnectMemberConnected,
+  [Type.ConnectConnectedPrimaryAction]: Type.ConnectConnectedPrimaryAction,
+  "mx/connect/connected/primaryaction": Type.ConnectConnectedPrimaryAction,
+  [Type.ConnectMemberDeleted]: Type.ConnectMemberDeleted,
+  "mx/connect/memberdeleted": Type.ConnectMemberDeleted,
+  [Type.ConnectCreateMemberError]: Type.ConnectCreateMemberError,
+  "mx/connect/createmembererror": Type.ConnectCreateMemberError,
+  [Type.ConnectMemberStatusUpdate]: Type.ConnectMemberStatusUpdate,
+  "mx/connect/memberstatusupdate": Type.ConnectMemberStatusUpdate,
+  [Type.ConnectOauthError]: Type.ConnectOauthError,
+  "mx/connect/oautherror": Type.ConnectOauthError,
+  [Type.ConnectOauthRequested]: Type.ConnectOauthRequested,
+  "mx/connect/oauthrequested": Type.ConnectOauthRequested,
+  [Type.ConnectStepChange]: Type.ConnectStepChange,
+  "mx/connect/stepchange": Type.ConnectStepChange,
+  [Type.ConnectSubmitMFA]: Type.ConnectSubmitMFA,
+  "mx/connect/submitmfa": Type.ConnectSubmitMFA,
+  [Type.ConnectUpdateCredentials]: Type.ConnectUpdateCredentials,
+  "mx/connect/updatecredentials": Type.ConnectUpdateCredentials,
   [Type.PulseLoad]: Type.PulseLoad,
-  [Type.PulseOverdraftwarningCtaTransferfunds]: Type.PulseOverdraftwarningCtaTransferfunds,
-  "mx/pulse/overdraftwarning/cta/transferfunds": Type.PulseOverdraftwarningCtaTransferfunds,
+  [Type.PulseOverdraftWarningCtaTransferFunds]: Type.PulseOverdraftWarningCtaTransferFunds,
+  "mx/pulse/overdraftwarning/cta/transferfunds": Type.PulseOverdraftWarningCtaTransferFunds,
   [Type.AccountCreated]: Type.AccountCreated,
 }
 
@@ -81,8 +81,8 @@ export type PingPayload = {
   session_guid: string,
 }
 
-export type FocustrapPayload = {
-  type: Type.Focustrap,
+export type FocusTrapPayload = {
+  type: Type.FocusTrap,
   user_guid: string,
   session_guid: string,
 }
@@ -94,22 +94,22 @@ export type ConnectLoadedPayload = {
   initial_step: "search" | "selectMember" | "enterCreds" | "mfa" | "connected" | "loginError" | "disclosure",
 }
 
-export type ConnectEntercredentialsPayload = {
-  type: Type.ConnectEntercredentials,
+export type ConnectEnterCredentialsPayload = {
+  type: Type.ConnectEnterCredentials,
   user_guid: string,
   session_guid: string,
   institution: { code: string, guid: string },
 }
 
-export type ConnectInstitutionsearchPayload = {
-  type: Type.ConnectInstitutionsearch,
+export type ConnectInstitutionSearchPayload = {
+  type: Type.ConnectInstitutionSearch,
   user_guid: string,
   session_guid: string,
   query: string,
 }
 
-export type ConnectSelectedinstitutionPayload = {
-  type: Type.ConnectSelectedinstitution,
+export type ConnectSelectedInstitutionPayload = {
+  type: Type.ConnectSelectedInstitution,
   user_guid: string,
   session_guid: string,
   code: string,
@@ -118,74 +118,74 @@ export type ConnectSelectedinstitutionPayload = {
   url: string,
 }
 
-export type ConnectMemberconnectedPayload = {
-  type: Type.ConnectMemberconnected,
+export type ConnectMemberConnectedPayload = {
+  type: Type.ConnectMemberConnected,
   user_guid: string,
   session_guid: string,
   member_guid: string,
 }
 
-export type ConnectConnectedPrimaryactionPayload = {
-  type: Type.ConnectConnectedPrimaryaction,
+export type ConnectConnectedPrimaryActionPayload = {
+  type: Type.ConnectConnectedPrimaryAction,
   user_guid: string,
   session_guid: string,
 }
 
-export type ConnectMemberdeletedPayload = {
-  type: Type.ConnectMemberdeleted,
+export type ConnectMemberDeletedPayload = {
+  type: Type.ConnectMemberDeleted,
   user_guid: string,
   session_guid: string,
   member_guid: string,
 }
 
-export type ConnectCreatemembererrorPayload = {
-  type: Type.ConnectCreatemembererror,
+export type ConnectCreateMemberErrorPayload = {
+  type: Type.ConnectCreateMemberError,
   user_guid: string,
   session_guid: string,
   institution_guid: string,
   institution_code: string,
 }
 
-export type ConnectMemberstatusupdatePayload = {
-  type: Type.ConnectMemberstatusupdate,
+export type ConnectMemberStatusUpdatePayload = {
+  type: Type.ConnectMemberStatusUpdate,
   user_guid: string,
   session_guid: string,
   member_guid: string,
   connection_status: number,
 }
 
-export type ConnectOautherrorPayload = {
-  type: Type.ConnectOautherror,
+export type ConnectOauthErrorPayload = {
+  type: Type.ConnectOauthError,
   user_guid: string,
   session_guid: string,
   member_guid: string,
 }
 
-export type ConnectOauthrequestedPayload = {
-  type: Type.ConnectOauthrequested,
+export type ConnectOauthRequestedPayload = {
+  type: Type.ConnectOauthRequested,
   user_guid: string,
   session_guid: string,
   url: string,
   member_guid: string,
 }
 
-export type ConnectStepchangePayload = {
-  type: Type.ConnectStepchange,
+export type ConnectStepChangePayload = {
+  type: Type.ConnectStepChange,
   user_guid: string,
   session_guid: string,
   previous: string,
   current: string,
 }
 
-export type ConnectSubmitmfaPayload = {
-  type: Type.ConnectSubmitmfa,
+export type ConnectSubmitMFAPayload = {
+  type: Type.ConnectSubmitMFA,
   user_guid: string,
   session_guid: string,
   member_guid: string,
 }
 
-export type ConnectUpdatecredentialsPayload = {
-  type: Type.ConnectUpdatecredentials,
+export type ConnectUpdateCredentialsPayload = {
+  type: Type.ConnectUpdateCredentials,
   user_guid: string,
   session_guid: string,
   member_guid: string,
@@ -196,8 +196,8 @@ export type PulseLoadPayload = {
   type: Type.PulseLoad,
 }
 
-export type PulseOverdraftwarningCtaTransferfundsPayload = {
-  type: Type.PulseOverdraftwarningCtaTransferfunds,
+export type PulseOverdraftWarningCtaTransferFundsPayload = {
+  type: Type.PulseOverdraftWarningCtaTransferFunds,
   account_guid: string,
   amount: number,
 }
@@ -211,23 +211,23 @@ export type AccountCreatedPayload = {
 export type WidgetPayload =
   | LoadPayload
   | PingPayload
-  | FocustrapPayload
+  | FocusTrapPayload
   | ConnectLoadedPayload
-  | ConnectEntercredentialsPayload
-  | ConnectInstitutionsearchPayload
-  | ConnectSelectedinstitutionPayload
-  | ConnectMemberconnectedPayload
-  | ConnectConnectedPrimaryactionPayload
-  | ConnectMemberdeletedPayload
-  | ConnectCreatemembererrorPayload
-  | ConnectMemberstatusupdatePayload
-  | ConnectOautherrorPayload
-  | ConnectOauthrequestedPayload
-  | ConnectStepchangePayload
-  | ConnectSubmitmfaPayload
-  | ConnectUpdatecredentialsPayload
+  | ConnectEnterCredentialsPayload
+  | ConnectInstitutionSearchPayload
+  | ConnectSelectedInstitutionPayload
+  | ConnectMemberConnectedPayload
+  | ConnectConnectedPrimaryActionPayload
+  | ConnectMemberDeletedPayload
+  | ConnectCreateMemberErrorPayload
+  | ConnectMemberStatusUpdatePayload
+  | ConnectOauthErrorPayload
+  | ConnectOauthRequestedPayload
+  | ConnectStepChangePayload
+  | ConnectSubmitMFAPayload
+  | ConnectUpdateCredentialsPayload
   | PulseLoadPayload
-  | PulseOverdraftwarningCtaTransferfundsPayload
+  | PulseOverdraftWarningCtaTransferFundsPayload
 
 export type EntityPayload =
   | AccountCreatedPayload
@@ -236,6 +236,17 @@ export type Payload =
   | WidgetPayload
   | EntityPayload
 
+/**
+ * Given a post message type (eg, "mx/load", "mx/connect/memberConnected") and
+ * the payload for that message, this function parses the payload object and
+ * returns a validated and typed object.
+ *
+ * @param {Type} type
+ * @param {Metadata, Object} metadata
+ * @throws {UnknownPostMessageError}
+ * @throws {PostMessageFieldDecodeError}
+ * @return {Payload}
+ */
 export function buildPayload(type: Type, metadata: Metadata): Payload {
   switch (type) {
     case Type.Load:
@@ -254,7 +265,7 @@ export function buildPayload(type: Type, metadata: Metadata): Payload {
         session_guid: metadata.session_guid as string,
       }
 
-    case Type.Focustrap:
+    case Type.FocusTrap:
       assertMessageProp(metadata, "mx/focusTrap", "user_guid", "string")
       assertMessageProp(metadata, "mx/focusTrap", "session_guid", "string")
 
@@ -276,7 +287,7 @@ export function buildPayload(type: Type, metadata: Metadata): Payload {
         initial_step: metadata.initial_step as "search" | "selectMember" | "enterCreds" | "mfa" | "connected" | "loginError" | "disclosure",
       }
 
-    case Type.ConnectEntercredentials:
+    case Type.ConnectEnterCredentials:
       assertMessageProp(metadata, "mx/connect/enterCredentials", "user_guid", "string")
       assertMessageProp(metadata, "mx/connect/enterCredentials", "session_guid", "string")
       assertMessageProp(metadata, "mx/connect/enterCredentials", "institution", { code: "string", guid: "string" })
@@ -288,7 +299,7 @@ export function buildPayload(type: Type, metadata: Metadata): Payload {
         institution: metadata.institution as { code: string, guid: string },
       }
 
-    case Type.ConnectInstitutionsearch:
+    case Type.ConnectInstitutionSearch:
       assertMessageProp(metadata, "mx/connect/institutionSearch", "user_guid", "string")
       assertMessageProp(metadata, "mx/connect/institutionSearch", "session_guid", "string")
       assertMessageProp(metadata, "mx/connect/institutionSearch", "query", "string")
@@ -300,7 +311,7 @@ export function buildPayload(type: Type, metadata: Metadata): Payload {
         query: metadata.query as string,
       }
 
-    case Type.ConnectSelectedinstitution:
+    case Type.ConnectSelectedInstitution:
       assertMessageProp(metadata, "mx/connect/selectedInstitution", "user_guid", "string")
       assertMessageProp(metadata, "mx/connect/selectedInstitution", "session_guid", "string")
       assertMessageProp(metadata, "mx/connect/selectedInstitution", "code", "string")
@@ -318,7 +329,7 @@ export function buildPayload(type: Type, metadata: Metadata): Payload {
         url: metadata.url as string,
       }
 
-    case Type.ConnectMemberconnected:
+    case Type.ConnectMemberConnected:
       assertMessageProp(metadata, "mx/connect/memberConnected", "user_guid", "string")
       assertMessageProp(metadata, "mx/connect/memberConnected", "session_guid", "string")
       assertMessageProp(metadata, "mx/connect/memberConnected", "member_guid", "string")
@@ -330,7 +341,7 @@ export function buildPayload(type: Type, metadata: Metadata): Payload {
         member_guid: metadata.member_guid as string,
       }
 
-    case Type.ConnectConnectedPrimaryaction:
+    case Type.ConnectConnectedPrimaryAction:
       assertMessageProp(metadata, "mx/connect/connected/primaryAction", "user_guid", "string")
       assertMessageProp(metadata, "mx/connect/connected/primaryAction", "session_guid", "string")
 
@@ -340,7 +351,7 @@ export function buildPayload(type: Type, metadata: Metadata): Payload {
         session_guid: metadata.session_guid as string,
       }
 
-    case Type.ConnectMemberdeleted:
+    case Type.ConnectMemberDeleted:
       assertMessageProp(metadata, "mx/connect/memberDeleted", "user_guid", "string")
       assertMessageProp(metadata, "mx/connect/memberDeleted", "session_guid", "string")
       assertMessageProp(metadata, "mx/connect/memberDeleted", "member_guid", "string")
@@ -352,7 +363,7 @@ export function buildPayload(type: Type, metadata: Metadata): Payload {
         member_guid: metadata.member_guid as string,
       }
 
-    case Type.ConnectCreatemembererror:
+    case Type.ConnectCreateMemberError:
       assertMessageProp(metadata, "mx/connect/createMemberError", "user_guid", "string")
       assertMessageProp(metadata, "mx/connect/createMemberError", "session_guid", "string")
       assertMessageProp(metadata, "mx/connect/createMemberError", "institution_guid", "string")
@@ -366,7 +377,7 @@ export function buildPayload(type: Type, metadata: Metadata): Payload {
         institution_code: metadata.institution_code as string,
       }
 
-    case Type.ConnectMemberstatusupdate:
+    case Type.ConnectMemberStatusUpdate:
       assertMessageProp(metadata, "mx/connect/memberStatusUpdate", "user_guid", "string")
       assertMessageProp(metadata, "mx/connect/memberStatusUpdate", "session_guid", "string")
       assertMessageProp(metadata, "mx/connect/memberStatusUpdate", "member_guid", "string")
@@ -380,7 +391,7 @@ export function buildPayload(type: Type, metadata: Metadata): Payload {
         connection_status: metadata.connection_status as number,
       }
 
-    case Type.ConnectOautherror:
+    case Type.ConnectOauthError:
       assertMessageProp(metadata, "mx/connect/oauthError", "user_guid", "string")
       assertMessageProp(metadata, "mx/connect/oauthError", "session_guid", "string")
       assertMessageProp(metadata, "mx/connect/oauthError", "member_guid", "string")
@@ -392,7 +403,7 @@ export function buildPayload(type: Type, metadata: Metadata): Payload {
         member_guid: metadata.member_guid as string,
       }
 
-    case Type.ConnectOauthrequested:
+    case Type.ConnectOauthRequested:
       assertMessageProp(metadata, "mx/connect/oauthRequested", "user_guid", "string")
       assertMessageProp(metadata, "mx/connect/oauthRequested", "session_guid", "string")
       assertMessageProp(metadata, "mx/connect/oauthRequested", "url", "string")
@@ -406,7 +417,7 @@ export function buildPayload(type: Type, metadata: Metadata): Payload {
         member_guid: metadata.member_guid as string,
       }
 
-    case Type.ConnectStepchange:
+    case Type.ConnectStepChange:
       assertMessageProp(metadata, "mx/connect/stepChange", "user_guid", "string")
       assertMessageProp(metadata, "mx/connect/stepChange", "session_guid", "string")
       assertMessageProp(metadata, "mx/connect/stepChange", "previous", "string")
@@ -420,7 +431,7 @@ export function buildPayload(type: Type, metadata: Metadata): Payload {
         current: metadata.current as string,
       }
 
-    case Type.ConnectSubmitmfa:
+    case Type.ConnectSubmitMFA:
       assertMessageProp(metadata, "mx/connect/submitMFA", "user_guid", "string")
       assertMessageProp(metadata, "mx/connect/submitMFA", "session_guid", "string")
       assertMessageProp(metadata, "mx/connect/submitMFA", "member_guid", "string")
@@ -432,7 +443,7 @@ export function buildPayload(type: Type, metadata: Metadata): Payload {
         member_guid: metadata.member_guid as string,
       }
 
-    case Type.ConnectUpdatecredentials:
+    case Type.ConnectUpdateCredentials:
       assertMessageProp(metadata, "mx/connect/updateCredentials", "user_guid", "string")
       assertMessageProp(metadata, "mx/connect/updateCredentials", "session_guid", "string")
       assertMessageProp(metadata, "mx/connect/updateCredentials", "member_guid", "string")
@@ -452,7 +463,7 @@ export function buildPayload(type: Type, metadata: Metadata): Payload {
         type,
       }
 
-    case Type.PulseOverdraftwarningCtaTransferfunds:
+    case Type.PulseOverdraftWarningCtaTransferFunds:
       assertMessageProp(metadata, "mx/pulse/overdraftWarning/cta/transferFunds", "account_guid", "string")
       assertMessageProp(metadata, "mx/pulse/overdraftWarning/cta/transferFunds", "amount", "number")
 
@@ -473,4 +484,14 @@ export function buildPayload(type: Type, metadata: Metadata): Payload {
     default:
       throw new UnknownPostMessageError(type)
   }
+}
+
+export type EntityCallbackProps = {
+  onAccountCreated?: (payload: AccountCreatedPayload) => void
+}
+
+export type GenericCallbackProps = {
+  onLoad?: (payload: LoadPayload) => void
+  onPing?: (payload: PingPayload) => void
+  onFocusTrap?: (payload: FocusTrapPayload) => void
 }
