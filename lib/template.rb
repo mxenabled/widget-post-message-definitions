@@ -42,6 +42,16 @@ class Template
     ERB.new(StringUtils.strip_margin(template), trim_mode: "-").result(scope)
   end
 
+  # @param [String] file_path
+  # @param [Hash] kwargs
+  def self.save(file_path, **kwargs)
+    File.open(file_path, "w") do |handle|
+      contents = render(**kwargs)
+      puts contents if ENV["DEBUG"] == "1"
+      handle.write(contents)
+    end
+  end
+
   # @param [Array<PostMessageDefinition>] post_message_definitions
   def initialize(post_message_definitions:)
     @post_message_definitions = post_message_definitions
