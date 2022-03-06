@@ -12,13 +12,7 @@ be done there.
 
 ## Development
 
-This project is written in TypeScript. The following commands will be useful
-when making changes to the source code or tests:
-
+- `npm install`, install depedencies.
 - `npm run build`, compile and emit output to the `dist` directory.
 - `npm run lint`, run linter.
 - `npm run test`, run unit tests.
-
-If you need to modify the auto generated code, see
-https://github.com/mxenabled/widget-post-message-definitions for instructions
-on how to do that.
