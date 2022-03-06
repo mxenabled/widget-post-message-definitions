@@ -36,8 +36,9 @@ module Template
     def self.save(file_path, **kwargs)
       File.open(file_path, "w") do |handle|
         contents = render(**kwargs)
-        puts contents if ENV["DEBUG"] == "1"
+        print "Writing #{contents.size} bytes to #{file_path} ..."
         handle.write(contents)
+        puts " done"
       end
     end
 
