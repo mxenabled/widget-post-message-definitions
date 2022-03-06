@@ -19,18 +19,18 @@ module Template
     # @param [Hash] kwargs
     # @return [String]
     def self.render(**kwargs)
-      scope = Scope.create(new(**kwargs))
-      "#{erb(self.const_get(:HEADER), scope)}\n\n#{erb(self.const_get(:CONTENT), scope)}"
+      ctx = new(**kwargs).binding
+      "#{erb(self.const_get(:HEADER), ctx)}\n\n#{erb(self.const_get(:CONTENT), ctx)}"
     end
 
     # ERB render helper method that strips a template of its margin and renders
-    # the results bound to the given scope.
+    # the results bound to the given binding.
     #
     # @param [String] template
-    # @param [Scope] scope
+    # @param [Binding] ctx
     # @return [String]
-    def self.erb(template, scope)
-      ERB.new(StringUtils.strip_margin(template), trim_mode: "-").result(scope)
+    def self.erb(template, ctx)
+      ERB.new(StringUtils.strip_margin(template), trim_mode: "-").result(ctx)
     end
 
     # @param [String] file_path
@@ -46,6 +46,11 @@ module Template
     # @param [Array<PostMessageDefinition>] post_message_definitions
     def initialize(post_message_definitions:)
       @post_message_definitions = post_message_definitions
+    end
+
+    # @return [Binding]
+    def binding
+      super
     end
   end
 end

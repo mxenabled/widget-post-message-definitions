@@ -1,7 +1,6 @@
 require "erb"
 require "yaml"
 
-require_relative "./scope"
 require_relative "./string_utils"
 require_relative "./post_message_definition"
 
