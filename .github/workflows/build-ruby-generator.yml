@@ -1,0 +1,16 @@
+name: Build Ruby Generator
+
+on: push
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ruby/setup-ruby@v1
+      with:
+        bundler-cache: true
+
+    - run: bin/setup
+    - run: bin/lint
