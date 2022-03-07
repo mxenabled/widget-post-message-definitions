@@ -1,0 +1,31 @@
+name: Build TypeScript Package
+
+on:
+  push:
+    paths:
+      - packages/typescript/**
+      - .github/workflows/build-typescript-package.yml
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: 16
+        cache: npm
+        cache-dependency-path: packages/typescript/package-lock.json
+
+    - run: npm install
+      working-directory: packages/typescript
+
+    - run: npm run build
+      working-directory: packages/typescript
+
+    - run: npm run lint
+      working-directory: packages/typescript
+
+    - run: npm run test
+      working-directory: packages/typescript
