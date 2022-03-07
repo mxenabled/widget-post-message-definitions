@@ -10,7 +10,7 @@
 import { parse as parseUrl } from "url"
 
 import {
-  BaseCallbackProps,
+  BasePostMessageCallbackProps,
   Metadata,
   PostMessageCallbackDispatchError,
   PostMessageFieldDecodeError,
@@ -513,23 +513,23 @@ function buildPayloadFromUrl(urlString: string): Payload {
   return payload
 }
 
-export type WidgetCallbackProps =
-  & BaseCallbackProps
-  & EntityCallbackProps
-  & GenericCallbackProps
+export type WidgetPostMessageCallbackProps =
+  & BasePostMessageCallbackProps
+  & EntityPostMessageCallbackProps
+  & GenericPostMessageCallbackProps
 
-export type EntityCallbackProps = {
+export type EntityPostMessageCallbackProps = {
   onAccountCreated?: (payload: AccountCreatedPayload) => void
 }
 
-export type GenericCallbackProps = {
+export type GenericPostMessageCallbackProps = {
   onLoad?: (payload: LoadPayload) => void
   onPing?: (payload: PingPayload) => void
   onFocusTrap?: (payload: FocusTrapPayload) => void
 }
 
 
-export type ConnectCallbackProps = WidgetCallbackProps & {
+export type ConnectPostMessageCallbackProps = WidgetPostMessageCallbackProps & {
   onLoaded?: (payload: ConnectLoadedPayload) => void
   onEnterCredentials?: (payload: ConnectEnterCredentialsPayload) => void
   onInstitutionSearch?: (payload: ConnectInstitutionSearchPayload) => void
@@ -546,19 +546,21 @@ export type ConnectCallbackProps = WidgetCallbackProps & {
   onUpdateCredentials?: (payload: ConnectUpdateCredentialsPayload) => void
 }
 
-export type PulseCallbackProps = WidgetCallbackProps & {
+export type PulsePostMessageCallbackProps = WidgetPostMessageCallbackProps & {
   onOverdraftWarningCtaTransferFunds?: (payload: PulseOverdraftWarningCtaTransferFundsPayload) => void
 }
 
 /**
  * @param {String} url
  * @param {unknown} error
- * @param {WidgetCallbackProps} callbacks
+ * @param {WidgetPostMessageCallbackProps} callbacks
  * @throws {Error}
  * @throws {unknown}
  */
-function dispatchError(url: string, error: unknown, callbacks: WidgetCallbackProps) {
+function dispatchError(url: string, error: unknown, callbacks: WidgetPostMessageCallbackProps) {
   if (error instanceof PostMessageFieldDecodeError) {
+    safeCall([url, error], callbacks.onMessageUnknownError)
+  } else if (error instanceof PostMessageUnknownTypeError) {
     safeCall([url, error], callbacks.onMessageUnknownError)
   } else if (error instanceof PostMessageCallbackDispatchError) {
     safeCall([url, error], callbacks.onMessageDispatchError)
@@ -573,11 +575,11 @@ function dispatchError(url: string, error: unknown, callbacks: WidgetCallbackPro
  * specific dispatching.
  *
  * @param {String} url
- * @param {WidgetCallbackProps} callbacks
+ * @param {WidgetPostMessageCallbackProps} callbacks
  * @throws {Error}
  * @throws {unknown}
  */
-export function dispatchWidgetPostMessage(url: string, callbacks: WidgetCallbackProps) {
+export function dispatchWidgetPostMessage(url: string, callbacks: WidgetPostMessageCallbackProps) {
   safeCall([url], callbacks.onMessage)
 
   try {
@@ -612,11 +614,11 @@ export function dispatchWidgetPostMessage(url: string, callbacks: WidgetCallback
  * Dispatch a post message from the Connect Widget.
  *
  * @param {String} url
- * @param {ConnectCallbackProps} callbacks
+ * @param {ConnectPostMessageCallbackProps} callbacks
  * @throws {Error}
  * @throws {unknown}
  */
-export function dispatchConnectPostMessage(url: string, callbacks: ConnectCallbackProps) {
+export function dispatchConnectPostMessage(url: string, callbacks: ConnectPostMessageCallbackProps) {
   safeCall([url], callbacks.onMessage)
 
   try {
@@ -706,11 +708,11 @@ export function dispatchConnectPostMessage(url: string, callbacks: ConnectCallba
  * Dispatch a post message from the Pulse Widget.
  *
  * @param {String} url
- * @param {PulseCallbackProps} callbacks
+ * @param {PulsePostMessageCallbackProps} callbacks
  * @throws {Error}
  * @throws {unknown}
  */
-export function dispatchPulsePostMessage(url: string, callbacks: PulseCallbackProps) {
+export function dispatchPulsePostMessage(url: string, callbacks: PulsePostMessageCallbackProps) {
   safeCall([url], callbacks.onMessage)
 
   try {

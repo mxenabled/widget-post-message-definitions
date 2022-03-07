@@ -3,7 +3,7 @@ class Template::TypescriptSource < Template::Base
     |import { parse as parseUrl } from "url"
     |
     |import {
-    |  BaseCallbackProps,
+    |  <%= callback_props_group_type_name(:base) %>,
     |  Metadata,
     |  PostMessageCallbackDispatchError,
     |  PostMessageFieldDecodeError,
@@ -111,9 +111,9 @@ class Template::TypescriptSource < Template::Base
     |}
     |
     |export type <%= callback_props_group_type_name(:widget) %> =
-    |  & BaseCallbackProps
-    |  & EntityCallbackProps
-    |  & GenericCallbackProps
+    |  & <%= callback_props_group_type_name(:base) %>
+    |  & <%= callback_props_group_type_name(:entity) %>
+    |  & <%= callback_props_group_type_name(:generic) %>
     |
     |export type <%= callback_props_group_type_name(:entity) %> = {
     |<%- entity_post_message_definitions.each do |post_message| -%>
@@ -144,6 +144,8 @@ class Template::TypescriptSource < Template::Base
     | */
     |function dispatchError(url: string, error: unknown, callbacks: <%= callback_props_group_type_name(:widget) %>) {
     |  if (error instanceof PostMessageFieldDecodeError) {
+    |    safeCall([url, error], callbacks.onMessageUnknownError)
+    |  } else if (error instanceof PostMessageUnknownTypeError) {
     |    safeCall([url, error], callbacks.onMessageUnknownError)
     |  } else if (error instanceof PostMessageCallbackDispatchError) {
     |    safeCall([url, error], callbacks.onMessageDispatchError)
@@ -318,12 +320,12 @@ class Template::TypescriptSource < Template::Base
   # @example
   #
   #   callback_props_group_type_name(:widget)
-  #   # => "WidgetCallbackProps"
+  #   # => "WidgetPostMessageCallbackProps"
   #
   # @param [String] group
   # @return [String]
   def callback_props_group_type_name(group)
-    normalized_casing("#{group}CallbackProps")
+    normalized_casing("#{group}PostMessageCallbackProps")
   end
 
   # @example
