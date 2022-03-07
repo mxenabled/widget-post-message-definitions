@@ -20,7 +20,8 @@ jobs:
 
     - name: Check for differences in packages
       run: |
-        if ! git diff --quiet HEAD packages; then
+        if ! git diff --quiet HEAD packages
+        then
           echo
           echo "Git diff:"
           git diff packages
@@ -29,4 +30,6 @@ jobs:
           echo "*** Detected code differences in a package ***"
           echo "*** Please run generator and commit the results ***"
           exit 1
+        else
+          echo "No differences found, great job."
         fi
