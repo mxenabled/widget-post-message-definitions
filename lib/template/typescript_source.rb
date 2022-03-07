@@ -164,7 +164,7 @@ class Template::TypescriptSource < Template::Base
     | * @throws {Error}
     | * @throws {unknown}
     | */
-    |export function <%= dispatch_function_name(:widget) %>(url: string, callbacks: <%= callback_props_group_type_name(:widget) %>) {
+    |export function <%= dispatch_location_change_function_name(:widget) %>(url: string, callbacks: <%= callback_props_group_type_name(:widget) %>) {
     |  safeCall([url], callbacks.onMessage)
     |
     |  try {
@@ -193,7 +193,7 @@ class Template::TypescriptSource < Template::Base
     | * @throws {Error}
     | * @throws {unknown}
     | */
-    |export function <%= dispatch_function_name(subgroup) %>(url: string, callbacks: <%= callback_props_group_type_name(subgroup) %>) {
+    |export function <%= dispatch_location_change_function_name(subgroup) %>(url: string, callbacks: <%= callback_props_group_type_name(subgroup) %>) {
     |  safeCall([url], callbacks.onMessage)
     |
     |  try {
@@ -353,13 +353,13 @@ class Template::TypescriptSource < Template::Base
 
   # @example
   #
-  #   dispatch_function_name(:generic)
+  #   dispatch_location_change_function_name(:generic)
   #   # => "dispatchWidgetPostMessage"
   #
   # @param [String] group
   # @return [String]
-  def dispatch_function_name(group)
-    "dispatch#{normalized_casing(group)}PostMessage"
+  def dispatch_location_change_function_name(group)
+    "dispatch#{normalized_casing(group)}LocationChangeEvent"
   end
 
   # @example

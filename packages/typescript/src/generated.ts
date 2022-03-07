@@ -579,7 +579,7 @@ function dispatchError(url: string, error: unknown, callbacks: WidgetPostMessage
  * @throws {Error}
  * @throws {unknown}
  */
-export function dispatchWidgetPostMessage(url: string, callbacks: WidgetPostMessageCallbackProps) {
+export function dispatchWidgetLocationChangeEvent(url: string, callbacks: WidgetPostMessageCallbackProps) {
   safeCall([url], callbacks.onMessage)
 
   try {
@@ -618,7 +618,7 @@ export function dispatchWidgetPostMessage(url: string, callbacks: WidgetPostMess
  * @throws {Error}
  * @throws {unknown}
  */
-export function dispatchConnectPostMessage(url: string, callbacks: ConnectPostMessageCallbackProps) {
+export function dispatchConnectLocationChangeEvent(url: string, callbacks: ConnectPostMessageCallbackProps) {
   safeCall([url], callbacks.onMessage)
 
   try {
@@ -712,7 +712,7 @@ export function dispatchConnectPostMessage(url: string, callbacks: ConnectPostMe
  * @throws {Error}
  * @throws {unknown}
  */
-export function dispatchPulsePostMessage(url: string, callbacks: PulsePostMessageCallbackProps) {
+export function dispatchPulseLocationChangeEvent(url: string, callbacks: PulsePostMessageCallbackProps) {
   safeCall([url], callbacks.onMessage)
 
   try {

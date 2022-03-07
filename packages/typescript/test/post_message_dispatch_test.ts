@@ -1,4 +1,4 @@
-import { dispatchConnectPostMessage } from "../src"
+import { dispatchConnectLocationChangeEvent } from "../src"
 
 describe("Post Message Dispatch", () => {
   const sessionData = {
@@ -11,11 +11,11 @@ describe("Post Message Dispatch", () => {
   const genPostMessageUrl = (url: string, metadata: unknown) =>
     `${url}?metadata=${encodeURIComponent(JSON.stringify(metadata))}`
 
-  describe("dispatchConnectPostMessage", () => {
+  describe("dispatchConnectLocationChangeEvent", () => {
     test("onMessage callback is called with valid post message", () => {
       const url = genPostMessageUrl("mx://connect/memberDeleted", memberPayload)
 
-      dispatchConnectPostMessage(url, {
+      dispatchConnectLocationChangeEvent(url, {
         onMessage: (postMessageUrl) => {
           expect(postMessageUrl).toBe(url)
         }
@@ -25,7 +25,7 @@ describe("Post Message Dispatch", () => {
     test("corresponding callback is called with parsed payload", () => {
       const url = genPostMessageUrl("mx://connect/memberDeleted", memberPayload)
 
-      dispatchConnectPostMessage(url, {
+      dispatchConnectLocationChangeEvent(url, {
         onMemberDeleted: (payload) => {
           expect(payload.member_guid).toBe(memberPayload.member_guid)
           expect(payload.user_guid).toBe(memberPayload.user_guid)
@@ -37,7 +37,7 @@ describe("Post Message Dispatch", () => {
     test("corresponding callback and onMessage are both called", () => {
       const url = genPostMessageUrl("mx://connect/memberDeleted", memberPayload)
 
-      dispatchConnectPostMessage(url, {
+      dispatchConnectLocationChangeEvent(url, {
         onMessage: (postMessageUrl) => {
           expect(postMessageUrl).toBe(url)
         },
