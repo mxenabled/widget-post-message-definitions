@@ -14,7 +14,7 @@ After you install the version of Ruby specified in `.ruby-version` , you can
 run the following command to execute all generators:
 
 ```
-ruby lib/run.rb
+ruby lib/generate.rb
 ```
 
 
