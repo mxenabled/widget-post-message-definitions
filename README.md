@@ -81,3 +81,4 @@ experiment. Run `bin/lint` to run the linter.
 ---
 
 [![Build Ruby Generator](https://github.com/mxenabled/widget-post-message-definitions/actions/workflows/build-ruby-generator.yml/badge.svg)](https://github.com/mxenabled/widget-post-message-definitions/actions/workflows/build-ruby-generator.yml)
+[![Build TypeScript Package](https://github.com/mxenabled/widget-post-message-definitions/actions/workflows/build-typescript-package.yml/badge.svg)](https://github.com/mxenabled/widget-post-message-definitions/actions/workflows/build-typescript-package.yml)
