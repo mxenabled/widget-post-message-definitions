@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc --outDir dist --declaration",
+    "build": "[ -d dist ] && rm -r dist; tsc --outDir dist --declaration",
     "test": "jest --verbose --coverage",
     "lint": "eslint src test",
     "prepack": "npm run build"
