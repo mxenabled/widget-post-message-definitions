@@ -32,8 +32,8 @@ export enum Type {
   ConnectMemberDeleted = "mx/connect/memberDeleted",
   ConnectCreateMemberError = "mx/connect/createMemberError",
   ConnectMemberStatusUpdate = "mx/connect/memberStatusUpdate",
-  ConnectOauthError = "mx/connect/oauthError",
-  ConnectOauthRequested = "mx/connect/oauthRequested",
+  ConnectOAuthError = "mx/connect/oauthError",
+  ConnectOAuthRequested = "mx/connect/oauthRequested",
   ConnectStepChange = "mx/connect/stepChange",
   ConnectSubmitMFA = "mx/connect/submitMFA",
   ConnectUpdateCredentials = "mx/connect/updateCredentials",
@@ -63,10 +63,10 @@ export const typeLookup: Record<string, Type> = {
   "mx/connect/createmembererror": Type.ConnectCreateMemberError,
   [Type.ConnectMemberStatusUpdate]: Type.ConnectMemberStatusUpdate,
   "mx/connect/memberstatusupdate": Type.ConnectMemberStatusUpdate,
-  [Type.ConnectOauthError]: Type.ConnectOauthError,
-  "mx/connect/oautherror": Type.ConnectOauthError,
-  [Type.ConnectOauthRequested]: Type.ConnectOauthRequested,
-  "mx/connect/oauthrequested": Type.ConnectOauthRequested,
+  [Type.ConnectOAuthError]: Type.ConnectOAuthError,
+  "mx/connect/oautherror": Type.ConnectOAuthError,
+  [Type.ConnectOAuthRequested]: Type.ConnectOAuthRequested,
+  "mx/connect/oauthrequested": Type.ConnectOAuthRequested,
   [Type.ConnectStepChange]: Type.ConnectStepChange,
   "mx/connect/stepchange": Type.ConnectStepChange,
   [Type.ConnectSubmitMFA]: Type.ConnectSubmitMFA,
@@ -162,15 +162,15 @@ export type ConnectMemberStatusUpdatePayload = {
   connection_status: number,
 }
 
-export type ConnectOauthErrorPayload = {
-  type: Type.ConnectOauthError,
+export type ConnectOAuthErrorPayload = {
+  type: Type.ConnectOAuthError,
   user_guid: string,
   session_guid: string,
   member_guid: string,
 }
 
-export type ConnectOauthRequestedPayload = {
-  type: Type.ConnectOauthRequested,
+export type ConnectOAuthRequestedPayload = {
+  type: Type.ConnectOAuthRequested,
   user_guid: string,
   session_guid: string,
   url: string,
@@ -225,8 +225,8 @@ export type WidgetPayload =
   | ConnectMemberDeletedPayload
   | ConnectCreateMemberErrorPayload
   | ConnectMemberStatusUpdatePayload
-  | ConnectOauthErrorPayload
-  | ConnectOauthRequestedPayload
+  | ConnectOAuthErrorPayload
+  | ConnectOAuthRequestedPayload
   | ConnectStepChangePayload
   | ConnectSubmitMFAPayload
   | ConnectUpdateCredentialsPayload
@@ -394,7 +394,7 @@ function buildPayload(type: Type, metadata: Metadata): Payload {
         connection_status: metadata.connection_status as number,
       }
 
-    case Type.ConnectOauthError:
+    case Type.ConnectOAuthError:
       assertMessageProp(metadata, "mx/connect/oauthError", "user_guid", "string")
       assertMessageProp(metadata, "mx/connect/oauthError", "session_guid", "string")
       assertMessageProp(metadata, "mx/connect/oauthError", "member_guid", "string")
@@ -406,7 +406,7 @@ function buildPayload(type: Type, metadata: Metadata): Payload {
         member_guid: metadata.member_guid as string,
       }
 
-    case Type.ConnectOauthRequested:
+    case Type.ConnectOAuthRequested:
       assertMessageProp(metadata, "mx/connect/oauthRequested", "user_guid", "string")
       assertMessageProp(metadata, "mx/connect/oauthRequested", "session_guid", "string")
       assertMessageProp(metadata, "mx/connect/oauthRequested", "url", "string")
@@ -539,8 +539,8 @@ export type ConnectCallbackProps = WidgetCallbackProps & {
   onMemberDeleted?: (payload: ConnectMemberDeletedPayload) => void
   onCreateMemberError?: (payload: ConnectCreateMemberErrorPayload) => void
   onMemberStatusUpdate?: (payload: ConnectMemberStatusUpdatePayload) => void
-  onOauthError?: (payload: ConnectOauthErrorPayload) => void
-  onOauthRequested?: (payload: ConnectOauthRequestedPayload) => void
+  onOAuthError?: (payload: ConnectOAuthErrorPayload) => void
+  onOAuthRequested?: (payload: ConnectOAuthRequestedPayload) => void
   onStepChange?: (payload: ConnectStepChangePayload) => void
   onSubmitMFA?: (payload: ConnectSubmitMFAPayload) => void
   onUpdateCredentials?: (payload: ConnectUpdateCredentialsPayload) => void
@@ -674,12 +674,12 @@ export function dispatchConnectPostMessage(url: string, callbacks: ConnectCallba
         safeCall([payload], callbacks.onMemberStatusUpdate)
         break
 
-      case Type.ConnectOauthError:
-        safeCall([payload], callbacks.onOauthError)
+      case Type.ConnectOAuthError:
+        safeCall([payload], callbacks.onOAuthError)
         break
 
-      case Type.ConnectOauthRequested:
-        safeCall([payload], callbacks.onOauthRequested)
+      case Type.ConnectOAuthRequested:
+        safeCall([payload], callbacks.onOAuthRequested)
         break
 
       case Type.ConnectStepChange:

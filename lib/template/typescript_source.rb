@@ -237,8 +237,8 @@ class Template::TypescriptSource < Template::Base
   # @return [String]
   def enum_key(post_message)
     post_message.grouped? ?
-      "#{post_message.subgroup}_#{post_message.label}".classify :
-      post_message.label.to_s.classify
+      normalized_casing("#{post_message.subgroup}_#{post_message.label}") :
+      normalized_casing(post_message.label)
   end
 
   # @see enum_key
@@ -312,7 +312,7 @@ class Template::TypescriptSource < Template::Base
   # @param [String] group
   # @return [String]
   def payload_group_type_name(group)
-    "#{group.to_s.classify}Payload"
+    normalized_casing("#{group}Payload")
   end
 
   # @example
@@ -323,7 +323,7 @@ class Template::TypescriptSource < Template::Base
   # @param [String] group
   # @return [String]
   def callback_props_group_type_name(group)
-    "#{group.to_s.classify}CallbackProps"
+    normalized_casing("#{group}CallbackProps")
   end
 
   # @example
@@ -343,7 +343,7 @@ class Template::TypescriptSource < Template::Base
     if post_message.entity?
       "on#{enum_key(post_message)}"
     else
-      "on#{post_message.label.to_s.classify}"
+      "on#{normalized_casing(post_message.label)}"
     end
   end
 
@@ -355,7 +355,7 @@ class Template::TypescriptSource < Template::Base
   # @param [String] group
   # @return [String]
   def dispatch_function_name(group)
-    "dispatch#{group.to_s.classify}PostMessage"
+    "dispatch#{normalized_casing(group)}PostMessage"
   end
 
   # @example
@@ -366,7 +366,7 @@ class Template::TypescriptSource < Template::Base
   # @param [String] group
   # @return [String]
   def widget_name(group)
-    "#{group.to_s.classify} Widget"
+    "#{normalized_casing(group)} Widget"
   end
 
   # @example
@@ -409,6 +409,12 @@ class Template::TypescriptSource < Template::Base
     else
       raise StandardError, "unable to convert `#{raw}` into TypeScript #{format}"
     end
+  end
+
+  # @param [String] string
+  # @return [String]
+  def normalized_casing(string)
+    string.to_s.classify.gsub("Oauth", "OAuth")
   end
 
   # @return [Hash]
