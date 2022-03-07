@@ -14,7 +14,7 @@ After you install the version of Ruby specified in `.ruby-version` , you can
 run the following command to execute all generators:
 
 ```
-ruby lib/main.rb
+ruby lib/run.rb
 ```
 
 
@@ -74,5 +74,7 @@ Template::TypescriptDocumentation.save("packages/typescript/docs/generated.md",
 
 ## Development
 
-- `bundle install`, install depedencies.
-- `bundle exec rubocop`, run linter.
+After checking out the repo, run `bin/setup` to install dependencies. You can
+also run `bin/console` for an interactive prompt that will allow you to
+experiment. Run `bundle exec rubocop` to run the linter. See `.ruby-version`
+for the required version of Ruby.
