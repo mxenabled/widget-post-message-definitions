@@ -71,3 +71,8 @@ package. For example:
 Template::TypescriptDocumentation.save("packages/typescript/docs/generated.md",
                                        post_message_definitions: post_message_definitions)
 ```
+
+## Development
+
+- `bundle install`, install depedencies.
+- `bundle exec rubocop`, run linter.

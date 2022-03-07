@@ -40,7 +40,7 @@ class PostMessageDefinition
 
   # @return [Boolean]
   def grouped?
-    not generic?
+    !generic?
   end
 
   # @return [Boolean]

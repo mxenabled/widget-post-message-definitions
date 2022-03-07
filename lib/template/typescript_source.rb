@@ -1,5 +1,5 @@
 class Template::TypescriptSource < Template::Base
-  CONTENT = <<-EOS
+  CONTENT = <<-CONTENT
     |import { parse as parseUrl } from "url"
     |
     |import {
@@ -219,7 +219,7 @@ class Template::TypescriptSource < Template::Base
     |  }
     |}
     |<%- end -%>
-  EOS
+  CONTENT
 
   # Generates the enum type key for a give post message.
   #
@@ -238,9 +238,11 @@ class Template::TypescriptSource < Template::Base
   # @param [PostMessageDefinition] post_message_definition
   # @return [String]
   def enum_key(post_message)
-    post_message.grouped? ?
-      normalized_casing("#{post_message.subgroup}_#{post_message.label}") :
+    if post_message.grouped?
+      normalized_casing("#{post_message.subgroup}_#{post_message.label}")
+    else
       normalized_casing(post_message.label)
+    end
   end
 
   # @see enum_key
@@ -432,7 +434,7 @@ class Template::TypescriptSource < Template::Base
   # @return [Hash]
   def post_message_definitions_by_widget
     post_message_definitions_of_group(:widget).filter do |post_message|
-      not post_message.generic?
+      !post_message.generic?
     end.group_by(&:subgroup)
   end
 
