@@ -1,10 +1,11 @@
 #!/usr/bin/env ruby
 
-require "pry"
 require "irb"
 require "bundler/setup"
 
 require_relative "../lib/main"
 
-Pry.start
+# require "pry"
+# Pry.start
+
 IRB.start(__FILE__)

@@ -76,5 +76,4 @@ Template::TypescriptDocumentation.save("packages/typescript/docs/generated.md",
 
 After checking out the repo, run `bin/setup` to install dependencies. You can
 also run `bin/console` for an interactive prompt that will allow you to
-experiment. Run `bundle exec rubocop` to run the linter. See `.ruby-version`
-for the required version of Ruby.
+experiment. Run `bin/lint` to run the linter.
