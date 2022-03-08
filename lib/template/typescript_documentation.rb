@@ -2,6 +2,7 @@ class Template::TypescriptDocumentation < Template::TypescriptSource
   HEADER = ""
   CONTENT = <<-CONTENT
     |<%- post_message_definitions_by_widget.each do |widget, post_messages| -%>
+    |<%- next unless widget == :connect -%>
     |## <%= widget_name(widget) %> Post Messages
     |
     |<%- post_messages.each do |post_message| -%>

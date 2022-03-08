@@ -159,25 +159,3 @@ import { ConnectWidget } from "@mxenabled/react-native-widget-sdk"
 />
 ```
 
-## Pulse Widget Post Messages
-
-#### Overdraft warning cta transfer funds (`mx/pulse/overdraftWarning/cta/transferFunds`)
-
-- Widget callback prop name: `onOverdraftWarningCtaTransferFunds`
-- Payload:
-    - `account_guid` (`string`)
-    - `amount` (`number`)
-
-
-### Example
-
-```jsx
-import { PulseWidget } from "@mxenabled/react-native-widget-sdk"
-
-<PulseWidget
-  url="https://widgets.moneydesktop.com/md/pulse/..."
-
-  onOverdraftWarningCtaTransferFunds={(payload) => console.log(payload)}
-/>
-```
-
