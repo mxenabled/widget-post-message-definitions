@@ -5,9 +5,8 @@ class Template::TypescriptDocumentation < Template::TypescriptSource
     |## <%= widget_name(widget) %> Post Messages
     |
     |<%- post_messages.each do |post_message| -%>
-    |#### <%= normalize_keywords(post_message.label.to_s.titleize) %>
+    |#### <%= normalize_keywords(post_message.label.to_s.titleize) %> (`<%= post_message %>`)
     |
-    |- Post message event type: `<%= post_message %>`
     |- Widget callback prop name: `<%= callback_function_name(post_message) %>`
     |<%- unless post_message.properties.empty? -%>
     |- Payload:

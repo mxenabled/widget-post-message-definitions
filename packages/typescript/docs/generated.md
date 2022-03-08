@@ -2,36 +2,32 @@
 
 ## Connect Widget Post Messages
 
-#### Loaded
+#### Loaded (`mx/connect/loaded`)
 
-- Post message event type: `mx/connect/loaded`
 - Widget callback prop name: `onLoaded`
 - Payload:
     - `user_guid` (`string`)
     - `session_guid` (`string`)
     - `initial_step` (`"search" | "selectMember" | "enterCreds" | "mfa" | "connected" | "loginError" | "disclosure"`)
 
-#### Enter credentials
+#### Enter credentials (`mx/connect/enterCredentials`)
 
-- Post message event type: `mx/connect/enterCredentials`
 - Widget callback prop name: `onEnterCredentials`
 - Payload:
     - `user_guid` (`string`)
     - `session_guid` (`string`)
     - `institution` (`{ code: string, guid: string }`)
 
-#### Institution search
+#### Institution search (`mx/connect/institutionSearch`)
 
-- Post message event type: `mx/connect/institutionSearch`
 - Widget callback prop name: `onInstitutionSearch`
 - Payload:
     - `user_guid` (`string`)
     - `session_guid` (`string`)
     - `query` (`string`)
 
-#### Selected institution
+#### Selected institution (`mx/connect/selectedInstitution`)
 
-- Post message event type: `mx/connect/selectedInstitution`
 - Widget callback prop name: `onSelectedInstitution`
 - Payload:
     - `user_guid` (`string`)
@@ -41,35 +37,31 @@
     - `name` (`string`)
     - `url` (`string`)
 
-#### Member connected
+#### Member connected (`mx/connect/memberConnected`)
 
-- Post message event type: `mx/connect/memberConnected`
 - Widget callback prop name: `onMemberConnected`
 - Payload:
     - `user_guid` (`string`)
     - `session_guid` (`string`)
     - `member_guid` (`string`)
 
-#### Connected primary action
+#### Connected primary action (`mx/connect/connected/primaryAction`)
 
-- Post message event type: `mx/connect/connected/primaryAction`
 - Widget callback prop name: `onConnectedPrimaryAction`
 - Payload:
     - `user_guid` (`string`)
     - `session_guid` (`string`)
 
-#### Member deleted
+#### Member deleted (`mx/connect/memberDeleted`)
 
-- Post message event type: `mx/connect/memberDeleted`
 - Widget callback prop name: `onMemberDeleted`
 - Payload:
     - `user_guid` (`string`)
     - `session_guid` (`string`)
     - `member_guid` (`string`)
 
-#### Create member error
+#### Create member error (`mx/connect/createMemberError`)
 
-- Post message event type: `mx/connect/createMemberError`
 - Widget callback prop name: `onCreateMemberError`
 - Payload:
     - `user_guid` (`string`)
@@ -77,9 +69,8 @@
     - `institution_guid` (`string`)
     - `institution_code` (`string`)
 
-#### Member status update
+#### Member status update (`mx/connect/memberStatusUpdate`)
 
-- Post message event type: `mx/connect/memberStatusUpdate`
 - Widget callback prop name: `onMemberStatusUpdate`
 - Payload:
     - `user_guid` (`string`)
@@ -87,18 +78,16 @@
     - `member_guid` (`string`)
     - `connection_status` (`number`)
 
-#### OAuth error
+#### OAuth error (`mx/connect/oauthError`)
 
-- Post message event type: `mx/connect/oauthError`
 - Widget callback prop name: `onOAuthError`
 - Payload:
     - `user_guid` (`string`)
     - `session_guid` (`string`)
     - `member_guid` (`string`)
 
-#### OAuth requested
+#### OAuth requested (`mx/connect/oauthRequested`)
 
-- Post message event type: `mx/connect/oauthRequested`
 - Widget callback prop name: `onOAuthRequested`
 - Payload:
     - `user_guid` (`string`)
@@ -106,9 +95,8 @@
     - `url` (`string`)
     - `member_guid` (`string`)
 
-#### Step change
+#### Step change (`mx/connect/stepChange`)
 
-- Post message event type: `mx/connect/stepChange`
 - Widget callback prop name: `onStepChange`
 - Payload:
     - `user_guid` (`string`)
@@ -116,18 +104,16 @@
     - `previous` (`string`)
     - `current` (`string`)
 
-#### Submit MFA
+#### Submit MFA (`mx/connect/submitMFA`)
 
-- Post message event type: `mx/connect/submitMFA`
 - Widget callback prop name: `onSubmitMFA`
 - Payload:
     - `user_guid` (`string`)
     - `session_guid` (`string`)
     - `member_guid` (`string`)
 
-#### Update credentials
+#### Update credentials (`mx/connect/updateCredentials`)
 
-- Post message event type: `mx/connect/updateCredentials`
 - Widget callback prop name: `onUpdateCredentials`
 - Payload:
     - `user_guid` (`string`)
@@ -163,9 +149,8 @@ import { ConnectWidget } from "@mxenabled/react-native-widget-sdk"
 
 ## Pulse Widget Post Messages
 
-#### Overdraft warning cta transfer funds
+#### Overdraft warning cta transfer funds (`mx/pulse/overdraftWarning/cta/transferFunds`)
 
-- Post message event type: `mx/pulse/overdraftWarning/cta/transferFunds`
 - Widget callback prop name: `onOverdraftWarningCtaTransferFunds`
 - Payload:
     - `account_guid` (`string`)
