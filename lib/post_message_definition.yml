@@ -1,5 +1,8 @@
-account_properties: &account_properties
+account_payload: &account_payload
   guid: string
+
+account_properties: &account_properties
+  payload: *account_payload
 
 user_session_properties: &user_session_properties
   user_guid: string
@@ -8,78 +11,98 @@ user_session_properties: &user_session_properties
 post_messages:
   widget:
     generic:
-      load: {}
+      load:
+        payload: {}
       ping:
-        <<: *user_session_properties
+        payload:
+          <<: *user_session_properties
       focusTrap:
-        <<: *user_session_properties
+        payload:
+          <<: *user_session_properties
     # This list was taken from this documentation:
     # https://docs.mx.com/api#connect_postmessage_events
     connect:
       loaded:
-        <<: *user_session_properties
-        initial_step:
-          - search
-          - selectMember
-          - enterCreds
-          - mfa
-          - connected
-          - loginError
-          - disclosure
+        payload:
+          <<: *user_session_properties
+          initial_step:
+            - search
+            - selectMember
+            - enterCreds
+            - mfa
+            - connected
+            - loginError
+            - disclosure
       enterCredentials:
-        <<: *user_session_properties
-        institution:
-          code: string
-          guid: string
+        payload:
+          <<: *user_session_properties
+          institution:
+            code: string
+            guid: string
       institutionSearch:
-        <<: *user_session_properties
-        query: string
+        payload:
+          <<: *user_session_properties
+          query: string
       selectedInstitution:
-        <<: *user_session_properties
-        code: string
-        guid: string
-        name: string
-        url: string
-      memberConnected:
-        <<: *user_session_properties
-        member_guid: string
-      connected/primaryAction:
-        <<: *user_session_properties
-      memberDeleted:
-        <<: *user_session_properties
-        member_guid: string
-      createMemberError:
-        <<: *user_session_properties
-        institution_guid: string
-        institution_code: string
-      memberStatusUpdate:
-        <<: *user_session_properties
-        member_guid: string
-        connection_status: number
-      oauthError:
-        <<: *user_session_properties
-        member_guid: string
-      oauthRequested:
-        <<: *user_session_properties
-        url: string
-        member_guid: string
-      stepChange:
-        <<: *user_session_properties
-        previous: string
-        current: string
-      submitMFA:
-        <<: *user_session_properties
-        member_guid: string
-      updateCredentials:
-        <<: *user_session_properties
-        member_guid: string
-        institution:
+        payload:
+          <<: *user_session_properties
           code: string
           guid: string
+          name: string
+          url: string
+      memberConnected:
+        payload:
+          <<: *user_session_properties
+          member_guid: string
+      connected/primaryAction:
+        payload:
+          <<: *user_session_properties
+      memberDeleted:
+        payload:
+          <<: *user_session_properties
+          member_guid: string
+      createMemberError:
+        payload:
+          <<: *user_session_properties
+          institution_guid: string
+          institution_code: string
+      memberStatusUpdate:
+        payload:
+          <<: *user_session_properties
+          member_guid: string
+          connection_status: number
+      oauthError:
+        payload:
+          <<: *user_session_properties
+          member_guid: string
+      oauthRequested:
+        warning: |
+          Overriding this ...
+        payload:
+          <<: *user_session_properties
+          url: string
+          member_guid: string
+      stepChange:
+        payload:
+          <<: *user_session_properties
+          previous: string
+          current: string
+      submitMFA:
+        payload:
+          <<: *user_session_properties
+          member_guid: string
+      updateCredentials:
+        payload:
+          <<: *user_session_properties
+          member_guid: string
+          institution:
+            code: string
+            guid: string
     pulse:
       overdraftWarning/cta/transferFunds:
-        account_guid: string
-        amount: number
+        payload:
+          account_guid: string
+          amount: number
 
   entity:
     account:

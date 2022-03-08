@@ -9,9 +9,9 @@ class Template::TypescriptDocumentation < Template::TypescriptSource
     |### <%= normalize_keywords(post_message.label.to_s.titleize) %> (`<%= post_message %>`)
     |
     |- Widget callback prop name: `<%= callback_function_name(post_message) %>`
-    |<%- unless post_message.properties.empty? -%>
+    |<%- unless post_message.payload.empty? -%>
     |- Payload fields:
-    |    <%- post_message.properties.each do |property, rhs| -%>
+    |    <%- post_message.payload.each do |property, rhs| -%>
     |    <%- if rhs.is_a?(Array) -%>
     |    - `<%= property %>` (`<%= payload_property_type("string") %>`)
     |        - One of:
