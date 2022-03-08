@@ -11,7 +11,20 @@ class Template::TypescriptDocumentation < Template::TypescriptSource
     |<%- unless post_message.properties.empty? -%>
     |- Payload:
     |    <%- post_message.properties.each do |property, rhs| -%>
+    |    <%- if rhs.is_a?(Array) -%>
+    |    - `<%= property %>` (`<%= payload_property_type("string") %>`)
+    |        - One of:
+    |            <%- rhs.each do |option| -%>
+    |            - `"<%= option %>"`
+    |            <%- end -%>
+    |    <%- elsif rhs.is_a?(Hash) -%>
+    |    - `<%= property %>` (`<%= payload_property_type("object") %>`)
+    |        <%- rhs.each do |property, deep_rhs| -%>
+    |        - `<%= property %>` (`<%= payload_property_type(deep_rhs) %>`)
+    |        <%- end -%>
+    |    <%- else -%>
     |    - `<%= property %>` (`<%= payload_property_type(rhs) %>`)
+    |    <%- end -%>
     |    <%- end -%>
     |<%- end -%>
     |

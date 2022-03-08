@@ -8,7 +8,15 @@
 - Payload:
     - `user_guid` (`string`)
     - `session_guid` (`string`)
-    - `initial_step` (`"search" | "selectMember" | "enterCreds" | "mfa" | "connected" | "loginError" | "disclosure"`)
+    - `initial_step` (`string`)
+        - One of:
+            - `"search"`
+            - `"selectMember"`
+            - `"enterCreds"`
+            - `"mfa"`
+            - `"connected"`
+            - `"loginError"`
+            - `"disclosure"`
 
 #### Enter credentials (`mx/connect/enterCredentials`)
 
@@ -16,7 +24,9 @@
 - Payload:
     - `user_guid` (`string`)
     - `session_guid` (`string`)
-    - `institution` (`{ code: string, guid: string }`)
+    - `institution` (`object`)
+        - `code` (`string`)
+        - `guid` (`string`)
 
 #### Institution search (`mx/connect/institutionSearch`)
 
@@ -119,7 +129,9 @@
     - `user_guid` (`string`)
     - `session_guid` (`string`)
     - `member_guid` (`string`)
-    - `institution` (`{ code: string, guid: string }`)
+    - `institution` (`object`)
+        - `code` (`string`)
+        - `guid` (`string`)
 
 
 ### Example
