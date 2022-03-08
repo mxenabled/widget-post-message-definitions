@@ -46,12 +46,11 @@ class String
   #
   # @return [String]
   def titleize
-    words = self
-      .gsub("/", " ")
-      .gsub("_", " ")
-      .gsub(/([a-z])([A-Z])/, '\1 \2')
-      .split(" ")
-      .map(&:downcase)
+    words = self.gsub("/", " ")
+                .gsub("_", " ")
+                .gsub(/([a-z])([A-Z])/, '\1 \2')
+                .split(" ")
+                .map(&:downcase)
 
     return "" if words.empty?
 

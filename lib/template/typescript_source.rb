@@ -418,7 +418,11 @@ class Template::TypescriptSource < Template::Base
   # @param [String] string
   # @return [String]
   def normalize_keywords(string)
-    string.to_s.gsub("Oauth", "OAuth")
+    string.to_s
+          .gsub("Oauth", "OAuth")
+          .gsub(/\soauth/i, " OAuth")
+          .gsub("Mfa", "MFA")
+          .gsub(/\smfa/i, " MFA")
   end
 
   # @return [Hash]
