@@ -77,7 +77,9 @@ post_messages:
           member_guid: string
       oauthRequested:
         warning: |
-          Overriding this ...
+          By passing your own method to this prop, you are overriding the
+          default behaviour of the SDK which is to load the OAuth URL in a new
+          browser tab.
         payload:
           <<: *user_session_properties
           url: string

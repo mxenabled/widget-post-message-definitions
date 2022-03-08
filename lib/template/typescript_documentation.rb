@@ -8,6 +8,9 @@ class Template::TypescriptDocumentation < Template::TypescriptSource
     |<%- post_messages.each do |post_message| -%>
     |### <%= normalize_keywords(post_message.label.to_s.titleize) %> (`<%= post_message %>`)
     |
+    |<%- if post_message.properties["warning"] -%>
+    |**Warning**: <%= post_message.properties["warning"] %>
+    |<%- end -%>
     |- Widget callback prop name: `<%= callback_function_name(post_message) %>`
     |<%- unless post_message.payload.empty? -%>
     |- Payload fields:

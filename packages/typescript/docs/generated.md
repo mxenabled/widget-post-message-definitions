@@ -98,6 +98,10 @@
 
 ### OAuth requested (`mx/connect/oauthRequested`)
 
+**Warning**: By passing your own method to this prop, you are overriding the
+default behaviour of the SDK which is to load the OAuth URL in a new
+browser tab.
+
 - Widget callback prop name: `onOAuthRequested`
 - Payload fields:
     - `user_guid` (`string`)
