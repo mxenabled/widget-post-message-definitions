@@ -2,10 +2,10 @@
 
 ## Connect Widget Post Messages
 
-#### Loaded (`mx/connect/loaded`)
+### Loaded (`mx/connect/loaded`)
 
 - Widget callback prop name: `onLoaded`
-- Payload:
+- Payload fields:
     - `user_guid` (`string`)
     - `session_guid` (`string`)
     - `initial_step` (`string`)
@@ -18,28 +18,28 @@
             - `"loginError"`
             - `"disclosure"`
 
-#### Enter credentials (`mx/connect/enterCredentials`)
+### Enter credentials (`mx/connect/enterCredentials`)
 
 - Widget callback prop name: `onEnterCredentials`
-- Payload:
+- Payload fields:
     - `user_guid` (`string`)
     - `session_guid` (`string`)
     - `institution` (`object`)
         - `code` (`string`)
         - `guid` (`string`)
 
-#### Institution search (`mx/connect/institutionSearch`)
+### Institution search (`mx/connect/institutionSearch`)
 
 - Widget callback prop name: `onInstitutionSearch`
-- Payload:
+- Payload fields:
     - `user_guid` (`string`)
     - `session_guid` (`string`)
     - `query` (`string`)
 
-#### Selected institution (`mx/connect/selectedInstitution`)
+### Selected institution (`mx/connect/selectedInstitution`)
 
 - Widget callback prop name: `onSelectedInstitution`
-- Payload:
+- Payload fields:
     - `user_guid` (`string`)
     - `session_guid` (`string`)
     - `code` (`string`)
@@ -47,85 +47,85 @@
     - `name` (`string`)
     - `url` (`string`)
 
-#### Member connected (`mx/connect/memberConnected`)
+### Member connected (`mx/connect/memberConnected`)
 
 - Widget callback prop name: `onMemberConnected`
-- Payload:
+- Payload fields:
     - `user_guid` (`string`)
     - `session_guid` (`string`)
     - `member_guid` (`string`)
 
-#### Connected primary action (`mx/connect/connected/primaryAction`)
+### Connected primary action (`mx/connect/connected/primaryAction`)
 
 - Widget callback prop name: `onConnectedPrimaryAction`
-- Payload:
+- Payload fields:
     - `user_guid` (`string`)
     - `session_guid` (`string`)
 
-#### Member deleted (`mx/connect/memberDeleted`)
+### Member deleted (`mx/connect/memberDeleted`)
 
 - Widget callback prop name: `onMemberDeleted`
-- Payload:
+- Payload fields:
     - `user_guid` (`string`)
     - `session_guid` (`string`)
     - `member_guid` (`string`)
 
-#### Create member error (`mx/connect/createMemberError`)
+### Create member error (`mx/connect/createMemberError`)
 
 - Widget callback prop name: `onCreateMemberError`
-- Payload:
+- Payload fields:
     - `user_guid` (`string`)
     - `session_guid` (`string`)
     - `institution_guid` (`string`)
     - `institution_code` (`string`)
 
-#### Member status update (`mx/connect/memberStatusUpdate`)
+### Member status update (`mx/connect/memberStatusUpdate`)
 
 - Widget callback prop name: `onMemberStatusUpdate`
-- Payload:
+- Payload fields:
     - `user_guid` (`string`)
     - `session_guid` (`string`)
     - `member_guid` (`string`)
     - `connection_status` (`number`)
 
-#### OAuth error (`mx/connect/oauthError`)
+### OAuth error (`mx/connect/oauthError`)
 
 - Widget callback prop name: `onOAuthError`
-- Payload:
+- Payload fields:
     - `user_guid` (`string`)
     - `session_guid` (`string`)
     - `member_guid` (`string`)
 
-#### OAuth requested (`mx/connect/oauthRequested`)
+### OAuth requested (`mx/connect/oauthRequested`)
 
 - Widget callback prop name: `onOAuthRequested`
-- Payload:
+- Payload fields:
     - `user_guid` (`string`)
     - `session_guid` (`string`)
     - `url` (`string`)
     - `member_guid` (`string`)
 
-#### Step change (`mx/connect/stepChange`)
+### Step change (`mx/connect/stepChange`)
 
 - Widget callback prop name: `onStepChange`
-- Payload:
+- Payload fields:
     - `user_guid` (`string`)
     - `session_guid` (`string`)
     - `previous` (`string`)
     - `current` (`string`)
 
-#### Submit MFA (`mx/connect/submitMFA`)
+### Submit MFA (`mx/connect/submitMFA`)
 
 - Widget callback prop name: `onSubmitMFA`
-- Payload:
+- Payload fields:
     - `user_guid` (`string`)
     - `session_guid` (`string`)
     - `member_guid` (`string`)
 
-#### Update credentials (`mx/connect/updateCredentials`)
+### Update credentials (`mx/connect/updateCredentials`)
 
 - Widget callback prop name: `onUpdateCredentials`
-- Payload:
+- Payload fields:
     - `user_guid` (`string`)
     - `session_guid` (`string`)
     - `member_guid` (`string`)
