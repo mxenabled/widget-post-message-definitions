@@ -9,7 +9,6 @@ class Template::TypescriptSource < Template::Base
     |  PostMessageFieldDecodeError,
     |  PostMessageUnknownTypeError,
     |  assertMessageProp,
-    |  safeCall,
     |} from "./lib"
     |
     |export enum Type {
@@ -144,11 +143,11 @@ class Template::TypescriptSource < Template::Base
     | */
     |function dispatchError(url: string, error: unknown, callbacks: <%= callback_props_group_type_name(:widget) %>) {
     |  if (error instanceof PostMessageFieldDecodeError) {
-    |    safeCall([url, error], callbacks.onMessageUnknownError)
+    |    callbacks.onMessageUnknownError?.(url, error)
     |  } else if (error instanceof PostMessageUnknownTypeError) {
-    |    safeCall([url, error], callbacks.onMessageUnknownError)
+    |    callbacks.onMessageUnknownError?.(url, error)
     |  } else if (error instanceof PostMessageCallbackDispatchError) {
-    |    safeCall([url, error], callbacks.onMessageDispatchError)
+    |    callbacks.onMessageDispatchError?.(url, error)
     |  } else {
     |    throw error
     |  }
@@ -165,14 +164,14 @@ class Template::TypescriptSource < Template::Base
     | * @throws {unknown}
     | */
     |export function <%= dispatch_location_change_function_name(:widget) %>(url: string, callbacks: <%= callback_props_group_type_name(:widget) %>) {
-    |  safeCall([url], callbacks.onMessage)
+    |  callbacks.onMessage?.(url)
     |
     |  try {
     |    const payload = buildPayloadFromUrl(url)
     |    switch (payload.type) {
     |      <%- (generic_post_message_definitions + entity_post_message_definitions).each do |post_message| -%>
     |      case <%= qualified_enum_key(post_message) %>:
-    |        safeCall([payload], callbacks.<%= callback_function_name(post_message) %>)
+    |        callbacks.<%= callback_function_name(post_message) %>?.(payload)
     |        break
     |
     |      <%- end -%>
@@ -194,20 +193,20 @@ class Template::TypescriptSource < Template::Base
     | * @throws {unknown}
     | */
     |export function <%= dispatch_location_change_function_name(subgroup) %>(url: string, callbacks: <%= callback_props_group_type_name(subgroup) %>) {
-    |  safeCall([url], callbacks.onMessage)
+    |  callbacks.onMessage?.(url)
     |
     |  try {
     |    const payload = buildPayloadFromUrl(url)
     |    switch (payload.type) {
     |      <%- (generic_post_message_definitions + entity_post_message_definitions).each do |post_message| -%>
     |      case <%= qualified_enum_key(post_message) %>:
-    |        safeCall([payload], callbacks.<%= callback_function_name(post_message) %>)
+    |        callbacks.<%= callback_function_name(post_message) %>?.(payload)
     |        break
     |
     |      <%- end -%>
     |      <%- post_messages.each do |post_message| -%>
     |      case <%= qualified_enum_key(post_message) %>:
-    |        safeCall([payload], callbacks.<%= callback_function_name(post_message) %>)
+    |        callbacks.<%= callback_function_name(post_message) %>?.(payload)
     |        break
     |
     |      <%- end -%>

@@ -16,7 +16,6 @@ import {
   PostMessageFieldDecodeError,
   PostMessageUnknownTypeError,
   assertMessageProp,
-  safeCall,
 } from "./lib"
 
 export enum Type {
@@ -559,11 +558,11 @@ export type PulsePostMessageCallbackProps = WidgetPostMessageCallbackProps & {
  */
 function dispatchError(url: string, error: unknown, callbacks: WidgetPostMessageCallbackProps) {
   if (error instanceof PostMessageFieldDecodeError) {
-    safeCall([url, error], callbacks.onMessageUnknownError)
+    callbacks.onMessageUnknownError?.(url, error)
   } else if (error instanceof PostMessageUnknownTypeError) {
-    safeCall([url, error], callbacks.onMessageUnknownError)
+    callbacks.onMessageUnknownError?.(url, error)
   } else if (error instanceof PostMessageCallbackDispatchError) {
-    safeCall([url, error], callbacks.onMessageDispatchError)
+    callbacks.onMessageDispatchError?.(url, error)
   } else {
     throw error
   }
@@ -580,25 +579,25 @@ function dispatchError(url: string, error: unknown, callbacks: WidgetPostMessage
  * @throws {unknown}
  */
 export function dispatchWidgetLocationChangeEvent(url: string, callbacks: WidgetPostMessageCallbackProps) {
-  safeCall([url], callbacks.onMessage)
+  callbacks.onMessage?.(url)
 
   try {
     const payload = buildPayloadFromUrl(url)
     switch (payload.type) {
       case Type.Load:
-        safeCall([payload], callbacks.onLoad)
+        callbacks.onLoad?.(payload)
         break
 
       case Type.Ping:
-        safeCall([payload], callbacks.onPing)
+        callbacks.onPing?.(payload)
         break
 
       case Type.FocusTrap:
-        safeCall([payload], callbacks.onFocusTrap)
+        callbacks.onFocusTrap?.(payload)
         break
 
       case Type.AccountCreated:
-        safeCall([payload], callbacks.onAccountCreated)
+        callbacks.onAccountCreated?.(payload)
         break
 
       default:
@@ -619,81 +618,81 @@ export function dispatchWidgetLocationChangeEvent(url: string, callbacks: Widget
  * @throws {unknown}
  */
 export function dispatchConnectLocationChangeEvent(url: string, callbacks: ConnectPostMessageCallbackProps) {
-  safeCall([url], callbacks.onMessage)
+  callbacks.onMessage?.(url)
 
   try {
     const payload = buildPayloadFromUrl(url)
     switch (payload.type) {
       case Type.Load:
-        safeCall([payload], callbacks.onLoad)
+        callbacks.onLoad?.(payload)
         break
 
       case Type.Ping:
-        safeCall([payload], callbacks.onPing)
+        callbacks.onPing?.(payload)
         break
 
       case Type.FocusTrap:
-        safeCall([payload], callbacks.onFocusTrap)
+        callbacks.onFocusTrap?.(payload)
         break
 
       case Type.AccountCreated:
-        safeCall([payload], callbacks.onAccountCreated)
+        callbacks.onAccountCreated?.(payload)
         break
 
       case Type.ConnectLoaded:
-        safeCall([payload], callbacks.onLoaded)
+        callbacks.onLoaded?.(payload)
         break
 
       case Type.ConnectEnterCredentials:
-        safeCall([payload], callbacks.onEnterCredentials)
+        callbacks.onEnterCredentials?.(payload)
         break
 
       case Type.ConnectInstitutionSearch:
-        safeCall([payload], callbacks.onInstitutionSearch)
+        callbacks.onInstitutionSearch?.(payload)
         break
 
       case Type.ConnectSelectedInstitution:
-        safeCall([payload], callbacks.onSelectedInstitution)
+        callbacks.onSelectedInstitution?.(payload)
         break
 
       case Type.ConnectMemberConnected:
-        safeCall([payload], callbacks.onMemberConnected)
+        callbacks.onMemberConnected?.(payload)
         break
 
       case Type.ConnectConnectedPrimaryAction:
-        safeCall([payload], callbacks.onConnectedPrimaryAction)
+        callbacks.onConnectedPrimaryAction?.(payload)
         break
 
       case Type.ConnectMemberDeleted:
-        safeCall([payload], callbacks.onMemberDeleted)
+        callbacks.onMemberDeleted?.(payload)
         break
 
       case Type.ConnectCreateMemberError:
-        safeCall([payload], callbacks.onCreateMemberError)
+        callbacks.onCreateMemberError?.(payload)
         break
 
       case Type.ConnectMemberStatusUpdate:
-        safeCall([payload], callbacks.onMemberStatusUpdate)
+        callbacks.onMemberStatusUpdate?.(payload)
         break
 
       case Type.ConnectOAuthError:
-        safeCall([payload], callbacks.onOAuthError)
+        callbacks.onOAuthError?.(payload)
         break
 
       case Type.ConnectOAuthRequested:
-        safeCall([payload], callbacks.onOAuthRequested)
+        callbacks.onOAuthRequested?.(payload)
         break
 
       case Type.ConnectStepChange:
-        safeCall([payload], callbacks.onStepChange)
+        callbacks.onStepChange?.(payload)
         break
 
       case Type.ConnectSubmitMFA:
-        safeCall([payload], callbacks.onSubmitMFA)
+        callbacks.onSubmitMFA?.(payload)
         break
 
       case Type.ConnectUpdateCredentials:
-        safeCall([payload], callbacks.onUpdateCredentials)
+        callbacks.onUpdateCredentials?.(payload)
         break
 
       default:
@@ -713,29 +712,29 @@ export function dispatchConnectLocationChangeEvent(url: string, callbacks: Conne
  * @throws {unknown}
  */
 export function dispatchPulseLocationChangeEvent(url: string, callbacks: PulsePostMessageCallbackProps) {
-  safeCall([url], callbacks.onMessage)
+  callbacks.onMessage?.(url)
 
   try {
     const payload = buildPayloadFromUrl(url)
     switch (payload.type) {
       case Type.Load:
-        safeCall([payload], callbacks.onLoad)
+        callbacks.onLoad?.(payload)
         break
 
       case Type.Ping:
-        safeCall([payload], callbacks.onPing)
+        callbacks.onPing?.(payload)
         break
 
       case Type.FocusTrap:
-        safeCall([payload], callbacks.onFocusTrap)
+        callbacks.onFocusTrap?.(payload)
         break
 
       case Type.AccountCreated:
-        safeCall([payload], callbacks.onAccountCreated)
+        callbacks.onAccountCreated?.(payload)
         break
 
       case Type.PulseOverdraftWarningCtaTransferFunds:
-        safeCall([payload], callbacks.onOverdraftWarningCtaTransferFunds)
+        callbacks.onOverdraftWarningCtaTransferFunds?.(payload)
         break
 
       default:

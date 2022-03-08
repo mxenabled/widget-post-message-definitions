@@ -4,18 +4,6 @@ export type BasePostMessageCallbackProps = {
   onMessageDispatchError?: (url: string, error: Error) => void
 }
 
-export function safeCall(args: [], fn?: () => void): void
-export function safeCall<P1>(args: [P1], fn?: (...args: [P1]) => void): void
-export function safeCall<P1, P2>(args: [P1, P2], fn?: (...args: [P1, P2]) => void): void
-export function safeCall<P1, P2, P3>(args: [P1, P2, P3], fn?: (...args: [P1, P2, P3]) => void): void
-export function safeCall<P1, P2, P3, P4>(args: [P1, P2, P3, P4], fn?: (...args: [P1, P2, P3, P4]) => void): void
-export function safeCall<P1, P2, P3, P4, P5>(args: [P1, P2, P3, P4, P5], fn?: (...args: [P1, P2, P3, P4, P5]) => void): void
-export function safeCall<Ps>(args: Ps[], fn?: (...args: Ps[]) => void): void {
-  if (fn) {
-    fn(...args)
-  }
-}
-
 // This is an internal error. Thrown when we are decoding a post message's
 // metadata and we encourntered a missing field or an invalid value. This
 // likely means there has been a change to the definition of a post message
