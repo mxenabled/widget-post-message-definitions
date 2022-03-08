@@ -239,9 +239,9 @@ class Template::TypescriptSource < Template::Base
   # @return [String]
   def enum_key(post_message)
     if post_message.grouped?
-      normalized_casing("#{post_message.subgroup}_#{post_message.label}")
+      normalize_keywords("#{post_message.subgroup}_#{post_message.label}".classify)
     else
-      normalized_casing(post_message.label)
+      normalize_keywords(post_message.label.to_s.classify)
     end
   end
 
@@ -316,7 +316,7 @@ class Template::TypescriptSource < Template::Base
   # @param [String] group
   # @return [String]
   def payload_group_type_name(group)
-    normalized_casing("#{group}Payload")
+    normalize_keywords("#{group.to_s.classify}Payload")
   end
 
   # @example
@@ -327,7 +327,7 @@ class Template::TypescriptSource < Template::Base
   # @param [String] group
   # @return [String]
   def callback_props_group_type_name(group)
-    normalized_casing("#{group}PostMessageCallbackProps")
+    normalize_keywords("#{group.to_s.classify}PostMessageCallbackProps")
   end
 
   # @example
@@ -347,7 +347,7 @@ class Template::TypescriptSource < Template::Base
     if post_message.entity?
       "on#{enum_key(post_message)}"
     else
-      "on#{normalized_casing(post_message.label)}"
+      "on#{normalize_keywords(post_message.label.to_s.classify)}"
     end
   end
 
@@ -359,7 +359,7 @@ class Template::TypescriptSource < Template::Base
   # @param [String] group
   # @return [String]
   def dispatch_location_change_function_name(group)
-    "dispatch#{normalized_casing(group)}LocationChangeEvent"
+    "dispatch#{normalize_keywords(group.to_s.classify)}LocationChangeEvent"
   end
 
   # @example
@@ -370,7 +370,7 @@ class Template::TypescriptSource < Template::Base
   # @param [String] group
   # @return [String]
   def widget_name(group)
-    "#{normalized_casing(group)} Widget"
+    "#{normalize_keywords(group.to_s.classify)} Widget"
   end
 
   # @example
@@ -417,8 +417,8 @@ class Template::TypescriptSource < Template::Base
 
   # @param [String] string
   # @return [String]
-  def normalized_casing(string)
-    string.to_s.classify.gsub("Oauth", "OAuth")
+  def normalize_keywords(string)
+    string.to_s.gsub("Oauth", "OAuth")
   end
 
   # @return [Hash]
