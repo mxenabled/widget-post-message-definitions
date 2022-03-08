@@ -102,6 +102,13 @@
 default behaviour of the SDK which is to load the OAuth URL in a new
 browser tab.
 
+If you override this functionality, you must use the device's browser
+to authenticate the user with OAuth. You cannot use  WebViews or
+iframes. Not only does this approach result in better security, it
+also can leverage saved passwords and password managers that the user
+has installed. It is also worth noting that many OAuth providers
+explicitly block loading their webapps in an iframe or WebView.
+
 - Widget callback prop name: `onOAuthRequested`
 - Payload fields:
     - `user_guid` (`string`)
