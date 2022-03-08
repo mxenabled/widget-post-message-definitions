@@ -3,7 +3,8 @@
 ## Overview
 
 This project defines and generates the Post Message handling code for our
-various Widget SDKs.
+various Widget SDKs. The documentation for Post Messages and their payloads can
+be found [here](https://docs.mx.com/api#connect_postmessage_events).
 
 
 ## Generating source code
