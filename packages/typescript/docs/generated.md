@@ -2,6 +2,7 @@
 
 ## Connect Widget Post Messages
 
+---
 ### Loaded (`mx/connect/loaded`)
 
 - Widget callback prop name: `onLoaded`
@@ -18,6 +19,26 @@
             - `"loginError"`
             - `"disclosure"`
 
+<details>
+<summary>Click here to view a sample usage of <code>onLoaded</code>.</summary>
+
+```jsx
+import { ConnectWidget } from "@mxenabled/react-native-widget-sdk"
+
+<ConnectWidget
+  url="https://widgets.moneydesktop.com/md/connect/..."
+
+  onLoaded={(payload) => {
+    console.log(`User guid: ${payload.user_guid}`)
+    console.log(`Session guid: ${payload.session_guid}`)
+    console.log(`Initial step: ${payload.initial_step}`)
+  }
+/>
+```
+
+</details>
+
+---
 ### Enter credentials (`mx/connect/enterCredentials`)
 
 - Widget callback prop name: `onEnterCredentials`
@@ -28,6 +49,26 @@
         - `code` (`string`)
         - `guid` (`string`)
 
+<details>
+<summary>Click here to view a sample usage of <code>onEnterCredentials</code>.</summary>
+
+```jsx
+import { ConnectWidget } from "@mxenabled/react-native-widget-sdk"
+
+<ConnectWidget
+  url="https://widgets.moneydesktop.com/md/connect/..."
+
+  onEnterCredentials={(payload) => {
+    console.log(`User guid: ${payload.user_guid}`)
+    console.log(`Session guid: ${payload.session_guid}`)
+    console.log(`Institution: ${payload.institution}`)
+  }
+/>
+```
+
+</details>
+
+---
 ### Institution search (`mx/connect/institutionSearch`)
 
 - Widget callback prop name: `onInstitutionSearch`
@@ -36,6 +77,26 @@
     - `session_guid` (`string`)
     - `query` (`string`)
 
+<details>
+<summary>Click here to view a sample usage of <code>onInstitutionSearch</code>.</summary>
+
+```jsx
+import { ConnectWidget } from "@mxenabled/react-native-widget-sdk"
+
+<ConnectWidget
+  url="https://widgets.moneydesktop.com/md/connect/..."
+
+  onInstitutionSearch={(payload) => {
+    console.log(`User guid: ${payload.user_guid}`)
+    console.log(`Session guid: ${payload.session_guid}`)
+    console.log(`Query: ${payload.query}`)
+  }
+/>
+```
+
+</details>
+
+---
 ### Selected institution (`mx/connect/selectedInstitution`)
 
 - Widget callback prop name: `onSelectedInstitution`
@@ -47,6 +108,29 @@
     - `name` (`string`)
     - `url` (`string`)
 
+<details>
+<summary>Click here to view a sample usage of <code>onSelectedInstitution</code>.</summary>
+
+```jsx
+import { ConnectWidget } from "@mxenabled/react-native-widget-sdk"
+
+<ConnectWidget
+  url="https://widgets.moneydesktop.com/md/connect/..."
+
+  onSelectedInstitution={(payload) => {
+    console.log(`User guid: ${payload.user_guid}`)
+    console.log(`Session guid: ${payload.session_guid}`)
+    console.log(`Code: ${payload.code}`)
+    console.log(`Guid: ${payload.guid}`)
+    console.log(`Name: ${payload.name}`)
+    console.log(`Url: ${payload.url}`)
+  }
+/>
+```
+
+</details>
+
+---
 ### Member connected (`mx/connect/memberConnected`)
 
 - Widget callback prop name: `onMemberConnected`
@@ -55,6 +139,26 @@
     - `session_guid` (`string`)
     - `member_guid` (`string`)
 
+<details>
+<summary>Click here to view a sample usage of <code>onMemberConnected</code>.</summary>
+
+```jsx
+import { ConnectWidget } from "@mxenabled/react-native-widget-sdk"
+
+<ConnectWidget
+  url="https://widgets.moneydesktop.com/md/connect/..."
+
+  onMemberConnected={(payload) => {
+    console.log(`User guid: ${payload.user_guid}`)
+    console.log(`Session guid: ${payload.session_guid}`)
+    console.log(`Member guid: ${payload.member_guid}`)
+  }
+/>
+```
+
+</details>
+
+---
 ### Connected primary action (`mx/connect/connected/primaryAction`)
 
 - Widget callback prop name: `onConnectedPrimaryAction`
@@ -62,6 +166,25 @@
     - `user_guid` (`string`)
     - `session_guid` (`string`)
 
+<details>
+<summary>Click here to view a sample usage of <code>onConnectedPrimaryAction</code>.</summary>
+
+```jsx
+import { ConnectWidget } from "@mxenabled/react-native-widget-sdk"
+
+<ConnectWidget
+  url="https://widgets.moneydesktop.com/md/connect/..."
+
+  onConnectedPrimaryAction={(payload) => {
+    console.log(`User guid: ${payload.user_guid}`)
+    console.log(`Session guid: ${payload.session_guid}`)
+  }
+/>
+```
+
+</details>
+
+---
 ### Member deleted (`mx/connect/memberDeleted`)
 
 - Widget callback prop name: `onMemberDeleted`
@@ -70,6 +193,26 @@
     - `session_guid` (`string`)
     - `member_guid` (`string`)
 
+<details>
+<summary>Click here to view a sample usage of <code>onMemberDeleted</code>.</summary>
+
+```jsx
+import { ConnectWidget } from "@mxenabled/react-native-widget-sdk"
+
+<ConnectWidget
+  url="https://widgets.moneydesktop.com/md/connect/..."
+
+  onMemberDeleted={(payload) => {
+    console.log(`User guid: ${payload.user_guid}`)
+    console.log(`Session guid: ${payload.session_guid}`)
+    console.log(`Member guid: ${payload.member_guid}`)
+  }
+/>
+```
+
+</details>
+
+---
 ### Create member error (`mx/connect/createMemberError`)
 
 - Widget callback prop name: `onCreateMemberError`
@@ -79,6 +222,27 @@
     - `institution_guid` (`string`)
     - `institution_code` (`string`)
 
+<details>
+<summary>Click here to view a sample usage of <code>onCreateMemberError</code>.</summary>
+
+```jsx
+import { ConnectWidget } from "@mxenabled/react-native-widget-sdk"
+
+<ConnectWidget
+  url="https://widgets.moneydesktop.com/md/connect/..."
+
+  onCreateMemberError={(payload) => {
+    console.log(`User guid: ${payload.user_guid}`)
+    console.log(`Session guid: ${payload.session_guid}`)
+    console.log(`Institution guid: ${payload.institution_guid}`)
+    console.log(`Institution code: ${payload.institution_code}`)
+  }
+/>
+```
+
+</details>
+
+---
 ### Member status update (`mx/connect/memberStatusUpdate`)
 
 - Widget callback prop name: `onMemberStatusUpdate`
@@ -88,6 +252,27 @@
     - `member_guid` (`string`)
     - `connection_status` (`number`)
 
+<details>
+<summary>Click here to view a sample usage of <code>onMemberStatusUpdate</code>.</summary>
+
+```jsx
+import { ConnectWidget } from "@mxenabled/react-native-widget-sdk"
+
+<ConnectWidget
+  url="https://widgets.moneydesktop.com/md/connect/..."
+
+  onMemberStatusUpdate={(payload) => {
+    console.log(`User guid: ${payload.user_guid}`)
+    console.log(`Session guid: ${payload.session_guid}`)
+    console.log(`Member guid: ${payload.member_guid}`)
+    console.log(`Connection status: ${payload.connection_status}`)
+  }
+/>
+```
+
+</details>
+
+---
 ### OAuth error (`mx/connect/oauthError`)
 
 - Widget callback prop name: `onOAuthError`
@@ -96,6 +281,26 @@
     - `session_guid` (`string`)
     - `member_guid` (`string`)
 
+<details>
+<summary>Click here to view a sample usage of <code>onOAuthError</code>.</summary>
+
+```jsx
+import { ConnectWidget } from "@mxenabled/react-native-widget-sdk"
+
+<ConnectWidget
+  url="https://widgets.moneydesktop.com/md/connect/..."
+
+  onOAuthError={(payload) => {
+    console.log(`User guid: ${payload.user_guid}`)
+    console.log(`Session guid: ${payload.session_guid}`)
+    console.log(`Member guid: ${payload.member_guid}`)
+  }
+/>
+```
+
+</details>
+
+---
 ### OAuth requested (`mx/connect/oauthRequested`)
 
 **Warning**: By passing your own method to this prop, you are overriding the
@@ -116,6 +321,27 @@ explicitly block loading their webapps in an iframe or WebView.
     - `url` (`string`)
     - `member_guid` (`string`)
 
+<details>
+<summary>Click here to view a sample usage of <code>onOAuthRequested</code>.</summary>
+
+```jsx
+import { ConnectWidget } from "@mxenabled/react-native-widget-sdk"
+
+<ConnectWidget
+  url="https://widgets.moneydesktop.com/md/connect/..."
+
+  onOAuthRequested={(payload) => {
+    console.log(`User guid: ${payload.user_guid}`)
+    console.log(`Session guid: ${payload.session_guid}`)
+    console.log(`Url: ${payload.url}`)
+    console.log(`Member guid: ${payload.member_guid}`)
+  }
+/>
+```
+
+</details>
+
+---
 ### Step change (`mx/connect/stepChange`)
 
 - Widget callback prop name: `onStepChange`
@@ -125,6 +351,27 @@ explicitly block loading their webapps in an iframe or WebView.
     - `previous` (`string`)
     - `current` (`string`)
 
+<details>
+<summary>Click here to view a sample usage of <code>onStepChange</code>.</summary>
+
+```jsx
+import { ConnectWidget } from "@mxenabled/react-native-widget-sdk"
+
+<ConnectWidget
+  url="https://widgets.moneydesktop.com/md/connect/..."
+
+  onStepChange={(payload) => {
+    console.log(`User guid: ${payload.user_guid}`)
+    console.log(`Session guid: ${payload.session_guid}`)
+    console.log(`Previous: ${payload.previous}`)
+    console.log(`Current: ${payload.current}`)
+  }
+/>
+```
+
+</details>
+
+---
 ### Submit MFA (`mx/connect/submitMFA`)
 
 - Widget callback prop name: `onSubmitMFA`
@@ -133,6 +380,26 @@ explicitly block loading their webapps in an iframe or WebView.
     - `session_guid` (`string`)
     - `member_guid` (`string`)
 
+<details>
+<summary>Click here to view a sample usage of <code>onSubmitMFA</code>.</summary>
+
+```jsx
+import { ConnectWidget } from "@mxenabled/react-native-widget-sdk"
+
+<ConnectWidget
+  url="https://widgets.moneydesktop.com/md/connect/..."
+
+  onSubmitMFA={(payload) => {
+    console.log(`User guid: ${payload.user_guid}`)
+    console.log(`Session guid: ${payload.session_guid}`)
+    console.log(`Member guid: ${payload.member_guid}`)
+  }
+/>
+```
+
+</details>
+
+---
 ### Update credentials (`mx/connect/updateCredentials`)
 
 - Widget callback prop name: `onUpdateCredentials`
@@ -144,8 +411,8 @@ explicitly block loading their webapps in an iframe or WebView.
         - `code` (`string`)
         - `guid` (`string`)
 
-
-### Example
+<details>
+<summary>Click here to view a sample usage of <code>onUpdateCredentials</code>.</summary>
 
 ```jsx
 import { ConnectWidget } from "@mxenabled/react-native-widget-sdk"
@@ -153,20 +420,14 @@ import { ConnectWidget } from "@mxenabled/react-native-widget-sdk"
 <ConnectWidget
   url="https://widgets.moneydesktop.com/md/connect/..."
 
-  onLoaded={(payload) => console.log(payload)}
-  onEnterCredentials={(payload) => console.log(payload)}
-  onInstitutionSearch={(payload) => console.log(payload)}
-  onSelectedInstitution={(payload) => console.log(payload)}
-  onMemberConnected={(payload) => console.log(payload)}
-  onConnectedPrimaryAction={(payload) => console.log(payload)}
-  onMemberDeleted={(payload) => console.log(payload)}
-  onCreateMemberError={(payload) => console.log(payload)}
-  onMemberStatusUpdate={(payload) => console.log(payload)}
-  onOAuthError={(payload) => console.log(payload)}
-  onOAuthRequested={(payload) => console.log(payload)}
-  onStepChange={(payload) => console.log(payload)}
-  onSubmitMFA={(payload) => console.log(payload)}
-  onUpdateCredentials={(payload) => console.log(payload)}
+  onUpdateCredentials={(payload) => {
+    console.log(`User guid: ${payload.user_guid}`)
+    console.log(`Session guid: ${payload.session_guid}`)
+    console.log(`Member guid: ${payload.member_guid}`)
+    console.log(`Institution: ${payload.institution}`)
+  }
 />
 ```
+
+</details>
 

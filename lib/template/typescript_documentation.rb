@@ -6,6 +6,7 @@ class Template::TypescriptDocumentation < Template::TypescriptSource
     |## <%= widget_name(widget) %> Post Messages
     |
     |<%- post_messages.each do |post_message| -%>
+    |---
     |### <%= normalize_keywords(post_message.label.to_s.titleize) %> (`<%= post_message %>`)
     |
     |<%- if post_message.properties["warning"] -%>
@@ -32,9 +33,8 @@ class Template::TypescriptDocumentation < Template::TypescriptSource
     |    <%- end -%>
     |<%- end -%>
     |
-    |<%- end -%>
-    |
-    |### Example
+    |<details>
+    |<summary>Click here to view a sample usage of <code><%= callback_function_name(post_message) %></code>.</summary>
     |
     |```jsx
     |import { <%= widget_component(widget) %> } from "@mxenabled/react-native-widget-sdk"
@@ -42,12 +42,17 @@ class Template::TypescriptDocumentation < Template::TypescriptSource
     |<<%= widget_component(widget) %>
     |  url="<%= widget_sample_url(widget) %>"
     |
-    |<%- post_messages.each do |post_message| -%>
-    |  <%= callback_function_name(post_message) %>={(payload) => console.log(payload)}
-    |<%- end -%>
+    |  <%= callback_function_name(post_message) %>={(payload) => {
+    |    <%- post_message.payload.each do |property, rhs| -%>
+    |    console.log(`<%= property.titleize %>: ${payload.<%= property %>}`)
+    |    <%- end -%>
+    |  }
     |/>
     |```
     |
+    |</details>
+    |
+    |<%- end -%>
     |<%- end -%>
   CONTENT
 
