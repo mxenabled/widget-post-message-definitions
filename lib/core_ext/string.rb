@@ -39,6 +39,27 @@ class String
 
   # @example
   #
+  #   "hi_there".titleize # => "Hi there"
+  #   "hi thereMan".titleize # => "Hi there man"
+  #   "hi_there_Man".titleize # => "Hi there man"
+  #   "hi there Man".titleize # => "Hi there man"
+  #
+  # @return [String]
+  def titleize
+    words = self
+      .gsub("/", " ")
+      .gsub("_", " ")
+      .gsub(/([a-z])([A-Z])/, '\1 \2')
+      .split(" ")
+      .map(&:downcase)
+
+    return "" if words.empty?
+
+    [words.first.capitalize, *words.drop(1)].join(" ")
+  end
+
+  # @example
+  #
   #   surround("age", "\"") # => "\"age\""
   #   surround("1", "[", "]") # => "[1]"
   #
