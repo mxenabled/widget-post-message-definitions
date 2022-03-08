@@ -1,6 +1,6 @@
 
 
-### Connect Widget Post Messages
+## Connect Widget Post Messages
 
 #### Loaded
 
@@ -135,7 +135,33 @@
     - `member_guid` (`string`)
     - `institution` (`{ code: string, guid: string }`)
 
-### Pulse Widget Post Messages
+
+### Example
+
+```jsx
+import { ConnectWidget } from "@mxenabled/react-native-widget-sdk"
+
+<ConnectWidget
+  url="https://widgets.moneydesktop.com/md/connect/..."
+
+  onLoaded={(payload) => console.log(payload)}
+  onEnterCredentials={(payload) => console.log(payload)}
+  onInstitutionSearch={(payload) => console.log(payload)}
+  onSelectedInstitution={(payload) => console.log(payload)}
+  onMemberConnected={(payload) => console.log(payload)}
+  onConnectedPrimaryAction={(payload) => console.log(payload)}
+  onMemberDeleted={(payload) => console.log(payload)}
+  onCreateMemberError={(payload) => console.log(payload)}
+  onMemberStatusUpdate={(payload) => console.log(payload)}
+  onOAuthError={(payload) => console.log(payload)}
+  onOAuthRequested={(payload) => console.log(payload)}
+  onStepChange={(payload) => console.log(payload)}
+  onSubmitMFA={(payload) => console.log(payload)}
+  onUpdateCredentials={(payload) => console.log(payload)}
+/>
+```
+
+## Pulse Widget Post Messages
 
 #### Overdraft warning cta transfer funds
 
@@ -144,4 +170,17 @@
 - Payload:
     - `account_guid` (`string`)
     - `amount` (`number`)
+
+
+### Example
+
+```jsx
+import { PulseWidget } from "@mxenabled/react-native-widget-sdk"
+
+<PulseWidget
+  url="https://widgets.moneydesktop.com/md/pulse/..."
+
+  onOverdraftWarningCtaTransferFunds={(payload) => console.log(payload)}
+/>
+```
 
