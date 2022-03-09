@@ -12,7 +12,6 @@ import { parse as parseUrl } from "url"
 import {
   BasePostMessageCallbackProps,
   Metadata,
-  PostMessageCallbackDispatchError,
   PostMessageFieldDecodeError,
   PostMessageUnknownTypeError,
   assertMessageProp,
@@ -553,18 +552,14 @@ export type PulsePostMessageCallbackProps = WidgetPostMessageCallbackProps & {
  * @param {String} url
  * @param {unknown} error
  * @param {WidgetPostMessageCallbackProps} callbacks
- * @throws {Error}
- * @throws {unknown}
  */
 function dispatchError(url: string, error: unknown, callbacks: WidgetPostMessageCallbackProps) {
   if (error instanceof PostMessageFieldDecodeError) {
     callbacks.onMessageUnknownError?.(url, error)
   } else if (error instanceof PostMessageUnknownTypeError) {
     callbacks.onMessageUnknownError?.(url, error)
-  } else if (error instanceof PostMessageCallbackDispatchError) {
-    callbacks.onMessageDispatchError?.(url, error)
   } else {
-    throw error
+    callbacks.onMessageDispatchError?.(url, error)
   }
 }
 

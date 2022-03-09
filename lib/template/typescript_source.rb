@@ -5,7 +5,6 @@ class Template::TypescriptSource < Template::Base
     |import {
     |  <%= callback_props_group_type_name(:base) %>,
     |  Metadata,
-    |  PostMessageCallbackDispatchError,
     |  PostMessageFieldDecodeError,
     |  PostMessageUnknownTypeError,
     |  assertMessageProp,
@@ -138,18 +137,14 @@ class Template::TypescriptSource < Template::Base
     | * @param {String} url
     | * @param {unknown} error
     | * @param {<%= callback_props_group_type_name(:widget) %>} callbacks
-    | * @throws {Error}
-    | * @throws {unknown}
     | */
     |function dispatchError(url: string, error: unknown, callbacks: <%= callback_props_group_type_name(:widget) %>) {
     |  if (error instanceof PostMessageFieldDecodeError) {
     |    callbacks.onMessageUnknownError?.(url, error)
     |  } else if (error instanceof PostMessageUnknownTypeError) {
     |    callbacks.onMessageUnknownError?.(url, error)
-    |  } else if (error instanceof PostMessageCallbackDispatchError) {
-    |    callbacks.onMessageDispatchError?.(url, error)
     |  } else {
-    |    throw error
+    |    callbacks.onMessageDispatchError?.(url, error)
     |  }
     |}
     |

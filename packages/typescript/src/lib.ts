@@ -1,7 +1,7 @@
 export type BasePostMessageCallbackProps = {
   onMessage?: (url: string) => void
   onMessageUnknownError?: (url: string, error: Error) => void
-  onMessageDispatchError?: (url: string, error: Error) => void
+  onMessageDispatchError?: (url: string, error: Error | unknown) => void
 }
 
 // This is an internal error. Thrown when we are decoding a post message's
@@ -38,15 +38,6 @@ export class PostMessageUnknownTypeError extends Error {
     this.postMessageType = postMessageType
 
     Object.setPrototypeOf(this, PostMessageUnknownTypeError.prototype);
-  }
-}
-
-// Thrown when we are unable to process an otherwise valid post message
-// request. Used to trigger the `onMessageDispatchError` callback.
-export class PostMessageCallbackDispatchError extends Error {
-  constructor(msg: string) {
-    super(msg);
-    Object.setPrototypeOf(this, PostMessageCallbackDispatchError.prototype);
   }
 }
 
