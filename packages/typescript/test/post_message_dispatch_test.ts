@@ -255,7 +255,7 @@ describe("Post Message Dispatch", () => {
 
         dispatchConnectLocationChangeEvent(connectMemberStatusUpdateUrl, {
           onMemberStatusUpdate: (payload) => {
-            expect(payload.connection_status).toBe(initialStep)
+            expect(payload.connection_status).toBe(connectionStatus)
           }
         })
       })
