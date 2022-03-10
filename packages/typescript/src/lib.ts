@@ -21,7 +21,7 @@ export class PostMessageFieldDecodeError extends Error {
     this.expectedType = expectedType
     this.gotValue = gotValue
 
-    Object.setPrototypeOf(this, PostMessageFieldDecodeError.prototype);
+    Object.setPrototypeOf(this, PostMessageFieldDecodeError.prototype)
   }
 }
 
@@ -36,7 +36,7 @@ export class PostMessageUnknownTypeError extends Error {
 
     this.postMessageType = postMessageType
 
-    Object.setPrototypeOf(this, PostMessageUnknownTypeError.prototype);
+    Object.setPrototypeOf(this, PostMessageUnknownTypeError.prototype)
   }
 }
 

@@ -52,6 +52,24 @@
     "extends": [
       "eslint:recommended",
       "plugin:@typescript-eslint/recommended"
-    ]
+    ],
+    "rules": {
+      "semi": [
+        "error",
+        "never"
+      ],
+      "quotes": [
+        "error",
+        "double"
+      ],
+      "no-trailing-spaces": "error",
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          "argsIgnorePattern": "^_",
+          "varsIgnorePattern": "^_"
+        }
+      ]
+    }
   }
 }
