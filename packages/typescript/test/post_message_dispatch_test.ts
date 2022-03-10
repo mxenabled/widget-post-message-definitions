@@ -132,22 +132,15 @@ const testSharedCallbacks = (dispatch: (url: string, callbacks: WidgetPostMessag
     })
   })
 
-  describe("onMessageDispatchError", () => {
-    test("callback is called when the host function throws an error", () => {
-      expect.assertions(3)
-
-      dispatch(loadUrl, {
-        onMessageDispatchError: (url, error) => {
-          expect(url).toBe(loadUrl)
-          expect(error).toBeInstanceOf(Error)
-          if (error instanceof Error) {
-            expect(error.message).toContain("bad to the bone")
+  describe("errors", () => {
+    test("when an error is thrown from a callback is it bubbled up", () => {
+      expect(() => {
+        dispatch(loadUrl, {
+          onLoad: () => {
+            throw new Error("bad to the bone")
           }
-        },
-        onLoad: () => {
-          throw new Error("bad to the bone")
-        }
-      })
+        })
+      }).toThrow()
     })
   })
 

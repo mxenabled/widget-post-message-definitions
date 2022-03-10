@@ -137,6 +137,7 @@ class Template::TypescriptSource < Template::Base
     | * @param {String} url
     | * @param {unknown} error
     | * @param {<%= callback_props_group_type_name(:widget) %>} callbacks
+    | * @throws {unknown}
     | */
     |function dispatchError(url: string, error: unknown, callbacks: <%= callback_props_group_type_name(:widget) %>) {
     |  if (error instanceof PostMessageFieldDecodeError) {
@@ -144,7 +145,7 @@ class Template::TypescriptSource < Template::Base
     |  } else if (error instanceof PostMessageUnknownTypeError) {
     |    callbacks.onInvalidMessageError?.(url, error)
     |  } else {
-    |    callbacks.onMessageDispatchError?.(url, error)
+    |    throw error
     |  }
     |}
     |
