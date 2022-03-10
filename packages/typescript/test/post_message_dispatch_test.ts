@@ -97,12 +97,12 @@ const testSharedCallbacks = (dispatch: (url: string, callbacks: WidgetPostMessag
     })
   })
 
-  describe("onMessageUnknownError", () => {
+  describe("onInvalidMessageError", () => {
     test("callback is called when the given post message is not recognized", () => {
       expect.assertions(2)
 
       dispatch(invalidMessageUrl, {
-        onMessageUnknownError: (url, error) => {
+        onInvalidMessageError: (url, error) => {
           expect(url).toBe(invalidMessageUrl)
           expect(error.message).toContain("Unknown post message: mx/bad/memberDeleted")
         }
@@ -113,7 +113,7 @@ const testSharedCallbacks = (dispatch: (url: string, callbacks: WidgetPostMessag
       expect.assertions(2)
 
       dispatch(connectMemberDeletedUrlInvalidField, {
-        onMessageUnknownError: (url, error) => {
+        onInvalidMessageError: (url, error) => {
           expect(url).toBe(connectMemberDeletedUrlInvalidField)
           expect(error.message).toContain("Unable to decode 'member_guid' from 'mx/connect/memberDeleted")
         }
@@ -124,7 +124,7 @@ const testSharedCallbacks = (dispatch: (url: string, callbacks: WidgetPostMessag
       expect.assertions(2)
 
       dispatch(connectMemberDeletedUrlMissingField, {
-        onMessageUnknownError: (url, error) => {
+        onInvalidMessageError: (url, error) => {
           expect(url).toBe(connectMemberDeletedUrlMissingField)
           expect(error.message).toContain("Unable to decode 'member_guid' from 'mx/connect/memberDeleted")
         }

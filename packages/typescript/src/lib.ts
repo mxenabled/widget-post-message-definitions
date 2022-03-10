@@ -1,6 +1,6 @@
 export type BasePostMessageCallbackProps = {
   onMessage?: (url: string) => void
-  onMessageUnknownError?: (url: string, error: Error) => void
+  onInvalidMessageError?: (url: string, error: Error) => void
   onMessageDispatchError?: (url: string, error: Error | unknown) => void
 }
 

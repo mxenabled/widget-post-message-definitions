@@ -552,9 +552,9 @@ export type PulsePostMessageCallbackProps = WidgetPostMessageCallbackProps & {
  */
 function dispatchError(url: string, error: unknown, callbacks: WidgetPostMessageCallbackProps) {
   if (error instanceof PostMessageFieldDecodeError) {
-    callbacks.onMessageUnknownError?.(url, error)
+    callbacks.onInvalidMessageError?.(url, error)
   } else if (error instanceof PostMessageUnknownTypeError) {
-    callbacks.onMessageUnknownError?.(url, error)
+    callbacks.onInvalidMessageError?.(url, error)
   } else {
     callbacks.onMessageDispatchError?.(url, error)
   }

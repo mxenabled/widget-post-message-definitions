@@ -140,9 +140,9 @@ class Template::TypescriptSource < Template::Base
     | */
     |function dispatchError(url: string, error: unknown, callbacks: <%= callback_props_group_type_name(:widget) %>) {
     |  if (error instanceof PostMessageFieldDecodeError) {
-    |    callbacks.onMessageUnknownError?.(url, error)
+    |    callbacks.onInvalidMessageError?.(url, error)
     |  } else if (error instanceof PostMessageUnknownTypeError) {
-    |    callbacks.onMessageUnknownError?.(url, error)
+    |    callbacks.onInvalidMessageError?.(url, error)
     |  } else {
     |    callbacks.onMessageDispatchError?.(url, error)
     |  }
