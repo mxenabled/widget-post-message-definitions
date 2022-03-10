@@ -164,7 +164,6 @@ export type ConnectOAuthErrorPayload = {
   type: Type.ConnectOAuthError,
   user_guid: string,
   session_guid: string,
-  member_guid: string,
 }
 
 export type ConnectOAuthRequestedPayload = {
@@ -395,13 +394,11 @@ function buildPayload(type: Type, metadata: Metadata): Payload {
     case Type.ConnectOAuthError:
       assertMessageProp(metadata, "mx/connect/oauthError", "user_guid", "string")
       assertMessageProp(metadata, "mx/connect/oauthError", "session_guid", "string")
-      assertMessageProp(metadata, "mx/connect/oauthError", "member_guid", "string")
 
       return {
         type,
         user_guid: metadata.user_guid as string,
         session_guid: metadata.session_guid as string,
-        member_guid: metadata.member_guid as string,
       }
 
     case Type.ConnectOAuthRequested:

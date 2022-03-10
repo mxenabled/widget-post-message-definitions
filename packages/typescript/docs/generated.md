@@ -288,7 +288,6 @@ import { ConnectWidget } from "@mxenabled/react-native-widget-sdk"
 - Payload fields:
     - `user_guid` (`string`)
     - `session_guid` (`string`)
-    - `member_guid` (`string`)
 
 <details>
 <summary>Click here to view a sample usage of <code>onOAuthError</code>.</summary>
@@ -302,7 +301,6 @@ import { ConnectWidget } from "@mxenabled/react-native-widget-sdk"
   onOAuthError={(payload) => {
     console.log(`User guid: ${payload.user_guid}`)
     console.log(`Session guid: ${payload.session_guid}`)
-    console.log(`Member guid: ${payload.member_guid}`)
   }
 />
 ```
