@@ -14,9 +14,6 @@
     "type": "git",
     "url": "https://github.com/mxenabled/widget-post-message-definitions.git"
   },
-  "dependencies": {
-    "url": "^0.11.0"
-  },
   "devDependencies": {
     "@types/jest": "^27.4.1",
     "@types/node": "^17.0.21",
@@ -63,6 +60,9 @@
         "double"
       ],
       "no-trailing-spaces": "error",
+      "@typescript-eslint/no-var-requires": [
+        "off"
+      ],
       "@typescript-eslint/no-unused-vars": [
         "error",
         {

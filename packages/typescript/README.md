@@ -27,3 +27,13 @@ dispatchConnectLocationChangeEvent("mx://connect/memberDeleted?metadata=...", {
   }
 })
 ```
+
+## Dependencies
+
+This package does not have any depedencies with the exception of the `url`
+package, which you may need if you're parsing post message events from URL
+change events. To install it:
+
+```text
+npm install --save url
+```
