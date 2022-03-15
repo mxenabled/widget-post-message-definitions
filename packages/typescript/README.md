@@ -32,7 +32,14 @@ dispatchConnectLocationChangeEvent("mx://connect/memberDeleted?metadata=...", {
 
 This package does not have any depedencies with the exception of the `url`
 package, which you may need if you're parsing post message events from URL
-change events. To install it:
+change events.
+
+The React Native SDK needs this package and has it as a dependency, but the Web
+SDK won't and we shouldn't install or import it. This allows us to keep both
+SDKs happy.
+
+To install `url` in your project so you can parse post messages in location
+change events:
 
 ```text
 npm install --save url
