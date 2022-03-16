@@ -159,22 +159,29 @@ class Template::TypescriptSource < Template::Base
     | * @throws {unknown}
     | */
     |export function <%= dispatch_location_change_function_name(:widget) %>(url: string, callbacks: <%= callback_props_group_type_name(:widget) %>) {
-    |  callbacks.onMessage?.(url)
-    |
     |  try {
+    |    <%= dispatch_location_change_catch_all_function_name %>(url, callbacks)
     |    const payload = buildPayloadFromUrl(url)
-    |    switch (payload.type) {
-    |      <%- (generic_post_message_definitions + entity_post_message_definitions).each do |post_message| -%>
-    |      case <%= qualified_enum_key(post_message) %>:
-    |        callbacks.<%= callback_function_name(post_message) %>?.(payload)
-    |        break
-    |
-    |      <%- end -%>
-    |      default:
-    |        throw new PostMessageUnknownTypeError(payload.type)
-    |    }
+    |    <%= dispatch_internal_message_function_name(:widget) %>(payload, callbacks)
     |  } catch (error) {
     |    dispatchError(url, error, callbacks)
+    |  }
+    |}
+    |
+    |function <%= dispatch_location_change_catch_all_function_name %>(url: string, callbacks: <%= callback_props_group_type_name(:widget) %>) {
+    |  callbacks.onMessage?.(url)
+    |}
+    |
+    |function <%= dispatch_internal_message_function_name(:widget) %>(payload: Payload, callbacks: <%= callback_props_group_type_name(:widget) %>) {
+    |  switch (payload.type) {
+    |    <%- (generic_post_message_definitions + entity_post_message_definitions).each do |post_message| -%>
+    |    case <%= qualified_enum_key(post_message) %>:
+    |      callbacks.<%= callback_function_name(post_message) %>?.(payload)
+    |      break
+    |
+    |    <%- end -%>
+    |    default:
+    |      throw new PostMessageUnknownTypeError(payload.type)
     |  }
     |}
     |
@@ -188,28 +195,31 @@ class Template::TypescriptSource < Template::Base
     | * @throws {unknown}
     | */
     |export function <%= dispatch_location_change_function_name(subgroup) %>(url: string, callbacks: <%= callback_props_group_type_name(subgroup) %>) {
-    |  callbacks.onMessage?.(url)
-    |
     |  try {
+    |    <%= dispatch_location_change_catch_all_function_name %>(url, callbacks)
     |    const payload = buildPayloadFromUrl(url)
-    |    switch (payload.type) {
-    |      <%- (generic_post_message_definitions + entity_post_message_definitions).each do |post_message| -%>
-    |      case <%= qualified_enum_key(post_message) %>:
-    |        callbacks.<%= callback_function_name(post_message) %>?.(payload)
-    |        break
-    |
-    |      <%- end -%>
-    |      <%- post_messages.each do |post_message| -%>
-    |      case <%= qualified_enum_key(post_message) %>:
-    |        callbacks.<%= callback_function_name(post_message) %>?.(payload)
-    |        break
-    |
-    |      <%- end -%>
-    |      default:
-    |        throw new PostMessageUnknownTypeError(payload.type)
-    |    }
+    |    <%= dispatch_internal_message_function_name(subgroup) %>(payload, callbacks)
     |  } catch (error) {
     |    dispatchError(url, error, callbacks)
+    |  }
+    |}
+    |
+    |function <%= dispatch_internal_message_function_name(subgroup) %>(payload: Payload, callbacks: <%= callback_props_group_type_name(subgroup) %>) {
+    |  switch (payload.type) {
+    |    <%- (generic_post_message_definitions + entity_post_message_definitions).each do |post_message| -%>
+    |    case <%= qualified_enum_key(post_message) %>:
+    |      callbacks.<%= callback_function_name(post_message) %>?.(payload)
+    |      break
+    |
+    |    <%- end -%>
+    |    <%- post_messages.each do |post_message| -%>
+    |    case <%= qualified_enum_key(post_message) %>:
+    |      callbacks.<%= callback_function_name(post_message) %>?.(payload)
+    |      break
+    |
+    |    <%- end -%>
+    |    default:
+    |      throw new PostMessageUnknownTypeError(payload.type)
     |  }
     |}
     |<%- end -%>
@@ -347,13 +357,34 @@ class Template::TypescriptSource < Template::Base
 
   # @example
   #
+  #   dispatch_location_change_catch_all_function_name
+  #   # => "dispatchLocationChangeCatchAll"
+  #
+  # @return [String]
+  def dispatch_location_change_catch_all_function_name
+    "dispatchLocationChangeCatchAll"
+  end
+
+  # @example
+  #
   #   dispatch_location_change_function_name(:generic)
-  #   # => "dispatchWidgetPostMessage"
+  #   # => "dispatchWidgetLocationChangeEvent"
   #
   # @param [String] group
   # @return [String]
   def dispatch_location_change_function_name(group)
     "dispatch#{normalize_keywords(group.to_s.classify)}LocationChangeEvent"
+  end
+
+  # @example
+  #
+  #   dispatch_internal_message_function_name(:generic)
+  #   # => "dispatchWidgetInternalMessage"
+  #
+  # @param [String] group
+  # @return [String]
+  def dispatch_internal_message_function_name(group)
+    "dispatch#{normalize_keywords(group.to_s.classify)}InternalMessage"
   end
 
   # @example
