@@ -7,8 +7,6 @@
  * project.
  */
 
-import { parse as parseUrl } from "url"
-
 import {
   BasePostMessageCallbackProps,
   Metadata,
@@ -486,7 +484,8 @@ function buildPayload(type: Type, metadata: Metadata): Payload {
  * @throws {PostMessageFieldDecodeError}
  */
 function buildPayloadFromUrl(urlString: string): Payload {
-  const url = parseUrl(urlString, true)
+  const { parse } = require("url")
+  const url = parse(urlString, true)
 
   const namespace = url.host || ""
   const action = (url.pathname || "").substring(1)
