@@ -571,32 +571,39 @@ function dispatchError(url: string, error: unknown, callbacks: WidgetPostMessage
  * @throws {unknown}
  */
 export function dispatchWidgetLocationChangeEvent(url: string, callbacks: WidgetPostMessageCallbackProps) {
-  callbacks.onMessage?.(url)
-
   try {
+    dispatchLocationChangeCatchAll(url, callbacks)
     const payload = buildPayloadFromUrl(url)
-    switch (payload.type) {
-      case Type.Load:
-        callbacks.onLoad?.(payload)
-        break
-
-      case Type.Ping:
-        callbacks.onPing?.(payload)
-        break
-
-      case Type.FocusTrap:
-        callbacks.onFocusTrap?.(payload)
-        break
-
-      case Type.AccountCreated:
-        callbacks.onAccountCreated?.(payload)
-        break
-
-      default:
-        throw new PostMessageUnknownTypeError(payload.type)
-    }
+    dispatchWidgetInternalMessage(payload, callbacks)
   } catch (error) {
     dispatchError(url, error, callbacks)
+  }
+}
+
+function dispatchLocationChangeCatchAll(url: string, callbacks: WidgetPostMessageCallbackProps) {
+  callbacks.onMessage?.(url)
+}
+
+function dispatchWidgetInternalMessage(payload: Payload, callbacks: WidgetPostMessageCallbackProps) {
+  switch (payload.type) {
+    case Type.Load:
+      callbacks.onLoad?.(payload)
+      break
+
+    case Type.Ping:
+      callbacks.onPing?.(payload)
+      break
+
+    case Type.FocusTrap:
+      callbacks.onFocusTrap?.(payload)
+      break
+
+    case Type.AccountCreated:
+      callbacks.onAccountCreated?.(payload)
+      break
+
+    default:
+      throw new PostMessageUnknownTypeError(payload.type)
   }
 }
 
@@ -610,88 +617,91 @@ export function dispatchWidgetLocationChangeEvent(url: string, callbacks: Widget
  * @throws {unknown}
  */
 export function dispatchConnectLocationChangeEvent(url: string, callbacks: ConnectPostMessageCallbackProps) {
-  callbacks.onMessage?.(url)
-
   try {
+    dispatchLocationChangeCatchAll(url, callbacks)
     const payload = buildPayloadFromUrl(url)
-    switch (payload.type) {
-      case Type.Load:
-        callbacks.onLoad?.(payload)
-        break
-
-      case Type.Ping:
-        callbacks.onPing?.(payload)
-        break
-
-      case Type.FocusTrap:
-        callbacks.onFocusTrap?.(payload)
-        break
-
-      case Type.AccountCreated:
-        callbacks.onAccountCreated?.(payload)
-        break
-
-      case Type.ConnectLoaded:
-        callbacks.onLoaded?.(payload)
-        break
-
-      case Type.ConnectEnterCredentials:
-        callbacks.onEnterCredentials?.(payload)
-        break
-
-      case Type.ConnectInstitutionSearch:
-        callbacks.onInstitutionSearch?.(payload)
-        break
-
-      case Type.ConnectSelectedInstitution:
-        callbacks.onSelectedInstitution?.(payload)
-        break
-
-      case Type.ConnectMemberConnected:
-        callbacks.onMemberConnected?.(payload)
-        break
-
-      case Type.ConnectConnectedPrimaryAction:
-        callbacks.onConnectedPrimaryAction?.(payload)
-        break
-
-      case Type.ConnectMemberDeleted:
-        callbacks.onMemberDeleted?.(payload)
-        break
-
-      case Type.ConnectCreateMemberError:
-        callbacks.onCreateMemberError?.(payload)
-        break
-
-      case Type.ConnectMemberStatusUpdate:
-        callbacks.onMemberStatusUpdate?.(payload)
-        break
-
-      case Type.ConnectOAuthError:
-        callbacks.onOAuthError?.(payload)
-        break
-
-      case Type.ConnectOAuthRequested:
-        callbacks.onOAuthRequested?.(payload)
-        break
-
-      case Type.ConnectStepChange:
-        callbacks.onStepChange?.(payload)
-        break
-
-      case Type.ConnectSubmitMFA:
-        callbacks.onSubmitMFA?.(payload)
-        break
-
-      case Type.ConnectUpdateCredentials:
-        callbacks.onUpdateCredentials?.(payload)
-        break
-
-      default:
-        throw new PostMessageUnknownTypeError(payload.type)
-    }
+    dispatchConnectInternalMessage(payload, callbacks)
   } catch (error) {
     dispatchError(url, error, callbacks)
+  }
+}
+
+function dispatchConnectInternalMessage(payload: Payload, callbacks: ConnectPostMessageCallbackProps) {
+  switch (payload.type) {
+    case Type.Load:
+      callbacks.onLoad?.(payload)
+      break
+
+    case Type.Ping:
+      callbacks.onPing?.(payload)
+      break
+
+    case Type.FocusTrap:
+      callbacks.onFocusTrap?.(payload)
+      break
+
+    case Type.AccountCreated:
+      callbacks.onAccountCreated?.(payload)
+      break
+
+    case Type.ConnectLoaded:
+      callbacks.onLoaded?.(payload)
+      break
+
+    case Type.ConnectEnterCredentials:
+      callbacks.onEnterCredentials?.(payload)
+      break
+
+    case Type.ConnectInstitutionSearch:
+      callbacks.onInstitutionSearch?.(payload)
+      break
+
+    case Type.ConnectSelectedInstitution:
+      callbacks.onSelectedInstitution?.(payload)
+      break
+
+    case Type.ConnectMemberConnected:
+      callbacks.onMemberConnected?.(payload)
+      break
+
+    case Type.ConnectConnectedPrimaryAction:
+      callbacks.onConnectedPrimaryAction?.(payload)
+      break
+
+    case Type.ConnectMemberDeleted:
+      callbacks.onMemberDeleted?.(payload)
+      break
+
+    case Type.ConnectCreateMemberError:
+      callbacks.onCreateMemberError?.(payload)
+      break
+
+    case Type.ConnectMemberStatusUpdate:
+      callbacks.onMemberStatusUpdate?.(payload)
+      break
+
+    case Type.ConnectOAuthError:
+      callbacks.onOAuthError?.(payload)
+      break
+
+    case Type.ConnectOAuthRequested:
+      callbacks.onOAuthRequested?.(payload)
+      break
+
+    case Type.ConnectStepChange:
+      callbacks.onStepChange?.(payload)
+      break
+
+    case Type.ConnectSubmitMFA:
+      callbacks.onSubmitMFA?.(payload)
+      break
+
+    case Type.ConnectUpdateCredentials:
+      callbacks.onUpdateCredentials?.(payload)
+      break
+
+    default:
+      throw new PostMessageUnknownTypeError(payload.type)
   }
 }
 
@@ -704,35 +714,38 @@ export function dispatchConnectLocationChangeEvent(url: string, callbacks: Conne
  * @throws {unknown}
  */
 export function dispatchPulseLocationChangeEvent(url: string, callbacks: PulsePostMessageCallbackProps) {
-  callbacks.onMessage?.(url)
-
   try {
+    dispatchLocationChangeCatchAll(url, callbacks)
     const payload = buildPayloadFromUrl(url)
-    switch (payload.type) {
-      case Type.Load:
-        callbacks.onLoad?.(payload)
-        break
-
-      case Type.Ping:
-        callbacks.onPing?.(payload)
-        break
-
-      case Type.FocusTrap:
-        callbacks.onFocusTrap?.(payload)
-        break
-
-      case Type.AccountCreated:
-        callbacks.onAccountCreated?.(payload)
-        break
-
-      case Type.PulseOverdraftWarningCtaTransferFunds:
-        callbacks.onOverdraftWarningCtaTransferFunds?.(payload)
-        break
-
-      default:
-        throw new PostMessageUnknownTypeError(payload.type)
-    }
+    dispatchPulseInternalMessage(payload, callbacks)
   } catch (error) {
     dispatchError(url, error, callbacks)
+  }
+}
+
+function dispatchPulseInternalMessage(payload: Payload, callbacks: PulsePostMessageCallbackProps) {
+  switch (payload.type) {
+    case Type.Load:
+      callbacks.onLoad?.(payload)
+      break
+
+    case Type.Ping:
+      callbacks.onPing?.(payload)
+      break
+
+    case Type.FocusTrap:
+      callbacks.onFocusTrap?.(payload)
+      break
+
+    case Type.AccountCreated:
+      callbacks.onAccountCreated?.(payload)
+      break
+
+    case Type.PulseOverdraftWarningCtaTransferFunds:
+      callbacks.onOverdraftWarningCtaTransferFunds?.(payload)
+      break
+
+    default:
+      throw new PostMessageUnknownTypeError(payload.type)
   }
 }
