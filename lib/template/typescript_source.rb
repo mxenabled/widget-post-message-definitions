@@ -364,6 +364,7 @@ class Template::TypescriptSource < Template::Base
   def dispatch_location_change_catch_all_function_name
     "dispatchLocationChangeCatchAll"
   end
+
   # @example
   #
   #   dispatch_location_change_function_name(:generic)
@@ -374,7 +375,6 @@ class Template::TypescriptSource < Template::Base
   def dispatch_location_change_function_name(group)
     "dispatch#{normalize_keywords(group.to_s.classify)}LocationChangeEvent"
   end
-
 
   # @example
   #
