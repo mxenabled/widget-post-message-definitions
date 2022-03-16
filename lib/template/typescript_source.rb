@@ -368,7 +368,7 @@ class Template::TypescriptSource < Template::Base
   # @example
   #
   #   dispatch_location_change_function_name(:generic)
-  #   # => "dispatchWidgetLocationChange"
+  #   # => "dispatchWidgetLocationChangeEvent"
   #
   # @param [String] group
   # @return [String]
