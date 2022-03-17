@@ -78,7 +78,7 @@ const account = {
 const accountCreatedUrl = genPostMessageUrl("ms://account/created", account)
 
 const testSharedCallbacks = (
-  dispatch: (url: string, callbacks: WidgetPostMessageCallbackProps) => void,
+  dispatch: (url: string, callbacks: WidgetPostMessageCallbackProps<string>) => void,
 ) => {
   describe("onMessage", () => {
     test("callback is called with valid post message", () => {

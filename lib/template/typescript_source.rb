@@ -14,7 +14,7 @@ class Template::TypescriptSource < Template::Base
     |  <%- end -%>
     |}
     |
-    |export const typeLookup: Record<string, Type> = {
+    |const typeLookup: Record<string, Type> = {
     |  <%- post_message_definitions.each do |post_message| -%>
     |  [<%= qualified_enum_key(post_message) %>]: <%= qualified_enum_key(post_message) %>,
     |  <%- if needs_uri_friendly_lookup?(post_message) -%>
@@ -49,9 +49,6 @@ class Template::TypescriptSource < Template::Base
     | * the payload for that message, this function parses the payload object and
     | * returns a validated and typed object.
     | *
-    | * @param {Type} type
-    | * @param {Metadata, Object} metadata
-    | * @return {Payload}
     | * @throws {PostMessageUnknownTypeError}
     | * @throws {PostMessageFieldDecodeError}
     | */
@@ -78,17 +75,13 @@ class Template::TypescriptSource < Template::Base
     |
     |/**
     | * @see {buildPayload}
-    | * @param {String} url
-    | * @return {Payload}
-    | * @throws {PostMessageUnknownTypeError}
-    | * @throws {PostMessageFieldDecodeError}
     | */
-    |function buildPayloadFromUrl(urlString: string): Payload {
+    |function buildPayloadFromUrl(url: string): Payload {
     |  const { parse } = require("url")
-    |  const url = parse(urlString, true)
+    |  const urlObj = parse(url, true)
     |
-    |  const namespace = url.host || ""
-    |  const action = (url.pathname || "").substring(1)
+    |  const namespace = urlObj.host || ""
+    |  const action = (urlObj.pathname || "").substring(1)
     |  const rawType = action ? `mx/${namespace}/${action}` : `mx/${namespace}`
     |  let type: Type
     |  if (rawType in typeLookup) {
@@ -97,7 +90,7 @@ class Template::TypescriptSource < Template::Base
     |    throw new PostMessageUnknownTypeError(rawType)
     |  }
     |
-    |  const rawMetadataParam = url.query?.["metadata"] || "{}"
+    |  const rawMetadataParam = urlObj.query?.["metadata"] || "{}"
     |  const rawMetadataString = Array.isArray(rawMetadataParam) ?
     |    rawMetadataParam.join("") :
     |    rawMetadataParam
@@ -107,8 +100,8 @@ class Template::TypescriptSource < Template::Base
     |  return payload
     |}
     |
-    |export type <%= callback_props_group_type_name(:widget) %> =
-    |  & <%= callback_props_group_type_name(:base) %>
+    |export type <%= callback_props_group_type_name(:widget) %><T> =
+    |  & <%= callback_props_group_type_name(:base) %><T>
     |  & <%= callback_props_group_type_name(:entity) %>
     |  & <%= callback_props_group_type_name(:generic) %>
     |
@@ -125,7 +118,7 @@ class Template::TypescriptSource < Template::Base
     |}
     |
     |<% post_message_definitions_by_widget.each do |subgroup, post_messages| %>
-    |export type <%= callback_props_group_type_name(subgroup) %> = <%= callback_props_group_type_name(:widget) %> & {
+    |export type <%= callback_props_group_type_name(subgroup) %><T> = <%= callback_props_group_type_name(:widget) %><T> & {
     |  <%- post_messages.each do |post_messages| -%>
     |  <%= callback_function_name(post_messages) %>?: (payload: <%= payload_type_name(post_messages) %>) => void
     |  <%- end -%>
@@ -133,34 +126,36 @@ class Template::TypescriptSource < Template::Base
     |<%- end -%>
     |
     |/**
-    | * @param {String} url
-    | * @param {unknown} error
-    | * @param {<%= callback_props_group_type_name(:widget) %>} callbacks
-    | * @throws {unknown}
+    | * Called if we encounter an error while parsing or dispatching a post message
+    | * event. Internal errors are dispatched to the appropriate error callback, and
+    | * everything else is thrown so it can be handled in the host application since
+    | * it's likely an application/user-level error.
     | */
-    |function dispatchError(url: string, error: unknown, callbacks: <%= callback_props_group_type_name(:widget) %>) {
+    |function dispatchError<T>(message: T, error: unknown, callbacks: <%= callback_props_group_type_name(:base) %><T>) {
     |  if (error instanceof PostMessageFieldDecodeError) {
-    |    callbacks.onInvalidMessageError?.(url, error)
+    |    callbacks.onInvalidMessageError?.(message, error)
     |  } else if (error instanceof PostMessageUnknownTypeError) {
-    |    callbacks.onInvalidMessageError?.(url, error)
+    |    callbacks.onInvalidMessageError?.(message, error)
     |  } else {
     |    throw error
     |  }
     |}
     |
     |/**
-    | * Dispatch a post message from any widget. Does not handle widget
-    | * specific post messages. See other dispatch methods for widget
-    | * specific dispatching.
-    | *
-    | * @param {String} url
-    | * @param {<%= callback_props_group_type_name(:widget) %>} callbacks
-    | * @throws {Error}
-    | * @throws {unknown}
+    | * We dispatch all messages to the onMessage callback.
     | */
-    |export function <%= dispatch_location_change_function_name(:widget) %>(url: string, callbacks: <%= callback_props_group_type_name(:widget) %>) {
+    |function dispatchOnMessage<T>(message: T, callbacks: <%= callback_props_group_type_name(:base) %><T>) {
+    |  callbacks.onMessage?.(message)
+    |}
+    |
+    |/**
+    | * Dispatch a post message event that we got from a url change event for any
+    | * widget. Does not handle widget specific post messages. See other dispatch
+    | * methods for widget specific dispatching.
+    | */
+    |export function <%= dispatch_location_change_function_name(:widget) %>(url: string, callbacks: <%= callback_props_group_type_name(:widget) %><string>) {
     |  try {
-    |    <%= dispatch_location_change_catch_all_function_name %>(url, callbacks)
+    |    dispatchOnMessage(url, callbacks)
     |    const payload = buildPayloadFromUrl(url)
     |    <%= dispatch_internal_message_function_name(:widget) %>(payload, callbacks)
     |  } catch (error) {
@@ -168,11 +163,10 @@ class Template::TypescriptSource < Template::Base
     |  }
     |}
     |
-    |function <%= dispatch_location_change_catch_all_function_name %>(url: string, callbacks: <%= callback_props_group_type_name(:widget) %>) {
-    |  callbacks.onMessage?.(url)
-    |}
-    |
-    |function <%= dispatch_internal_message_function_name(:widget) %>(payload: Payload, callbacks: <%= callback_props_group_type_name(:widget) %>) {
+    |/**
+    | * Dispatch a validated internal message for any widget.
+    | */
+    |function <%= dispatch_internal_message_function_name(:widget) %><T>(payload: Payload, callbacks: <%= callback_props_group_type_name(:widget) %><T>) {
     |  switch (payload.type) {
     |    <%- (generic_post_message_definitions + entity_post_message_definitions).each do |post_message| -%>
     |    case <%= qualified_enum_key(post_message) %>:
@@ -187,16 +181,12 @@ class Template::TypescriptSource < Template::Base
     |
     |<% post_message_definitions_by_widget.each do |subgroup, post_messages| %>
     |/**
-    | * Dispatch a post message from the <%= widget_name(subgroup) %>.
-    | *
-    | * @param {String} url
-    | * @param {<%= callback_props_group_type_name(subgroup) %>} callbacks
-    | * @throws {Error}
-    | * @throws {unknown}
+    | * Dispatch a post message event that we got from a url change event for the
+    | * <%= widget_name(subgroup) %>.
     | */
-    |export function <%= dispatch_location_change_function_name(subgroup) %>(url: string, callbacks: <%= callback_props_group_type_name(subgroup) %>) {
+    |export function <%= dispatch_location_change_function_name(subgroup) %>(url: string, callbacks: <%= callback_props_group_type_name(subgroup) %><string>) {
     |  try {
-    |    <%= dispatch_location_change_catch_all_function_name %>(url, callbacks)
+    |    dispatchOnMessage(url, callbacks)
     |    const payload = buildPayloadFromUrl(url)
     |    <%= dispatch_internal_message_function_name(subgroup) %>(payload, callbacks)
     |  } catch (error) {
@@ -204,7 +194,10 @@ class Template::TypescriptSource < Template::Base
     |  }
     |}
     |
-    |function <%= dispatch_internal_message_function_name(subgroup) %>(payload: Payload, callbacks: <%= callback_props_group_type_name(subgroup) %>) {
+    |/**
+    | * Dispatch a validated internal message for the <%= widget_name(subgroup) %>.
+    | */
+    |function <%= dispatch_internal_message_function_name(subgroup) %><T>(payload: Payload, callbacks: <%= callback_props_group_type_name(subgroup) %><T>) {
     |  switch (payload.type) {
     |    <%- (generic_post_message_definitions + entity_post_message_definitions).each do |post_message| -%>
     |    case <%= qualified_enum_key(post_message) %>:
@@ -353,16 +346,6 @@ class Template::TypescriptSource < Template::Base
     else
       "on#{normalize_keywords(post_message.label.to_s.classify)}"
     end
-  end
-
-  # @example
-  #
-  #   dispatch_location_change_catch_all_function_name
-  #   # => "dispatchLocationChangeCatchAll"
-  #
-  # @return [String]
-  def dispatch_location_change_catch_all_function_name
-    "dispatchLocationChangeCatchAll"
   end
 
   # @example

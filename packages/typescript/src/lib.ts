@@ -1,6 +1,6 @@
-export type BasePostMessageCallbackProps = {
-  onMessage?: (url: string) => void
-  onInvalidMessageError?: (url: string, error: Error) => void
+export type BasePostMessageCallbackProps<T> = {
+  onMessage?: (message: T) => void
+  onInvalidMessageError?: (message: T, error: Error) => void
 }
 
 // This is an internal error. Thrown when we are decoding a post message's
