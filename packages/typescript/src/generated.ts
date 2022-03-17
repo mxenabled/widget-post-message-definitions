@@ -239,9 +239,6 @@ export type Payload =
  * the payload for that message, this function parses the payload object and
  * returns a validated and typed object.
  *
- * @param {Type} type
- * @param {Metadata, Object} metadata
- * @return {Payload}
  * @throws {PostMessageUnknownTypeError}
  * @throws {PostMessageFieldDecodeError}
  */
@@ -478,10 +475,6 @@ function buildPayload(type: Type, metadata: Metadata): Payload {
 
 /**
  * @see {buildPayload}
- * @param {String} url
- * @return {Payload}
- * @throws {PostMessageUnknownTypeError}
- * @throws {PostMessageFieldDecodeError}
  */
 function buildPayloadFromUrl(urlString: string): Payload {
   const { parse } = require("url")
@@ -544,6 +537,12 @@ export type PulsePostMessageCallbackProps<T> = WidgetPostMessageCallbackProps<T>
   onOverdraftWarningCtaTransferFunds?: (payload: PulseOverdraftWarningCtaTransferFundsPayload) => void
 }
 
+/**
+ * Called if we encounter an error while parsing or dispatching a post message
+ * event. Internal errors are dispatched to the appropriate error callback, and
+ * everything else is thrown so it can be handled in the host application since
+ * it's likely an application/user-level error.
+ */
 function dispatchError<T>(message: T, error: unknown, callbacks: BasePostMessageCallbackProps<T>) {
   if (error instanceof PostMessageFieldDecodeError) {
     callbacks.onInvalidMessageError?.(message, error)
@@ -554,18 +553,17 @@ function dispatchError<T>(message: T, error: unknown, callbacks: BasePostMessage
   }
 }
 
+/**
+ * We dispatch all messages to the onMessage callback.
+ */
 function dispatchOnMessage<T>(message: T, callbacks: BasePostMessageCallbackProps<T>) {
   callbacks.onMessage?.(message)
 }
 
 /**
- * Dispatch a post message from any widget. Does not handle widget specific
- * post messages. See other dispatch methods for widget specific dispatching.
- *
- * @param {String} url
- * @param {WidgetPostMessageCallbackProps<string>} callbacks
- * @throws {Error}
- * @throws {unknown}
+ * Dispatch a post message event that we got from a url change event for any
+ * widget. Does not handle widget specific post messages. See other dispatch
+ * methods for widget specific dispatching.
  */
 export function dispatchWidgetLocationChangeEvent(url: string, callbacks: WidgetPostMessageCallbackProps<string>) {
   try {
@@ -577,6 +575,9 @@ export function dispatchWidgetLocationChangeEvent(url: string, callbacks: Widget
   }
 }
 
+/**
+ * Dispatch a validated internal message for any widget.
+ */
 function dispatchWidgetInternalMessage<T>(payload: Payload, callbacks: WidgetPostMessageCallbackProps<T>) {
   switch (payload.type) {
     case Type.Load:
@@ -602,12 +603,8 @@ function dispatchWidgetInternalMessage<T>(payload: Payload, callbacks: WidgetPos
 
 
 /**
- * Dispatch a post message from the Connect Widget.
- *
- * @param {String} url
- * @param {ConnectPostMessageCallbackProps<string>} callbacks
- * @throws {Error}
- * @throws {unknown}
+ * Dispatch a post message event that we got from a url change event for the
+ * Connect Widget.
  */
 export function dispatchConnectLocationChangeEvent(url: string, callbacks: ConnectPostMessageCallbackProps<string>) {
   try {
@@ -619,6 +616,9 @@ export function dispatchConnectLocationChangeEvent(url: string, callbacks: Conne
   }
 }
 
+/**
+ * Dispatch a validated internal message for the Connect Widget.
+ */
 function dispatchConnectInternalMessage<T>(payload: Payload, callbacks: ConnectPostMessageCallbackProps<T>) {
   switch (payload.type) {
     case Type.Load:
@@ -699,12 +699,8 @@ function dispatchConnectInternalMessage<T>(payload: Payload, callbacks: ConnectP
 }
 
 /**
- * Dispatch a post message from the Pulse Widget.
- *
- * @param {String} url
- * @param {PulsePostMessageCallbackProps<string>} callbacks
- * @throws {Error}
- * @throws {unknown}
+ * Dispatch a post message event that we got from a url change event for the
+ * Pulse Widget.
  */
 export function dispatchPulseLocationChangeEvent(url: string, callbacks: PulsePostMessageCallbackProps<string>) {
   try {
@@ -716,6 +712,9 @@ export function dispatchPulseLocationChangeEvent(url: string, callbacks: PulsePo
   }
 }
 
+/**
+ * Dispatch a validated internal message for the Pulse Widget.
+ */
 function dispatchPulseInternalMessage<T>(payload: Payload, callbacks: PulsePostMessageCallbackProps<T>) {
   switch (payload.type) {
     case Type.Load:

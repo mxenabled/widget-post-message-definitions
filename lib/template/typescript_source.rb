@@ -49,9 +49,6 @@ class Template::TypescriptSource < Template::Base
     | * the payload for that message, this function parses the payload object and
     | * returns a validated and typed object.
     | *
-    | * @param {Type} type
-    | * @param {Metadata, Object} metadata
-    | * @return {Payload}
     | * @throws {PostMessageUnknownTypeError}
     | * @throws {PostMessageFieldDecodeError}
     | */
@@ -78,10 +75,6 @@ class Template::TypescriptSource < Template::Base
     |
     |/**
     | * @see {buildPayload}
-    | * @param {String} url
-    | * @return {Payload}
-    | * @throws {PostMessageUnknownTypeError}
-    | * @throws {PostMessageFieldDecodeError}
     | */
     |function buildPayloadFromUrl(urlString: string): Payload {
     |  const { parse } = require("url")
@@ -132,6 +125,12 @@ class Template::TypescriptSource < Template::Base
     |}
     |<%- end -%>
     |
+    |/**
+    | * Called if we encounter an error while parsing or dispatching a post message
+    | * event. Internal errors are dispatched to the appropriate error callback, and
+    | * everything else is thrown so it can be handled in the host application since
+    | * it's likely an application/user-level error.
+    | */
     |function dispatchError<T>(message: T, error: unknown, callbacks: <%= callback_props_group_type_name(:base) %><T>) {
     |  if (error instanceof PostMessageFieldDecodeError) {
     |    callbacks.onInvalidMessageError?.(message, error)
@@ -142,18 +141,17 @@ class Template::TypescriptSource < Template::Base
     |  }
     |}
     |
+    |/**
+    | * We dispatch all messages to the onMessage callback.
+    | */
     |function dispatchOnMessage<T>(message: T, callbacks: <%= callback_props_group_type_name(:base) %><T>) {
     |  callbacks.onMessage?.(message)
     |}
     |
     |/**
-    | * Dispatch a post message from any widget. Does not handle widget specific
-    | * post messages. See other dispatch methods for widget specific dispatching.
-    | *
-    | * @param {String} url
-    | * @param {<%= callback_props_group_type_name(:widget) %><string>} callbacks
-    | * @throws {Error}
-    | * @throws {unknown}
+    | * Dispatch a post message event that we got from a url change event for any
+    | * widget. Does not handle widget specific post messages. See other dispatch
+    | * methods for widget specific dispatching.
     | */
     |export function <%= dispatch_location_change_function_name(:widget) %>(url: string, callbacks: <%= callback_props_group_type_name(:widget) %><string>) {
     |  try {
@@ -165,6 +163,9 @@ class Template::TypescriptSource < Template::Base
     |  }
     |}
     |
+    |/**
+    | * Dispatch a validated internal message for any widget.
+    | */
     |function <%= dispatch_internal_message_function_name(:widget) %><T>(payload: Payload, callbacks: <%= callback_props_group_type_name(:widget) %><T>) {
     |  switch (payload.type) {
     |    <%- (generic_post_message_definitions + entity_post_message_definitions).each do |post_message| -%>
@@ -180,12 +181,8 @@ class Template::TypescriptSource < Template::Base
     |
     |<% post_message_definitions_by_widget.each do |subgroup, post_messages| %>
     |/**
-    | * Dispatch a post message from the <%= widget_name(subgroup) %>.
-    | *
-    | * @param {String} url
-    | * @param {<%= callback_props_group_type_name(subgroup) %><string>} callbacks
-    | * @throws {Error}
-    | * @throws {unknown}
+    | * Dispatch a post message event that we got from a url change event for the
+    | * <%= widget_name(subgroup) %>.
     | */
     |export function <%= dispatch_location_change_function_name(subgroup) %>(url: string, callbacks: <%= callback_props_group_type_name(subgroup) %><string>) {
     |  try {
@@ -197,6 +194,9 @@ class Template::TypescriptSource < Template::Base
     |  }
     |}
     |
+    |/**
+    | * Dispatch a validated internal message for the <%= widget_name(subgroup) %>.
+    | */
     |function <%= dispatch_internal_message_function_name(subgroup) %><T>(payload: Payload, callbacks: <%= callback_props_group_type_name(subgroup) %><T>) {
     |  switch (payload.type) {
     |    <%- (generic_post_message_definitions + entity_post_message_definitions).each do |post_message| -%>
