@@ -544,13 +544,7 @@ export type PulsePostMessageCallbackProps<T> = WidgetPostMessageCallbackProps<T>
   onOverdraftWarningCtaTransferFunds?: (payload: PulseOverdraftWarningCtaTransferFundsPayload) => void
 }
 
-/**
- * @param {T} message
- * @param {unknown} error
- * @param {WidgetPostMessageCallbackProps<T>} callbacks
- * @throws {unknown}
- */
-function dispatchError<T>(message: T, error: unknown, callbacks: WidgetPostMessageCallbackProps<T>) {
+function dispatchError<T>(message: T, error: unknown, callbacks: BasePostMessageCallbackProps<T>) {
   if (error instanceof PostMessageFieldDecodeError) {
     callbacks.onInvalidMessageError?.(message, error)
   } else if (error instanceof PostMessageUnknownTypeError) {
@@ -558,6 +552,10 @@ function dispatchError<T>(message: T, error: unknown, callbacks: WidgetPostMessa
   } else {
     throw error
   }
+}
+
+function dispatchOnMessage<T>(message: T, callbacks: BasePostMessageCallbackProps<T>) {
+  callbacks.onMessage?.(message)
 }
 
 /**
@@ -577,10 +575,6 @@ export function dispatchWidgetLocationChangeEvent(url: string, callbacks: Widget
   } catch (error) {
     dispatchError(url, error, callbacks)
   }
-}
-
-function dispatchOnMessage<T>(message: T, callbacks: BasePostMessageCallbackProps<T>) {
-  callbacks.onMessage?.(message)
 }
 
 function dispatchWidgetInternalMessage<T>(payload: Payload, callbacks: WidgetPostMessageCallbackProps<T>) {

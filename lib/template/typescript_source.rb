@@ -132,13 +132,7 @@ class Template::TypescriptSource < Template::Base
     |}
     |<%- end -%>
     |
-    |/**
-    | * @param {T} message
-    | * @param {unknown} error
-    | * @param {<%= callback_props_group_type_name(:widget) %><T>} callbacks
-    | * @throws {unknown}
-    | */
-    |function dispatchError<T>(message: T, error: unknown, callbacks: <%= callback_props_group_type_name(:widget) %><T>) {
+    |function dispatchError<T>(message: T, error: unknown, callbacks: <%= callback_props_group_type_name(:base) %><T>) {
     |  if (error instanceof PostMessageFieldDecodeError) {
     |    callbacks.onInvalidMessageError?.(message, error)
     |  } else if (error instanceof PostMessageUnknownTypeError) {
@@ -146,6 +140,10 @@ class Template::TypescriptSource < Template::Base
     |  } else {
     |    throw error
     |  }
+    |}
+    |
+    |function dispatchOnMessage<T>(message: T, callbacks: <%= callback_props_group_type_name(:base) %><T>) {
+    |  callbacks.onMessage?.(message)
     |}
     |
     |/**
@@ -159,16 +157,12 @@ class Template::TypescriptSource < Template::Base
     | */
     |export function <%= dispatch_location_change_function_name(:widget) %>(url: string, callbacks: <%= callback_props_group_type_name(:widget) %><string>) {
     |  try {
-    |    <%= dispatch_on_message_function_name %>(url, callbacks)
+    |    dispatchOnMessage(url, callbacks)
     |    const payload = buildPayloadFromUrl(url)
     |    <%= dispatch_internal_message_function_name(:widget) %>(payload, callbacks)
     |  } catch (error) {
     |    dispatchError(url, error, callbacks)
     |  }
-    |}
-    |
-    |function <%= dispatch_on_message_function_name %><T>(message: T, callbacks: <%= callback_props_group_type_name(:base) %><T>) {
-    |  callbacks.onMessage?.(message)
     |}
     |
     |function <%= dispatch_internal_message_function_name(:widget) %><T>(payload: Payload, callbacks: <%= callback_props_group_type_name(:widget) %><T>) {
@@ -195,7 +189,7 @@ class Template::TypescriptSource < Template::Base
     | */
     |export function <%= dispatch_location_change_function_name(subgroup) %>(url: string, callbacks: <%= callback_props_group_type_name(subgroup) %><string>) {
     |  try {
-    |    <%= dispatch_on_message_function_name %>(url, callbacks)
+    |    dispatchOnMessage(url, callbacks)
     |    const payload = buildPayloadFromUrl(url)
     |    <%= dispatch_internal_message_function_name(subgroup) %>(payload, callbacks)
     |  } catch (error) {
@@ -352,16 +346,6 @@ class Template::TypescriptSource < Template::Base
     else
       "on#{normalize_keywords(post_message.label.to_s.classify)}"
     end
-  end
-
-  # @example
-  #
-  #   dispatch_on_message_function_name
-  #   # => "dispatchOnMessage"
-  #
-  # @return [String]
-  def dispatch_on_message_function_name
-    "dispatchOnMessage"
   end
 
   # @example
