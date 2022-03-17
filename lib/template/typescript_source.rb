@@ -14,7 +14,7 @@ class Template::TypescriptSource < Template::Base
     |  <%- end -%>
     |}
     |
-    |export const typeLookup: Record<string, Type> = {
+    |const typeLookup: Record<string, Type> = {
     |  <%- post_message_definitions.each do |post_message| -%>
     |  [<%= qualified_enum_key(post_message) %>]: <%= qualified_enum_key(post_message) %>,
     |  <%- if needs_uri_friendly_lookup?(post_message) -%>

@@ -37,7 +37,7 @@ export enum Type {
   AccountCreated = "mx/account/created",
 }
 
-export const typeLookup: Record<string, Type> = {
+const typeLookup: Record<string, Type> = {
   [Type.Load]: Type.Load,
   [Type.Ping]: Type.Ping,
   [Type.FocusTrap]: Type.FocusTrap,
