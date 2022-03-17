@@ -76,12 +76,12 @@ class Template::TypescriptSource < Template::Base
     |/**
     | * @see {buildPayload}
     | */
-    |function buildPayloadFromUrl(urlString: string): Payload {
+    |function buildPayloadFromUrl(url: string): Payload {
     |  const { parse } = require("url")
-    |  const url = parse(urlString, true)
+    |  const urlObj = parse(url, true)
     |
-    |  const namespace = url.host || ""
-    |  const action = (url.pathname || "").substring(1)
+    |  const namespace = urlObj.host || ""
+    |  const action = (urlObj.pathname || "").substring(1)
     |  const rawType = action ? `mx/${namespace}/${action}` : `mx/${namespace}`
     |  let type: Type
     |  if (rawType in typeLookup) {
@@ -90,7 +90,7 @@ class Template::TypescriptSource < Template::Base
     |    throw new PostMessageUnknownTypeError(rawType)
     |  }
     |
-    |  const rawMetadataParam = url.query?.["metadata"] || "{}"
+    |  const rawMetadataParam = urlObj.query?.["metadata"] || "{}"
     |  const rawMetadataString = Array.isArray(rawMetadataParam) ?
     |    rawMetadataParam.join("") :
     |    rawMetadataParam
