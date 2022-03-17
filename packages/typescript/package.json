@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
-    "format": "prettier -w src test '!**/generated.*'",
+    "format": "npm run prettier -- -w",
+    "prettier": "prettier src test '!**/generated.*'",
     "build": "[ -d dist ] && rm -r dist; tsc --outDir dist --declaration",
     "test": "jest --verbose --coverage",
     "lint": "eslint src test",
