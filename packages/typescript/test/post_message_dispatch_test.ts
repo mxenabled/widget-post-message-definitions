@@ -45,7 +45,7 @@ const connectionStatus = 6
 const connectMemberStatusUpdateUrl = genPostMessageUrl("mx://connect/memberStatusUpdate", {
   ...session,
   member_guid: memberGuid,
-  connection_status: connectionStatus
+  connection_status: connectionStatus,
 })
 
 const institutionCode = "INST"
@@ -56,14 +56,17 @@ const connectUpdateCredentialsUrl = genPostMessageUrl("mx://connect/updateCreden
   institution: {
     code: institutionCode,
     guid: institutionGuid,
-  }
+  },
 })
 
 const amount = 42
-const pulseOverdraftWarningCtaTransferFundsUrl = genPostMessageUrl("mx://pulse/overdraftWarning/cta/transferFunds", {
-  account_guid: accountGuid,
-  amount: amount,
-})
+const pulseOverdraftWarningCtaTransferFundsUrl = genPostMessageUrl(
+  "mx://pulse/overdraftWarning/cta/transferFunds",
+  {
+    account_guid: accountGuid,
+    amount: amount,
+  },
+)
 
 const invalidMessageUrl = genPostMessageUrl("mx://bad/memberDeleted", {
   ...session,
@@ -74,7 +77,9 @@ const account = {
 }
 const accountCreatedUrl = genPostMessageUrl("ms://account/created", account)
 
-const testSharedCallbacks = (dispatch: (url: string, callbacks: WidgetPostMessageCallbackProps) => void) => {
+const testSharedCallbacks = (
+  dispatch: (url: string, callbacks: WidgetPostMessageCallbackProps) => void,
+) => {
   describe("onMessage", () => {
     test("callback is called with valid post message", () => {
       expect.assertions(1)
@@ -82,7 +87,7 @@ const testSharedCallbacks = (dispatch: (url: string, callbacks: WidgetPostMessag
       dispatch(connectMemberDeletedUrl, {
         onMessage: (url) => {
           expect(url).toBe(connectMemberDeletedUrl)
-        }
+        },
       })
     })
 
@@ -92,7 +97,7 @@ const testSharedCallbacks = (dispatch: (url: string, callbacks: WidgetPostMessag
       dispatch(invalidMessageUrl, {
         onMessage: (url) => {
           expect(url).toBe(invalidMessageUrl)
-        }
+        },
       })
     })
   })
@@ -105,7 +110,7 @@ const testSharedCallbacks = (dispatch: (url: string, callbacks: WidgetPostMessag
         onInvalidMessageError: (url, error) => {
           expect(url).toBe(invalidMessageUrl)
           expect(error.message).toContain("Unknown post message: mx/bad/memberDeleted")
-        }
+        },
       })
     })
 
@@ -115,8 +120,10 @@ const testSharedCallbacks = (dispatch: (url: string, callbacks: WidgetPostMessag
       dispatch(connectMemberDeletedUrlInvalidField, {
         onInvalidMessageError: (url, error) => {
           expect(url).toBe(connectMemberDeletedUrlInvalidField)
-          expect(error.message).toContain("Unable to decode 'member_guid' from 'mx/connect/memberDeleted")
-        }
+          expect(error.message).toContain(
+            "Unable to decode 'member_guid' from 'mx/connect/memberDeleted",
+          )
+        },
       })
     })
 
@@ -126,8 +133,10 @@ const testSharedCallbacks = (dispatch: (url: string, callbacks: WidgetPostMessag
       dispatch(connectMemberDeletedUrlMissingField, {
         onInvalidMessageError: (url, error) => {
           expect(url).toBe(connectMemberDeletedUrlMissingField)
-          expect(error.message).toContain("Unable to decode 'member_guid' from 'mx/connect/memberDeleted")
-        }
+          expect(error.message).toContain(
+            "Unable to decode 'member_guid' from 'mx/connect/memberDeleted",
+          )
+        },
       })
     })
   })
@@ -138,7 +147,7 @@ const testSharedCallbacks = (dispatch: (url: string, callbacks: WidgetPostMessag
         dispatch(loadUrl, {
           onLoad: () => {
             throw new Error("bad to the bone")
-          }
+          },
         })
       }).toThrow()
     })
@@ -151,7 +160,7 @@ const testSharedCallbacks = (dispatch: (url: string, callbacks: WidgetPostMessag
       dispatch(loadUrl, {
         onLoad: (payload) => {
           expect(payload).toBeDefined()
-        }
+        },
       })
     })
 
@@ -161,7 +170,7 @@ const testSharedCallbacks = (dispatch: (url: string, callbacks: WidgetPostMessag
       dispatch(pingUrl, {
         onPing: (payload) => {
           expect(payload.user_guid).toBe(userGuid)
-        }
+        },
       })
     })
 
@@ -171,7 +180,7 @@ const testSharedCallbacks = (dispatch: (url: string, callbacks: WidgetPostMessag
       dispatch(focusTrapUrl, {
         onFocusTrap: (payload) => {
           expect(payload.user_guid).toBe(userGuid)
-        }
+        },
       })
     })
   })
@@ -183,7 +192,7 @@ const testSharedCallbacks = (dispatch: (url: string, callbacks: WidgetPostMessag
       dispatch(accountCreatedUrl, {
         onAccountCreated: (payload) => {
           expect(payload.guid).toBe(accountGuid)
-        }
+        },
       })
     })
   })
@@ -205,7 +214,7 @@ describe("Post Message Dispatch", () => {
           onOverdraftWarningCtaTransferFunds: (payload) => {
             expect(payload.account_guid).toBe(accountGuid)
             expect(payload.amount).toBe(amount)
-          }
+          },
         })
       })
     })
@@ -223,7 +232,7 @@ describe("Post Message Dispatch", () => {
             expect(payload.member_guid).toBe(memberGuid)
             expect(payload.user_guid).toBe(userGuid)
             expect(payload.session_guid).toBe(sessionGuid)
-          }
+          },
         })
       })
 
@@ -236,7 +245,7 @@ describe("Post Message Dispatch", () => {
           },
           onMemberDeleted: (payload) => {
             expect(payload.member_guid).toBe(memberGuid)
-          }
+          },
         })
       })
 
@@ -246,7 +255,7 @@ describe("Post Message Dispatch", () => {
         dispatchConnectLocationChangeEvent(connectLoadedUrl, {
           onLoaded: (payload) => {
             expect(payload.initial_step).toBe(initialStep)
-          }
+          },
         })
       })
 
@@ -256,7 +265,7 @@ describe("Post Message Dispatch", () => {
         dispatchConnectLocationChangeEvent(connectMemberStatusUpdateUrl, {
           onMemberStatusUpdate: (payload) => {
             expect(payload.connection_status).toBe(connectionStatus)
-          }
+          },
         })
       })
 
@@ -267,7 +276,7 @@ describe("Post Message Dispatch", () => {
           onUpdateCredentials: (payload) => {
             expect(payload.institution.code).toBe(institutionCode)
             expect(payload.institution.guid).toBe(institutionGuid)
-          }
+          },
         })
       })
     })

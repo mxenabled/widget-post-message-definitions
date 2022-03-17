@@ -45,7 +45,12 @@ export type NestedValue = Record<string, Value>
 export type TypeDef = string | Array<string> | Record<string, string>
 export type Metadata = Record<string, Value | NestedValue>
 
-export function assertMessageProp(container: Metadata, postMessageType: string, field: string, expectedType: TypeDef) {
+export function assertMessageProp(
+  container: Metadata,
+  postMessageType: string,
+  field: string,
+  expectedType: TypeDef,
+) {
   const value = container[field]
 
   const valueIsDefined = typeof value !== "undefined"
