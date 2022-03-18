@@ -40,6 +40,12 @@ export class PostMessageUnknownTypeError extends Error {
   }
 }
 
+export type MessageEventData = {
+  mx?: boolean
+  metadata?: Metadata
+  type?: string
+}
+
 export type Value = string | number
 export type NestedValue = Record<string, Value>
 export type TypeDef = string | Array<string> | Record<string, string>

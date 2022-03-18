@@ -1,6 +1,7 @@
 import {
   WidgetPostMessageCallbackProps,
   dispatchConnectLocationChangeEvent,
+  dispatchConnectPostMessageEvent,
   dispatchPulseLocationChangeEvent,
   dispatchWidgetLocationChangeEvent,
 } from "../src"
@@ -20,6 +21,17 @@ const session = {
 const loadUrl = genPostMessageUrl("mx://load")
 const pingUrl = genPostMessageUrl("mx://ping", session)
 const focusTrapUrl = genPostMessageUrl("mx://focusTrap", session)
+
+const connectMemberDeletedMessage = new MessageEvent("message", {
+  data: {
+    mx: true,
+    type: "mx/connect/memberDeleted",
+    metadata: {
+      ...session,
+      member_guid: memberGuid,
+    },
+  },
+})
 
 const connectMemberDeletedUrl = genPostMessageUrl("mx://connect/memberDeleted", {
   ...session,
@@ -70,6 +82,10 @@ const pulseOverdraftWarningCtaTransferFundsUrl = genPostMessageUrl(
 
 const invalidMessageUrl = genPostMessageUrl("mx://bad/memberDeleted", {
   ...session,
+})
+
+const invalidMessage = new MessageEvent("message", {
+  data: {},
 })
 
 const account = {
@@ -278,6 +294,43 @@ describe("Post Message Dispatch", () => {
             expect(payload.institution.guid).toBe(institutionGuid)
           },
         })
+      })
+    })
+  })
+
+  describe(dispatchConnectPostMessageEvent, () => {
+    test("corresponding callback is called with parsed payload", () => {
+      expect.assertions(3)
+
+      dispatchConnectPostMessageEvent(connectMemberDeletedMessage, {
+        onMemberDeleted: (payload) => {
+          expect(payload.member_guid).toBe(memberGuid)
+          expect(payload.user_guid).toBe(userGuid)
+          expect(payload.session_guid).toBe(sessionGuid)
+        },
+      })
+    })
+
+    test("corresponding callback and onMessage are both called", () => {
+      expect.assertions(2)
+
+      dispatchConnectPostMessageEvent(connectMemberDeletedMessage, {
+        onMessage: (message) => {
+          expect(message.data.mx).toBe(true)
+        },
+        onMemberDeleted: (payload) => {
+          expect(payload.member_guid).toBe(memberGuid)
+        },
+      })
+    })
+
+    test("callback is called when the given post message is not recognized", () => {
+      expect.assertions(1)
+
+      dispatchConnectPostMessageEvent(invalidMessage, {
+        onInvalidMessageError: (message, error) => {
+          expect(error.message).toContain("Unknown post message: type not provided")
+        },
       })
     })
   })

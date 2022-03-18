@@ -2,6 +2,7 @@ class Template::TypescriptSource < Template::Base
   CONTENT = <<-CONTENT
     |import {
     |  <%= callback_props_group_type_name(:base) %>,
+    |  MessageEventData,
     |  Metadata,
     |  PostMessageFieldDecodeError,
     |  PostMessageUnknownTypeError,
@@ -100,6 +101,24 @@ class Template::TypescriptSource < Template::Base
     |  return payload
     |}
     |
+    |/**
+    | * @see {buildPayload}
+    | */
+    |function buildPayloadFromPostMessageEventData(data: MessageEventData): Payload {
+    |  const rawType = data.type || "type not provided"
+    |  let type: Type
+    |  if (rawType && rawType in typeLookup) {
+    |    type = typeLookup[rawType]
+    |  } else {
+    |    throw new PostMessageUnknownTypeError(rawType)
+    |  }
+    |
+    |  const metadata = data.metadata || {}
+    |  const payload = buildPayload(type, metadata)
+    |
+    |  return payload
+    |}
+    |
     |export type <%= callback_props_group_type_name(:widget) %><T> =
     |  & <%= callback_props_group_type_name(:base) %><T>
     |  & <%= callback_props_group_type_name(:entity) %>
@@ -164,6 +183,21 @@ class Template::TypescriptSource < Template::Base
     |}
     |
     |/**
+    | * Dispatch a post message event that we got from a message event for any
+    | * widget. Does not handle widget specific post messages. See other dispatch
+    | * methods for widget specific dispatching.
+    | */
+    |export function <%= dispatch_post_message_function_name(:widget) %>(event: MessageEvent<MessageEventData>, callbacks: <%= callback_props_group_type_name(:widget) %><MessageEvent<MessageEventData>>) {
+    |  try {
+    |    dispatchOnMessage(event, callbacks)
+    |    const payload = buildPayloadFromPostMessageEventData(event.data)
+    |    <%= dispatch_internal_message_function_name(:widget) %>(payload, callbacks)
+    |  } catch (error) {
+    |    dispatchError(event, error, callbacks)
+    |  }
+    |}
+    |
+    |/**
     | * Dispatch a validated internal message for any widget.
     | */
     |function <%= dispatch_internal_message_function_name(:widget) %><T>(payload: Payload, callbacks: <%= callback_props_group_type_name(:widget) %><T>) {
@@ -191,6 +225,20 @@ class Template::TypescriptSource < Template::Base
     |    <%= dispatch_internal_message_function_name(subgroup) %>(payload, callbacks)
     |  } catch (error) {
     |    dispatchError(url, error, callbacks)
+    |  }
+    |}
+    |
+    |/**
+    | * Dispatch a post message event that we got from a window/document message for the
+    | * <%= widget_name(subgroup) %>.
+    | */
+    |export function <%= dispatch_post_message_function_name(subgroup) %>(event: MessageEvent<MessageEventData>, callbacks: <%= callback_props_group_type_name(subgroup) %><MessageEvent<MessageEventData>>) {
+    |  try {
+    |    dispatchOnMessage(event, callbacks)
+    |    const payload = buildPayloadFromPostMessageEventData(event.data)
+    |    <%= dispatch_internal_message_function_name(subgroup) %>(payload, callbacks)
+    |  } catch (error) {
+    |    dispatchError(event, error, callbacks)
     |  }
     |}
     |
@@ -357,6 +405,17 @@ class Template::TypescriptSource < Template::Base
   # @return [String]
   def dispatch_location_change_function_name(group)
     "dispatch#{normalize_keywords(group.to_s.classify)}LocationChangeEvent"
+  end
+
+  # @example
+  #
+  #   dispatch_post_message_function_name(:generic)
+  #   # => "dispatchWidgetPostMessageEvent"
+  #
+  # @param [String] group
+  # @return [String]
+  def dispatch_post_message_function_name(group)
+    "dispatch#{normalize_keywords(group.to_s.classify)}PostMessageEvent"
   end
 
   # @example

@@ -19,6 +19,7 @@
     "isolatedModules": false,
     "jsx": "react-native",
     "lib": [
+      "dom",
       "es6"
     ],
     "moduleResolution": "node",
