@@ -91,6 +91,9 @@ post_messages:
           url: string
           member_guid: string
       stepChange:
+        warning: |
+          This message is intended for analytics tracking purposes and not
+          controlling or altering user experience.
         payload:
           <<: *user_session_properties
           previous: string

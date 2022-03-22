@@ -351,6 +351,9 @@ import { ConnectWidget } from "@mxenabled/react-native-widget-sdk"
 ---
 ### Step change (`mx/connect/stepChange`)
 
+**Warning**: This message is intended for analytics tracking purposes and not
+controlling or altering user experience.
+
 - Widget callback prop name: `onStepChange`
 - Payload fields:
     - `user_guid` (`string`)
