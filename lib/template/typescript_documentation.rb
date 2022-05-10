@@ -12,7 +12,7 @@ class Template::TypescriptDocumentation < Template::TypescriptSource
     |-->
   HEADER
 
-  CONTENT = <<-CONTENT
+  ITEM_HEADER = <<-ITEM_HEADER
     |<%- post_message_definitions_by_widget.each do |widget, post_messages| -%>
     |<%- next unless widget == :connect -%>
     |## <%= widget_name(widget) %> Post Messages
@@ -44,29 +44,12 @@ class Template::TypescriptDocumentation < Template::TypescriptSource
     |    <%- end -%>
     |    <%- end -%>
     |<%- end -%>
-    |
-    |<details>
-    |<summary>Click here to view a sample usage of <code><%= callback_function_name(post_message) %></code>.</summary>
-    |
-    |```jsx
-    |import { <%= widget_component(widget) %> } from "@mxenabled/react-native-widget-sdk"
-    |
-    |<<%= widget_component(widget) %>
-    |  url="<%= widget_sample_url(widget) %>"
-    |
-    |  <%= callback_function_name(post_message) %>={(payload) => {
-    |    <%- post_message.payload.each do |property, rhs| -%>
-    |    console.log(`<%= property.titleize %>: ${payload.<%= property %>}`)
-    |    <%- end -%>
-    |  }
-    |/>
-    |```
-    |
-    |</details>
-    |
+  ITEM_HEADER
+
+  ITEM_FOOTER = <<-ITEM_FOOTER
     |<%- end -%>
     |<%- end -%>
-  CONTENT
+  ITEM_FOOTER
 
   # @example
   #
