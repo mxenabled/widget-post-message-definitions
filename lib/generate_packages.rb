@@ -4,5 +4,7 @@ post_message_definitions = PostMessageDefinition.load_file("./lib/post_message_d
 
 Template::TypescriptSource.save("packages/typescript/src/generated.ts",
                                 post_message_definitions: post_message_definitions)
-Template::TypescriptDocumentation.save("packages/typescript/docs/generated.md",
-                                       post_message_definitions: post_message_definitions)
+Template::TypescriptReactNativeDocumentation.save("packages/typescript/docs/react-native-sdk-generated.md",
+                                                  post_message_definitions: post_message_definitions)
+Template::TypescriptWebDocumentation.save("packages/typescript/docs/web-sdk-generated.md",
+                                          post_message_definitions: post_message_definitions)
