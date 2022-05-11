@@ -1,6 +1,6 @@
 {
   "name": "@mxenabled/widget-post-message-definitions",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Widget Post Message Definitions for use in SDKs",
   "main": "dist/index.js",
   "license": "MIT",
