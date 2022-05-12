@@ -16,6 +16,10 @@ post_messages:
       ping:
         payload:
           <<: *user_session_properties
+      go_back:
+        payload:
+          <<: *user_session_properties
+          can_go_back: boolean
       focusTrap:
         payload:
           <<: *user_session_properties
