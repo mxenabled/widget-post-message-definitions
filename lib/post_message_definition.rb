@@ -28,7 +28,7 @@ class PostMessageDefinition
   # @param [Symbol] group (eg, :entities, :widgets)
   # @param [Symbol] subgroup (eg, :generic, :connect)
   # @param [Symbol] label (eg, :submitMFA, :overdraftWarning/cta/transferFunds)
-  # @param [Hash] properties (default: {}, example: {url: string})
+  # @param [Hash] payload (default: {}, example: {url: string})
   # @param [Hash] properties (default: {}, example: {warning: "This Post Message ..."})
   def initialize(group, subgroup, label, payload = {}, properties = {})
     @group = group.to_sym

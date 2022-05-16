@@ -19,7 +19,7 @@ import {
 export enum Type {
   Load = "mx/load",
   Ping = "mx/ping",
-  GoBack = "mx/go_back",
+  GoBack = "mx/goBack",
   FocusTrap = "mx/focusTrap",
   ConnectLoaded = "mx/connect/loaded",
   ConnectEnterCredentials = "mx/connect/enterCredentials",
@@ -43,6 +43,7 @@ const typeLookup: Record<string, Type> = {
   [Type.Load]: Type.Load,
   [Type.Ping]: Type.Ping,
   [Type.GoBack]: Type.GoBack,
+  "mx/goback": Type.GoBack,
   [Type.FocusTrap]: Type.FocusTrap,
   "mx/focustrap": Type.FocusTrap,
   [Type.ConnectLoaded]: Type.ConnectLoaded,
@@ -92,7 +93,7 @@ export type GoBackPayload = {
   type: Type.GoBack,
   user_guid: string,
   session_guid: string,
-  can_go_back: boolean,
+  did_go_back: boolean,
 }
 
 export type FocusTrapPayload = {
@@ -272,15 +273,15 @@ function buildPayload(type: Type, metadata: Metadata): Payload {
       }
 
     case Type.GoBack:
-      assertMessageProp(metadata, "mx/go_back", "user_guid", "string")
-      assertMessageProp(metadata, "mx/go_back", "session_guid", "string")
-      assertMessageProp(metadata, "mx/go_back", "can_go_back", "boolean")
+      assertMessageProp(metadata, "mx/goBack", "user_guid", "string")
+      assertMessageProp(metadata, "mx/goBack", "session_guid", "string")
+      assertMessageProp(metadata, "mx/goBack", "did_go_back", "boolean")
 
       return {
         type,
         user_guid: metadata.user_guid as string,
         session_guid: metadata.session_guid as string,
-        can_go_back: metadata.can_go_back as boolean,
+        did_go_back: metadata.did_go_back as boolean,
       }
 
     case Type.FocusTrap:
