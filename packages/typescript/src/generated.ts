@@ -19,7 +19,7 @@ import {
 export enum Type {
   Load = "mx/load",
   Ping = "mx/ping",
-  GoBack = "mx/goBack",
+  Navigation = "mx/navigation",
   FocusTrap = "mx/focusTrap",
   ConnectLoaded = "mx/connect/loaded",
   ConnectEnterCredentials = "mx/connect/enterCredentials",
@@ -42,8 +42,7 @@ export enum Type {
 const typeLookup: Record<string, Type> = {
   [Type.Load]: Type.Load,
   [Type.Ping]: Type.Ping,
-  [Type.GoBack]: Type.GoBack,
-  "mx/goback": Type.GoBack,
+  [Type.Navigation]: Type.Navigation,
   [Type.FocusTrap]: Type.FocusTrap,
   "mx/focustrap": Type.FocusTrap,
   [Type.ConnectLoaded]: Type.ConnectLoaded,
@@ -89,8 +88,8 @@ export type PingPayload = {
   session_guid: string,
 }
 
-export type GoBackPayload = {
-  type: Type.GoBack,
+export type NavigationPayload = {
+  type: Type.Navigation,
   user_guid: string,
   session_guid: string,
   did_go_back: boolean,
@@ -221,7 +220,7 @@ export type AccountCreatedPayload = {
 export type WidgetPayload =
   | LoadPayload
   | PingPayload
-  | GoBackPayload
+  | NavigationPayload
   | FocusTrapPayload
   | ConnectLoadedPayload
   | ConnectEnterCredentialsPayload
@@ -272,10 +271,10 @@ function buildPayload(type: Type, metadata: Metadata): Payload {
         session_guid: metadata.session_guid as string,
       }
 
-    case Type.GoBack:
-      assertMessageProp(metadata, "mx/goBack", "user_guid", "string")
-      assertMessageProp(metadata, "mx/goBack", "session_guid", "string")
-      assertMessageProp(metadata, "mx/goBack", "did_go_back", "boolean")
+    case Type.Navigation:
+      assertMessageProp(metadata, "mx/navigation", "user_guid", "string")
+      assertMessageProp(metadata, "mx/navigation", "session_guid", "string")
+      assertMessageProp(metadata, "mx/navigation", "did_go_back", "boolean")
 
       return {
         type,
@@ -554,7 +553,7 @@ export type EntityPostMessageCallbackProps = {
 export type GenericPostMessageCallbackProps = {
   onLoad?: (payload: LoadPayload) => void
   onPing?: (payload: PingPayload) => void
-  onGoBack?: (payload: GoBackPayload) => void
+  onNavigation?: (payload: NavigationPayload) => void
   onFocusTrap?: (payload: FocusTrapPayload) => void
 }
 
@@ -646,8 +645,8 @@ function dispatchWidgetInternalMessage<T>(payload: Payload, callbacks: WidgetPos
       callbacks.onPing?.(payload)
       break
 
-    case Type.GoBack:
-      callbacks.onGoBack?.(payload)
+    case Type.Navigation:
+      callbacks.onNavigation?.(payload)
       break
 
     case Type.FocusTrap:
@@ -705,8 +704,8 @@ function dispatchConnectInternalMessage<T>(payload: Payload, callbacks: ConnectP
       callbacks.onPing?.(payload)
       break
 
-    case Type.GoBack:
-      callbacks.onGoBack?.(payload)
+    case Type.Navigation:
+      callbacks.onNavigation?.(payload)
       break
 
     case Type.FocusTrap:
@@ -819,8 +818,8 @@ function dispatchPulseInternalMessage<T>(payload: Payload, callbacks: PulsePostM
       callbacks.onPing?.(payload)
       break
 
-    case Type.GoBack:
-      callbacks.onGoBack?.(payload)
+    case Type.Navigation:
+      callbacks.onNavigation?.(payload)
       break
 
     case Type.FocusTrap:
