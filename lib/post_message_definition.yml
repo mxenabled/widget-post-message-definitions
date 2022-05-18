@@ -16,10 +16,10 @@ post_messages:
       ping:
         payload:
           <<: *user_session_properties
-      goBack:
+      navigation:
         warning: |
           By passing your own method to this prop, you are overriding the
-          default navigation behaviour of the SDK which is to determine if widget was able
+          default navigation behaviour of the SDK which is used to determine if widget was able
           to go back or not internally.
         payload:
           <<: *user_session_properties
