@@ -51,6 +51,8 @@ class Template::TypescriptDocumentation < Template::TypescriptSource
     |<%- end -%>
   ITEM_FOOTER
 
+  # @param [PostMessageDefinition::PayloadField] field
+  # @return [String]
   def payload_field_heading(field)
     if field.optional?
       "`#{field.name}` (optional)"
