@@ -5,15 +5,41 @@ class PostMessageDefinition
   attr_reader :payload
   attr_reader :properties
 
+  class PayloadField
+    attr_reader :name, :type, :properties
+
+    def initialize(name, type, properties = {})
+      @name = name
+      @type = type
+      @properties = properties
+    end
+
+    def required?
+      !!properties[:required]
+    end
+
+    def to_s
+      "<#{name} type=#{type} properties=#{properties}>"
+    end
+  end
+
   # @param [Hash] definitions
   # @return [Array<PostMessageDefinition>]
   def self.load(definitions)
     definitions.dig("post_messages").map do |group, subgroups|
       subgroups.map do |subgroup, messages|
-        messages.map do |label, properties|
-          payload = properties["payload"]
-          properties.delete("payload")
-          PostMessageDefinition.new(group, subgroup, label, payload, properties)
+        messages.map do |label, raw_properties|
+          message_properties = raw_properties.except("payload")
+          payload = raw_properties["payload"].each_with_object([]) do |(name, value), acc|
+            (type, field_properties) = if value.is_a?(Hash) && !value["type"].nil?
+                                         [value.dig("type"), value.except("type")]
+                                       else
+                                         [value, {}]
+                                       end
+            acc << PayloadField.new(name, type, field_properties)
+          end
+
+          PostMessageDefinition.new(group, subgroup, label, payload, message_properties)
         end
       end.flatten
     end.flatten
@@ -28,9 +54,9 @@ class PostMessageDefinition
   # @param [Symbol] group (eg, :entities, :widgets)
   # @param [Symbol] subgroup (eg, :generic, :connect)
   # @param [Symbol] label (eg, :submitMFA, :overdraftWarning/cta/transferFunds)
-  # @param [Hash] properties (default: {}, example: {url: string})
+  # @param [Array<PayloadField>] payload (default: [])
   # @param [Hash] properties (default: {}, example: {warning: "This Post Message ..."})
-  def initialize(group, subgroup, label, payload = {}, properties = {})
+  def initialize(group, subgroup, label, payload = [], properties = {})
     @group = group.to_sym
     @subgroup = subgroup.to_sym
     @label = label.to_sym
