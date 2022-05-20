@@ -60,7 +60,7 @@ export function assertMessageProp(
   postMessageType: string,
   field: string,
   expectedType: TypeDef,
-  properties: FieldProperties = {}
+  properties: FieldProperties = {},
 ) {
   const value = container[field]
 
