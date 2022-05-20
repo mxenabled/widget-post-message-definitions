@@ -8,18 +8,18 @@ class PostMessageDefinition
   class PayloadField
     attr_reader :name, :type
 
+    # @param [String] name
+    # @param [String | Array | Hash] type
+    # @param [Hahs] properties (default: {}, example: {required: false})
     def initialize(name, type, properties = {})
       @name = name
       @type = type
       @properties = properties
     end
 
+    # @return [Boolean]
     def required?
       !!@properties[:required]
-    end
-
-    def to_s
-      "<#{name} type=#{type} properties=#{@properties}>"
     end
   end
 
