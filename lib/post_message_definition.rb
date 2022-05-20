@@ -57,4 +57,8 @@ class PostMessageDefinition
   def entity?
     group == :entity
   end
+
+  def documented?
+    properties.fetch("documented", true)
+  end
 end
