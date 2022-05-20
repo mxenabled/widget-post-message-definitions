@@ -6,7 +6,7 @@ class PostMessageDefinition
   attr_reader :properties
 
   class PayloadField
-    attr_reader :name, :type, :properties
+    attr_reader :name, :type
 
     def initialize(name, type, properties = {})
       @name = name
@@ -15,11 +15,11 @@ class PostMessageDefinition
     end
 
     def required?
-      !!properties[:required]
+      !!@properties[:required]
     end
 
     def to_s
-      "<#{name} type=#{type} properties=#{properties}>"
+      "<#{name} type=#{type} properties=#{@properties}>"
     end
   end
 
