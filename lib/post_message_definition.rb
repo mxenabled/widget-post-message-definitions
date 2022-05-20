@@ -10,7 +10,7 @@ class PostMessageDefinition
 
     # @param [String] name
     # @param [String | Array | Hash] type
-    # @param [Hahs] properties (default: {}, example: {required: false})
+    # @param [Hash] properties (default: {}, example: {required: false})
     def initialize(name, type, properties = {})
       @name = name
       @type = type
