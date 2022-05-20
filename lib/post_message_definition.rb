@@ -16,6 +16,11 @@ class PostMessageDefinition
       @type = type
       @properties = properties
     end
+
+    # @return [Boolean]
+    def optional?
+      @properties["optional"] == true
+    end
   end
 
   # @param [Hash] definitions

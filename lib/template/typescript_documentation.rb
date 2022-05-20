@@ -29,18 +29,18 @@ class Template::TypescriptDocumentation < Template::TypescriptSource
     |- Payload fields:
     |    <%- post_message.payload.each do |field| -%>
     |    <%- if field.type.is_a?(Array) -%>
-    |    - `<%= field.name %>` (`<%= payload_property_type("string") %>`)
+    |    - <%= payload_field_heading(field) %> (`<%= payload_property_type("string") %>`)
     |        - One of:
     |            <%- field.type.each do |option| -%>
     |            - `"<%= option %>"`
     |            <%- end -%>
     |    <%- elsif field.type.is_a?(Hash) -%>
-    |    - `<%= field.name %>` (`<%= payload_property_type("object") %>`)
+    |    - <%= payload_field_heading(field) %> (`<%= payload_property_type("object") %>`)
     |        <%- field.type.each do |property, deep_rhs| -%>
     |        - `<%= property %>` (`<%= payload_property_type(deep_rhs) %>`)
     |        <%- end -%>
     |    <%- else -%>
-    |    - `<%= field.name %>` (`<%= payload_property_type(field.type) %>`)
+    |    - <%= payload_field_heading(field) %> (`<%= payload_property_type(field.type) %>`)
     |    <%- end -%>
     |    <%- end -%>
     |<%- end -%>
@@ -50,6 +50,14 @@ class Template::TypescriptDocumentation < Template::TypescriptSource
     |<%- end -%>
     |<%- end -%>
   ITEM_FOOTER
+
+  def payload_field_heading(field)
+    if field.optional?
+      "`#{field.name}` (optional)"
+    else
+      "`#{field.name}`"
+    end
+  end
 
   # @example
   #
