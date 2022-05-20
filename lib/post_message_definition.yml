@@ -76,9 +76,6 @@ post_messages:
       oauthError:
         payload:
           <<: *user_session_properties
-          # member_guid:
-          #   type: string
-          #   required: false
       oauthRequested:
         warning: |
           By passing your own method to this prop, you are overriding the

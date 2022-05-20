@@ -16,11 +16,6 @@ class PostMessageDefinition
       @type = type
       @properties = properties
     end
-
-    # @return [Boolean]
-    def required?
-      !!@properties[:required]
-    end
   end
 
   # @param [Hash] definitions
