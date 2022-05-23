@@ -1,6 +1,6 @@
 name: Build Ruby Generator
 
-on: push
+on: pull_request
 
 jobs:
   Build:
@@ -14,22 +14,5 @@ jobs:
 
     - run: bin/setup
     - run: bin/lint
-
-    - name: Generate packages
-      run: ruby lib/generate_packages.rb
-
-    - name: Check for differences in packages
-      run: |
-        if ! git diff --quiet HEAD packages
-        then
-          echo
-          echo "Git diff:"
-          git diff packages
-          echo
-          echo "*** Error ***"
-          echo "*** Detected code differences in a package ***"
-          echo "*** Please run generator and commit the results ***"
-          exit 1
-        else
-          echo "No differences found, great job."
-        fi
+    - run: bin/run
+    - run: bin/check

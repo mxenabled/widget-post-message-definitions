@@ -18,6 +18,7 @@ class Template::TypescriptDocumentation < Template::TypescriptSource
     |## <%= widget_name(widget) %> Post Messages
     |
     |<%- post_messages.each do |post_message| -%>
+    |<%- next unless post_message.documented? -%>
     |---
     |### <%= normalize_keywords(post_message.label.to_s.titleize) %> (`<%= post_message %>`)
     |
@@ -27,20 +28,20 @@ class Template::TypescriptDocumentation < Template::TypescriptSource
     |- Widget callback prop name: `<%= callback_function_name(post_message) %>`
     |<%- unless post_message.payload.empty? -%>
     |- Payload fields:
-    |    <%- post_message.payload.each do |property, rhs| -%>
-    |    <%- if rhs.is_a?(Array) -%>
-    |    - `<%= property %>` (`<%= payload_property_type("string") %>`)
+    |    <%- post_message.payload.each do |field| -%>
+    |    <%- if field.type.is_a?(Array) -%>
+    |    - <%= payload_field_heading(field) %> (`<%= payload_property_type("string") %>`)
     |        - One of:
-    |            <%- rhs.each do |option| -%>
+    |            <%- field.type.each do |option| -%>
     |            - `"<%= option %>"`
     |            <%- end -%>
-    |    <%- elsif rhs.is_a?(Hash) -%>
-    |    - `<%= property %>` (`<%= payload_property_type("object") %>`)
-    |        <%- rhs.each do |property, deep_rhs| -%>
+    |    <%- elsif field.type.is_a?(Hash) -%>
+    |    - <%= payload_field_heading(field) %> (`<%= payload_property_type("object") %>`)
+    |        <%- field.type.each do |property, deep_rhs| -%>
     |        - `<%= property %>` (`<%= payload_property_type(deep_rhs) %>`)
     |        <%- end -%>
     |    <%- else -%>
-    |    - `<%= property %>` (`<%= payload_property_type(rhs) %>`)
+    |    - <%= payload_field_heading(field) %> (`<%= payload_property_type(field.type) %>`)
     |    <%- end -%>
     |    <%- end -%>
     |<%- end -%>
@@ -50,6 +51,16 @@ class Template::TypescriptDocumentation < Template::TypescriptSource
     |<%- end -%>
     |<%- end -%>
   ITEM_FOOTER
+
+  # @param [PostMessageDefinition::PayloadField] field
+  # @return [String]
+  def payload_field_heading(field)
+    if field.optional?
+      "`#{field.name}` (optional)"
+    else
+      "`#{field.name}`"
+    end
+  end
 
   # @example
   #

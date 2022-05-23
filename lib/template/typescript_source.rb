@@ -27,8 +27,12 @@ class Template::TypescriptSource < Template::Base
     |<% post_message_definitions.each do |post_message| %>
     |export type <%= payload_type_name(post_message) %> = {
     |  type: <%= qualified_enum_key(post_message) %>,
-    |  <%- post_message.payload.each do |property, rhs| -%>
-    |  <%= property %>: <%= payload_property_type(rhs) %>,
+    |  <%- post_message.payload.each do |field| -%>
+    |  <%- if field.optional? -%>
+    |  <%= field.name %>?: <%= payload_property_type(field.type) %>,
+    |  <%- else -%>
+    |  <%= field.name %>: <%= payload_property_type(field.type) %>,
+    |  <%- end -%>
     |  <%- end -%>
     |}
     |<%- end -%>
@@ -57,14 +61,24 @@ class Template::TypescriptSource < Template::Base
     |  switch (type) {
     |    <%- post_message_definitions.each do |post_message| -%>
     |    case <%= qualified_enum_key(post_message) %>:
-    |      <%- post_message.payload.each do |property, rhs| -%>
-    |      assertMessageProp(metadata, "<%= post_message %>", "<%= property %>", <%= payload_property_type(rhs, :code) %>)
+    |      <%- post_message.payload.each do |field| -%>
+    |      <%- if field.optional? -%>
+    |      assertMessageProp(metadata, "<%= post_message %>", "<%= field.name %>", <%= payload_property_type(field.type, :code) %>, {
+    |        optional: true,
+    |      })
+    |      <%- else -%>
+    |      assertMessageProp(metadata, "<%= post_message %>", "<%= field.name %>", <%= payload_property_type(field.type, :code) %>)
+    |      <%- end -%>
     |      <%- end -%>
     |
     |      return {
     |        type,
-    |        <%- post_message.payload.each do |property, rhs| -%>
-    |        <%= property %>: metadata.<%= property %> as <%= payload_property_type(rhs) %>,
+    |        <%- post_message.payload.each do |field| -%>
+    |        <%- if field.optional? -%>
+    |        <%= field.name %>: metadata.<%= field.name %> as <%= payload_property_type(field.type) %> | undefined,
+    |        <%- else -%>
+    |        <%= field.name %>: metadata.<%= field.name %> as <%= payload_property_type(field.type) %>,
+    |        <%- end -%>
     |        <%- end -%>
     |      }
     |

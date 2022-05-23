@@ -34,19 +34,21 @@ post_messages:
         payload:
           <<: *user_session_properties
           initial_step:
-            - search
-            - selectMember
-            - enterCreds
-            - mfa
-            - connected
-            - loginError
-            - disclosure
+            type:
+              - search
+              - selectMember
+              - enterCreds
+              - mfa
+              - connected
+              - loginError
+              - disclosure
       enterCredentials:
         payload:
           <<: *user_session_properties
           institution:
-            code: string
-            guid: string
+            type:
+              code: string
+              guid: string
       institutionSearch:
         payload:
           <<: *user_session_properties
@@ -82,6 +84,9 @@ post_messages:
       oauthError:
         payload:
           <<: *user_session_properties
+          member_guid:
+            type: string
+            optional: true
       oauthRequested:
         warning: |
           By passing your own method to this prop, you are overriding the
@@ -116,8 +121,9 @@ post_messages:
           <<: *user_session_properties
           member_guid: string
           institution:
-            code: string
-            guid: string
+            type:
+              code: string
+              guid: string
     pulse:
       overdraftWarning/cta/transferFunds:
         payload:
