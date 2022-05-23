@@ -18,6 +18,7 @@ class Template::TypescriptDocumentation < Template::TypescriptSource
     |## <%= widget_name(widget) %> Post Messages
     |
     |<%- post_messages.each do |post_message| -%>
+    |<%- next unless post_message.documented? -%>
     |---
     |### <%= normalize_keywords(post_message.label.to_s.titleize) %> (`<%= post_message %>`)
     |
