@@ -27,20 +27,20 @@ class Template::TypescriptDocumentation < Template::TypescriptSource
     |- Widget callback prop name: `<%= callback_function_name(post_message) %>`
     |<%- unless post_message.payload.empty? -%>
     |- Payload fields:
-    |    <%- post_message.payload.each do |property, rhs| -%>
-    |    <%- if rhs.is_a?(Array) -%>
-    |    - `<%= property %>` (`<%= payload_property_type("string") %>`)
+    |    <%- post_message.payload.each do |field| -%>
+    |    <%- if field.type.is_a?(Array) -%>
+    |    - `<%= field.name %>` (`<%= payload_property_type("string") %>`)
     |        - One of:
-    |            <%- rhs.each do |option| -%>
+    |            <%- field.type.each do |option| -%>
     |            - `"<%= option %>"`
     |            <%- end -%>
-    |    <%- elsif rhs.is_a?(Hash) -%>
-    |    - `<%= property %>` (`<%= payload_property_type("object") %>`)
-    |        <%- rhs.each do |property, deep_rhs| -%>
+    |    <%- elsif field.type.is_a?(Hash) -%>
+    |    - `<%= field.name %>` (`<%= payload_property_type("object") %>`)
+    |        <%- field.type.each do |property, deep_rhs| -%>
     |        - `<%= property %>` (`<%= payload_property_type(deep_rhs) %>`)
     |        <%- end -%>
     |    <%- else -%>
-    |    - `<%= property %>` (`<%= payload_property_type(rhs) %>`)
+    |    - `<%= field.name %>` (`<%= payload_property_type(field.type) %>`)
     |    <%- end -%>
     |    <%- end -%>
     |<%- end -%>

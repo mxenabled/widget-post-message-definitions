@@ -9,8 +9,8 @@ class Template::TypescriptWebDocumentation < Template::TypescriptDocumentation
     |  url: "<%= widget_sample_url(widget) %>",
     |
     |  <%= callback_function_name(post_message) %>: (payload) => {
-    |    <%- post_message.payload.each do |property, rhs| -%>
-    |    console.log(`<%= property.titleize %>: ${payload.<%= property %>}`)
+    |    <%- post_message.payload.each do |field| -%>
+    |    console.log(`<%= field.name.titleize %>: ${payload.<%= field.name %>}`)
     |    <%- end -%>
     |  }
     |})
