@@ -71,6 +71,15 @@ const connectUpdateCredentialsUrl = genPostMessageUrl("mx://connect/updateCreden
   },
 })
 
+const connectOAuthErrorWithMemberGuidUrl = genPostMessageUrl("mx://connect/oauthError", {
+  ...session,
+  member_guid: memberGuid,
+})
+
+const connectOAuthErrorWithoutMemberGuidUrl = genPostMessageUrl("mx://connect/oauthError", {
+  ...session,
+})
+
 const amount = 42
 const pulseOverdraftWarningCtaTransferFundsUrl = genPostMessageUrl(
   "mx://pulse/overdraftWarning/cta/transferFunds",
@@ -293,6 +302,28 @@ describe("Post Message Dispatch", () => {
             expect(payload.institution.code).toBe(institutionCode)
             expect(payload.institution.guid).toBe(institutionGuid)
           },
+        })
+      })
+
+      describe("optional fields", () => {
+        test("optional field is included", () => {
+          expect.assertions(1)
+
+          dispatchConnectLocationChangeEvent(connectOAuthErrorWithMemberGuidUrl, {
+            onOAuthError: (payload) => {
+              expect(payload.member_guid).toBe(memberGuid)
+            },
+          })
+        })
+
+        test("optional field is excluded", () => {
+          expect.assertions(1)
+
+          dispatchConnectLocationChangeEvent(connectOAuthErrorWithoutMemberGuidUrl, {
+            onOAuthError: (payload) => {
+              expect(payload.member_guid).toBe(undefined)
+            },
+          })
         })
       })
     })

@@ -46,6 +46,10 @@ export type MessageEventData = {
   type?: string
 }
 
+type FieldProperties = {
+  optional?: boolean
+}
+
 export type Value = string | number
 export type NestedValue = Record<string, Value>
 export type TypeDef = string | Array<string> | Record<string, string>
@@ -56,6 +60,7 @@ export function assertMessageProp(
   postMessageType: string,
   field: string,
   expectedType: TypeDef,
+  properties: FieldProperties = {},
 ) {
   const value = container[field]
 
@@ -69,7 +74,9 @@ export function assertMessageProp(
   const typeIsArray = expectedType instanceof Array
   const typeIsObject = typeof expectedType === "object" && !Array.isArray(expectedType)
 
-  if (!valueIsDefined) {
+  if (!valueIsDefined && properties.optional) {
+    return
+  } else if (!valueIsDefined) {
     throw new PostMessageFieldDecodeError(postMessageType, field, expectedType, value)
   } else if (typeIsString && !valueIsString) {
     throw new PostMessageFieldDecodeError(postMessageType, field, expectedType, value)
