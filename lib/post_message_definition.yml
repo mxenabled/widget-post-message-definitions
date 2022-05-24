@@ -17,6 +17,7 @@ post_messages:
         payload:
           <<: *user_session_properties
       navigation:
+        documented: false
         warning: |
           By passing your own method to this prop, you are overriding the
           default navigation behaviour of the SDK which is used to determine if the widget was able
