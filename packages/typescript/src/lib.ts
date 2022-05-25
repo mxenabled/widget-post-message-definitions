@@ -50,10 +50,10 @@ type FieldProperties = {
   optional?: boolean
 }
 
-export type Value = string | number
+export type Value = string | number | boolean
 export type NestedValue = Record<string, Value>
-export type TypeDef = string | Array<string> | Record<string, string>
 export type Metadata = Record<string, Value | NestedValue>
+export type TypeDef = string | Array<string> | Record<string, string>
 
 export function assertMessageProp(
   container: Metadata,
@@ -68,11 +68,13 @@ export function assertMessageProp(
   const valueIsString = typeof value === "string"
   const valueIsNumber = typeof value === "number"
   const valueIsObject = typeof value === "object" && !Array.isArray(value)
+  const valueIsBoolean = typeof value === "boolean"
 
   const typeIsString = expectedType === "string"
   const typeIsNumber = expectedType === "number"
   const typeIsArray = expectedType instanceof Array
   const typeIsObject = typeof expectedType === "object" && !Array.isArray(expectedType)
+  const typeIsBoolean = expectedType === "boolean"
 
   if (!valueIsDefined && properties.optional) {
     return
@@ -85,6 +87,8 @@ export function assertMessageProp(
   } else if (typeIsArray && !(valueIsString && expectedType.includes(value))) {
     throw new PostMessageFieldDecodeError(postMessageType, field, expectedType, value)
   } else if (typeIsObject && !valueIsObject) {
+    throw new PostMessageFieldDecodeError(postMessageType, field, expectedType, value)
+  } else if (typeIsBoolean && !valueIsBoolean) {
     throw new PostMessageFieldDecodeError(postMessageType, field, expectedType, value)
   } else if (typeIsObject && valueIsObject) {
     Object.keys(expectedType).forEach((field) => {

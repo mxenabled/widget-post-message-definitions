@@ -20,6 +20,10 @@ const session = {
 
 const loadUrl = genPostMessageUrl("mx://load")
 const pingUrl = genPostMessageUrl("mx://ping", session)
+const navigationUrl = genPostMessageUrl("mx://navigation", {
+  ...session,
+  did_go_back: true,
+})
 const focusTrapUrl = genPostMessageUrl("mx://focusTrap", session)
 
 const connectMemberDeletedMessage = new MessageEvent("message", {
@@ -195,6 +199,16 @@ const testSharedCallbacks = (
       dispatch(pingUrl, {
         onPing: (payload) => {
           expect(payload.user_guid).toBe(userGuid)
+        },
+      })
+    })
+
+    test("onNavigation", () => {
+      expect.assertions(1)
+
+      dispatch(navigationUrl, {
+        onNavigation: (payload) => {
+          expect(payload.did_go_back).toBe(true)
         },
       })
     })
