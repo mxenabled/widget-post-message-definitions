@@ -1,4 +1,5 @@
 class Template::TypescriptSource < Template::Base
+  # cspell: disable
   CONTENT = <<-CONTENT
     |import {
     |  <%= callback_props_group_type_name(:base) %>,
@@ -19,7 +20,7 @@ class Template::TypescriptSource < Template::Base
     |  <%- post_message_definitions.each do |post_message| -%>
     |  [<%= qualified_enum_key(post_message) %>]: <%= qualified_enum_key(post_message) %>,
     |  <%- if needs_uri_friendly_lookup?(post_message) -%>
-    |  "<%= uri_friendly_lookup(post_message) %>": <%= qualified_enum_key(post_message) %>,
+    |  "<%= uri_friendly_lookup(post_message) %>": <%= qualified_enum_key(post_message) %>, // cspell:disable-line
     |  <%- end -%>
     |  <%- end -%>
     |}
@@ -279,6 +280,7 @@ class Template::TypescriptSource < Template::Base
     |}
     |<%- end -%>
   CONTENT
+  # cspell: enable
 
   # Generates the enum type key for a give post message.
   #
@@ -291,7 +293,7 @@ class Template::TypescriptSource < Template::Base
   #   # => "ConnectMemberDeleted"
   #
   #   enum_key("mx/pulse/overdraftWarning/cta/transferFunds")
-  #   # => "PulseOverdraftwarningCtaTransferfunds"
+  #   # => "PulseOverdraftWarningCtaTransferFunds"
   #
   #
   # @param [PostMessageDefinition] post_message_definition

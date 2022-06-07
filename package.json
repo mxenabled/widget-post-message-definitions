@@ -1,0 +1,6 @@
+{
+  "name": "widget-post-message-definitions",
+  "devDependencies": {
+    "cspell": "^6.1.1"
+  }
+}

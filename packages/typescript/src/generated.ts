@@ -44,36 +44,36 @@ const typeLookup: Record<string, Type> = {
   [Type.Ping]: Type.Ping,
   [Type.Navigation]: Type.Navigation,
   [Type.FocusTrap]: Type.FocusTrap,
-  "mx/focustrap": Type.FocusTrap,
+  "mx/focustrap": Type.FocusTrap, // cspell:disable-line
   [Type.ConnectLoaded]: Type.ConnectLoaded,
   [Type.ConnectEnterCredentials]: Type.ConnectEnterCredentials,
-  "mx/connect/entercredentials": Type.ConnectEnterCredentials,
+  "mx/connect/entercredentials": Type.ConnectEnterCredentials, // cspell:disable-line
   [Type.ConnectInstitutionSearch]: Type.ConnectInstitutionSearch,
-  "mx/connect/institutionsearch": Type.ConnectInstitutionSearch,
+  "mx/connect/institutionsearch": Type.ConnectInstitutionSearch, // cspell:disable-line
   [Type.ConnectSelectedInstitution]: Type.ConnectSelectedInstitution,
-  "mx/connect/selectedinstitution": Type.ConnectSelectedInstitution,
+  "mx/connect/selectedinstitution": Type.ConnectSelectedInstitution, // cspell:disable-line
   [Type.ConnectMemberConnected]: Type.ConnectMemberConnected,
-  "mx/connect/memberconnected": Type.ConnectMemberConnected,
+  "mx/connect/memberconnected": Type.ConnectMemberConnected, // cspell:disable-line
   [Type.ConnectConnectedPrimaryAction]: Type.ConnectConnectedPrimaryAction,
-  "mx/connect/connected/primaryaction": Type.ConnectConnectedPrimaryAction,
+  "mx/connect/connected/primaryaction": Type.ConnectConnectedPrimaryAction, // cspell:disable-line
   [Type.ConnectMemberDeleted]: Type.ConnectMemberDeleted,
-  "mx/connect/memberdeleted": Type.ConnectMemberDeleted,
+  "mx/connect/memberdeleted": Type.ConnectMemberDeleted, // cspell:disable-line
   [Type.ConnectCreateMemberError]: Type.ConnectCreateMemberError,
-  "mx/connect/createmembererror": Type.ConnectCreateMemberError,
+  "mx/connect/createmembererror": Type.ConnectCreateMemberError, // cspell:disable-line
   [Type.ConnectMemberStatusUpdate]: Type.ConnectMemberStatusUpdate,
-  "mx/connect/memberstatusupdate": Type.ConnectMemberStatusUpdate,
+  "mx/connect/memberstatusupdate": Type.ConnectMemberStatusUpdate, // cspell:disable-line
   [Type.ConnectOAuthError]: Type.ConnectOAuthError,
-  "mx/connect/oautherror": Type.ConnectOAuthError,
+  "mx/connect/oautherror": Type.ConnectOAuthError, // cspell:disable-line
   [Type.ConnectOAuthRequested]: Type.ConnectOAuthRequested,
-  "mx/connect/oauthrequested": Type.ConnectOAuthRequested,
+  "mx/connect/oauthrequested": Type.ConnectOAuthRequested, // cspell:disable-line
   [Type.ConnectStepChange]: Type.ConnectStepChange,
-  "mx/connect/stepchange": Type.ConnectStepChange,
+  "mx/connect/stepchange": Type.ConnectStepChange, // cspell:disable-line
   [Type.ConnectSubmitMFA]: Type.ConnectSubmitMFA,
-  "mx/connect/submitmfa": Type.ConnectSubmitMFA,
+  "mx/connect/submitmfa": Type.ConnectSubmitMFA, // cspell:disable-line
   [Type.ConnectUpdateCredentials]: Type.ConnectUpdateCredentials,
-  "mx/connect/updatecredentials": Type.ConnectUpdateCredentials,
+  "mx/connect/updatecredentials": Type.ConnectUpdateCredentials, // cspell:disable-line
   [Type.PulseOverdraftWarningCtaTransferFunds]: Type.PulseOverdraftWarningCtaTransferFunds,
-  "mx/pulse/overdraftwarning/cta/transferfunds": Type.PulseOverdraftWarningCtaTransferFunds,
+  "mx/pulse/overdraftwarning/cta/transferfunds": Type.PulseOverdraftWarningCtaTransferFunds, // cspell:disable-line
   [Type.AccountCreated]: Type.AccountCreated,
 }
 

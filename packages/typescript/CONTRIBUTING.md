@@ -18,7 +18,7 @@ following information:
 Clone this repo and install [Node v16](https://nodejs.org/en/download/). Below
 are commands we use to perform various tasks:
 
-- `npm install`, install depedencies.
+- `npm install`, install dependencies.
 - `npm run build`, compile and emit output to the `dist` directory.
 - `npm run lint`, run linter.
 - `npm run test`, run unit tests.

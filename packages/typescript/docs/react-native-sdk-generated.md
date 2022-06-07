@@ -313,7 +313,7 @@ import { ConnectWidget } from "@mxenabled/react-native-widget-sdk"
 ### OAuth requested (`mx/connect/oauthRequested`)
 
 **Warning**: By passing your own method to this prop, you are overriding the
-default behaviour of the SDK which is to load the OAuth URL in a new
+default behavior of the SDK which is to load the OAuth URL in a new
 browser tab.
 
 If you override this functionality, you must use the device's browser

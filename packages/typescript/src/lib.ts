@@ -4,7 +4,7 @@ export type BasePostMessageCallbackProps<T> = {
 }
 
 // This is an internal error. Thrown when we are decoding a post message's
-// metadata and we encourntered a missing field or an invalid value. This
+// metadata and we encountered a missing field or an invalid value. This
 // likely means there has been a change to the definition of a post message
 // that we do not know about.
 export class PostMessageFieldDecodeError extends Error {
@@ -25,7 +25,7 @@ export class PostMessageFieldDecodeError extends Error {
   }
 }
 
-// This is an internal error. Thrown when we get a post message we don't konw
+// This is an internal error. Thrown when we get a post message we don't know
 // about. This likely means there is a new post message that this package needs
 // to define.
 export class PostMessageUnknownTypeError extends Error {

@@ -3,3 +3,4 @@
 set -euo pipefail
 
 bundle install
+npm install

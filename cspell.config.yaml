@@ -1,0 +1,17 @@
+words:
+  - creds
+  - diffcheck
+  - focustrap
+  - iframe
+  - iframes
+  - kwargs
+  - lowercased
+  - mxenabled
+  - ngrx
+  - submitmfa
+  - webapps
+
+ignorePaths:
+  - .rubocop.yml
+  - bin/*
+  - cspell.config.yaml

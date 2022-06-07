@@ -20,7 +20,7 @@ post_messages:
         documented: false
         warning: |
           By passing your own method to this prop, you are overriding the
-          default navigation behaviour of the SDK which is used to determine if the widget was able
+          default navigation behavior of the SDK which is used to determine if the widget was able
           to go back or not internally.
         payload:
           <<: *user_session_properties
@@ -91,7 +91,7 @@ post_messages:
       oauthRequested:
         warning: |
           By passing your own method to this prop, you are overriding the
-          default behaviour of the SDK which is to load the OAuth URL in a new
+          default behavior of the SDK which is to load the OAuth URL in a new
           browser tab.
 
           If you override this functionality, you must use the device's browser
