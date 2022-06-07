@@ -75,9 +75,14 @@ Template::TypescriptDocumentation.save("packages/typescript/docs/generated.md",
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. You can
-also run `bin/console` for an interactive prompt that will allow you to
-experiment. Run `bin/lint` to run the linter.
+You'll need Ruby v3 and Node v16 to use and test this project. Other versions
+of Node or Ruby that are compatible with the versions mentioned will work as
+well.
+
+After checking out the repo, run `bin/setup` to install Ruby and Node
+dependencies. You can also run `bin/console` for an interactive prompt that
+will allow you to experiment. Run `bin/lint` to run the linter and
+`bin/spellcheck` to run the code spellchecker.
 
 ---
 
