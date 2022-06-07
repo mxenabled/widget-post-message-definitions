@@ -20,7 +20,7 @@ class Template::TypescriptSource < Template::Base
     |  <%- post_message_definitions.each do |post_message| -%>
     |  [<%= qualified_enum_key(post_message) %>]: <%= qualified_enum_key(post_message) %>,
     |  <%- if needs_uri_friendly_lookup?(post_message) -%>
-    |  "<%= uri_friendly_lookup(post_message) %>": <%= qualified_enum_key(post_message) %> // cspell:disable-line,
+    |  "<%= uri_friendly_lookup(post_message) %>": <%= qualified_enum_key(post_message) %>, // cspell:disable-line
     |  <%- end -%>
     |  <%- end -%>
     |}
