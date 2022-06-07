@@ -16,3 +16,4 @@ jobs:
     - run: bin/lint
     - run: bin/run
     - run: bin/diffcheck
+    - run: bin/spellcheck
