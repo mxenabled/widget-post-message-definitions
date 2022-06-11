@@ -20,6 +20,12 @@ jobs:
         node-version: 16
         cache: npm
         cache-dependency-path: packages/typescript/package-lock.json
+    - uses: actions/cache@v3
+      with:
+        path: packages/typescript/node_modules
+        key: ${{ runner.os }}-node-${{ hashFiles('packages/typescript/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
 
     - run: npm install
       working-directory: packages/typescript
