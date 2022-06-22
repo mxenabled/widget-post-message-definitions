@@ -1,4 +1,6 @@
 class Template::TypescriptSource < Template::Base
+  using StringRefinement
+
   # cspell: disable
   CONTENT = <<-CONTENT
     |import {
