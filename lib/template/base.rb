@@ -1,4 +1,6 @@
 class Template::Base
+  using StringRefinement
+
   attr_reader :post_message_definitions
 
   CONTENT = ""
