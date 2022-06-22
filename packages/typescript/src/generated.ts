@@ -21,6 +21,7 @@ export enum Type {
   Ping = "mx/ping",
   Navigation = "mx/navigation",
   FocusTrap = "mx/focusTrap",
+  ClientOAuthComplete = "mx/client/oauthComplete",
   ConnectLoaded = "mx/connect/loaded",
   ConnectEnterCredentials = "mx/connect/enterCredentials",
   ConnectInstitutionSearch = "mx/connect/institutionSearch",
@@ -45,6 +46,8 @@ const typeLookup: Record<string, Type> = {
   [Type.Navigation]: Type.Navigation,
   [Type.FocusTrap]: Type.FocusTrap,
   "mx/focustrap": Type.FocusTrap, // cspell:disable-line
+  [Type.ClientOAuthComplete]: Type.ClientOAuthComplete,
+  "mx/client/oauthcomplete": Type.ClientOAuthComplete, // cspell:disable-line
   [Type.ConnectLoaded]: Type.ConnectLoaded,
   [Type.ConnectEnterCredentials]: Type.ConnectEnterCredentials,
   "mx/connect/entercredentials": Type.ConnectEnterCredentials, // cspell:disable-line
@@ -99,6 +102,11 @@ export type FocusTrapPayload = {
   type: Type.FocusTrap,
   user_guid: string,
   session_guid: string,
+}
+
+export type ClientOAuthCompletePayload = {
+  type: Type.ClientOAuthComplete,
+  url: string,
 }
 
 export type ConnectLoadedPayload = {
@@ -223,6 +231,7 @@ export type WidgetPayload =
   | PingPayload
   | NavigationPayload
   | FocusTrapPayload
+  | ClientOAuthCompletePayload
   | ConnectLoadedPayload
   | ConnectEnterCredentialsPayload
   | ConnectInstitutionSearchPayload
@@ -292,6 +301,14 @@ function buildPayload(type: Type, metadata: Metadata): Payload {
         type,
         user_guid: metadata.user_guid as string,
         session_guid: metadata.session_guid as string,
+      }
+
+    case Type.ClientOAuthComplete:
+      assertMessageProp(metadata, "mx/client/oauthComplete", "url", "string")
+
+      return {
+        type,
+        url: metadata.url as string,
       }
 
     case Type.ConnectLoaded:
@@ -563,6 +580,10 @@ export type GenericPostMessageCallbackProps = {
 }
 
 
+export type ClientPostMessageCallbackProps<T> = WidgetPostMessageCallbackProps<T> & {
+  onOAuthComplete?: (payload: ClientOAuthCompletePayload) => void
+}
+
 export type ConnectPostMessageCallbackProps<T> = WidgetPostMessageCallbackProps<T> & {
   onLoaded?: (payload: ConnectLoadedPayload) => void
   onEnterCredentials?: (payload: ConnectEnterCredentialsPayload) => void
@@ -667,6 +688,68 @@ function dispatchWidgetInternalMessage<T>(payload: Payload, callbacks: WidgetPos
   }
 }
 
+
+/**
+ * Dispatch a post message event that we got from a url change event for the
+ * Client Widget.
+ */
+export function dispatchClientLocationChangeEvent(url: string, callbacks: ClientPostMessageCallbackProps<string>) {
+  try {
+    dispatchOnMessage(url, callbacks)
+    const payload = buildPayloadFromUrl(url)
+    dispatchClientInternalMessage(payload, callbacks)
+  } catch (error) {
+    dispatchError(url, error, callbacks)
+  }
+}
+
+/**
+ * Dispatch a post message event that we got from a window/document message for the
+ * Client Widget.
+ */
+export function dispatchClientPostMessageEvent(event: MessageEvent<MessageEventData>, callbacks: ClientPostMessageCallbackProps<MessageEvent<MessageEventData>>) {
+  try {
+    dispatchOnMessage(event, callbacks)
+    const payload = buildPayloadFromPostMessageEventData(event.data)
+    dispatchClientInternalMessage(payload, callbacks)
+  } catch (error) {
+    dispatchError(event, error, callbacks)
+  }
+}
+
+/**
+ * Dispatch a validated internal message for the Client Widget.
+ */
+function dispatchClientInternalMessage<T>(payload: Payload, callbacks: ClientPostMessageCallbackProps<T>) {
+  switch (payload.type) {
+    case Type.Load:
+      callbacks.onLoad?.(payload)
+      break
+
+    case Type.Ping:
+      callbacks.onPing?.(payload)
+      break
+
+    case Type.Navigation:
+      callbacks.onNavigation?.(payload)
+      break
+
+    case Type.FocusTrap:
+      callbacks.onFocusTrap?.(payload)
+      break
+
+    case Type.AccountCreated:
+      callbacks.onAccountCreated?.(payload)
+      break
+
+    case Type.ClientOAuthComplete:
+      callbacks.onOAuthComplete?.(payload)
+      break
+
+    default:
+      throw new PostMessageUnknownTypeError(payload.type)
+  }
+}
 
 /**
  * Dispatch a post message event that we got from a url change event for the
