@@ -28,6 +28,11 @@ post_messages:
       focusTrap:
         payload:
           <<: *user_session_properties
+    client:
+      oauthComplete:
+        documented: false
+        payload:
+          url: string
     # This list was taken from this documentation:
     # https://docs.mx.com/api#connect_postmessage_events
     connect:
