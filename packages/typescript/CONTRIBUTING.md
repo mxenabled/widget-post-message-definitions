@@ -1,35 +1,30 @@
 # Contributing
 
-## Reporting Bugs
-
-When submitting a new bug report, please first
-[search](https://github.com/mxenabled/react-native-widget-sdk/issues) for an
-existing or similar report. If no duplicate exists, file the issue with the
-following information:
-
-1. OS version.
-2. Steps to reproduce the issue.
-3. Example code snippet that causes the issue.
-4. Screenshots of the broken UI.
+Refer to [top-level contribution document](/CONTRIBUTING.md) for additional
+information.
 
 
 ## Development
 
-Clone this repo and install [Node v16](https://nodejs.org/en/download/). Below
-are commands we use to perform various tasks:
+Below are commands we use to perform various tasks:
 
-- `npm install`, install dependencies.
-- `npm run build`, compile and emit output to the `dist` directory.
-- `npm run lint`, run linter.
-- `npm run test`, run unit tests.
+- `npm run format` run code formatter.
+- `npm run build` compile code.
+- `npm run test` run tests.
+- `npm run lint` run linter.
 
 
-### Publishing to npm
+## Publishing a new version
 
-You will need permission to publish to the
-[mxenabled](https://www.npmjs.com/org/mxenabled) organization in npm before you
-can publish this package.
+1. Update the `version` in `package.json`.
+2. Run `npm install` to update lock file.
+3. Commit your changes.
+4. Create the git tag with `git tag v<version>` (eg, `git tag v1.0.3`)
+5. Push the commit and the tag, `git push origin master --tags`
+6. Run `npm login` and log into an account with permission to publish to the
+   [mxenabled][mxenabled_npm_org] organization in npm.
+7. Run `npm publish` to publish. Note that running this command will
+   automatically execute `npm run build` for you.
 
-Once you are able to publish, log into npm with `npm login` then run `npm
-publish` to publish. Running `npm publish` will automatically execute `npm run
-build` for you, so there is no need to do that manually.
+
+[mxenabled_npm_org]: https://www.npmjs.com/org/mxenabled "mxenabled npm organization"
