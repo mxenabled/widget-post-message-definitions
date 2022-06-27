@@ -1,6 +1,6 @@
 # Contributing
 
-Refer to [top-level contribution document](/CONTRIBUTING.md) for additional
+Refer to top-level [CONTRIBUTING.md](/CONTRIBUTING.md) for additional
 information.
 
 
