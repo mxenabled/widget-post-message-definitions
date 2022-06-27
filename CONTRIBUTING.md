@@ -26,7 +26,8 @@ well. Below are commands we use to perform various tasks:
 
 ## Publishing a new version
 
-Sub-packages are individually published to their respective package managers.
-Refer to the documentation below for details on publishing each sub-package:
+As this project is made up of sub-packages, each is individually published to
+their respective package managers. Refer to the documents linked below for
+details on publishing each package:
 
 - [TypeScript Package](/packages/typescript/CONTRIBUTING.md)
