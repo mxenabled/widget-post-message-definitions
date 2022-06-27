@@ -6,7 +6,8 @@ information.
 
 ## Development
 
-Below are commands we use to perform various tasks:
+You'll need Node v16 to build and test this project. Below are commands we use
+to perform various tasks:
 
 - `npm install` install dependencies.
 - `npm run build` compile code.
