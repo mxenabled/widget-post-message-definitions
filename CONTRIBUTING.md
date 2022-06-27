@@ -19,9 +19,9 @@ well. Below are commands we use to perform various tasks:
 
 - `bin/run` runs the code generators.
 - `bin/setup` installs Ruby and Node dependencies.
-- `bin/console` starts REPL with the project loaded.
 - `bin/lint` runs the linter.
 - `bin/spellcheck` runs the spellchecker.
+- `bin/console` starts REPL with the project loaded.
 
 
 ## Publishing a new version

@@ -8,10 +8,10 @@ information.
 
 Below are commands we use to perform various tasks:
 
-- `npm run format` run code formatter.
 - `npm run build` compile code.
 - `npm run test` run tests.
 - `npm run lint` run linter.
+- `npm run format` run code formatter.
 
 
 ## Publishing a new version
