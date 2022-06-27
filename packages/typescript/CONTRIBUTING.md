@@ -8,6 +8,7 @@ information.
 
 Below are commands we use to perform various tasks:
 
+- `npm install` install dependencies.
 - `npm run build` compile code.
 - `npm run test` run tests.
 - `npm run lint` run linter.
