@@ -76,7 +76,6 @@ module StringRefinement
     #   "onMfa".normalize_keywords # => "\"onMFA\""
     #   "onOauth".normalize_keywords # => "\"onOAuth\""
     #
-    # @param [String] string
     # @return [String]
     def normalize_keywords
       self.gsub("Oauth", "OAuth")
