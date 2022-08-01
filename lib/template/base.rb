@@ -48,10 +48,57 @@ class Template::Base
     @post_message_definitions = post_message_definitions
   end
 
+  # rubocop:disable Layout/CommentIndentation
   # rubocop:disable Lint/UselessMethodDefinition
   # @return [Binding]
   def binding
     super
   end
   # rubocop:enable Lint/UselessMethodDefinition
+  # rubocop:enable Layout/CommentIndentation
+
+private
+
+  # @return [Hash]
+  def entity_post_message_definitions
+    post_message_definitions_of_group(:entity)
+  end
+
+  # @return [Hash]
+  def generic_post_message_definitions
+    post_message_definitions_of_subgroup(:generic)
+  end
+
+  # @return [Hash]
+  def post_message_definitions_by_widget
+    post_message_definitions_of_group(:widget).filter do |post_message|
+      !post_message.generic?
+    end.group_by(&:subgroup)
+  end
+
+  # @return [Hash]
+  def post_message_definitions_by_group
+    post_message_definitions.group_by(&:group)
+  end
+
+  # @return [Hash]
+  def post_message_definitions_by_subgroup
+    post_message_definitions.group_by(&:subgroup)
+  end
+
+  # @return [Symbol] group
+  # @return [Array<PostMessageDefinition>]
+  def post_message_definitions_of_group(group)
+    post_message_definitions.filter do |post_message|
+      post_message.group == group
+    end
+  end
+
+  # @return [Symbol] subgroup
+  # @return [Array<PostMessageDefinition>]
+  def post_message_definitions_of_subgroup(subgroup)
+    post_message_definitions.filter do |post_message|
+      post_message.subgroup == subgroup
+    end
+  end
 end

@@ -302,9 +302,9 @@ class Template::TypescriptSource < Template::Base
   # @return [String]
   def enum_key(post_message)
     if post_message.grouped?
-      normalize_keywords("#{post_message.subgroup}_#{post_message.label}".classify)
+      "#{post_message.subgroup}_#{post_message.label}".classify.normalize_keywords
     else
-      normalize_keywords(post_message.label.to_s.classify)
+      post_message.label.to_s.classify.normalize_keywords
     end
   end
 
@@ -379,7 +379,7 @@ class Template::TypescriptSource < Template::Base
   # @param [String] group
   # @return [String]
   def payload_group_type_name(group)
-    normalize_keywords("#{group.to_s.classify}Payload")
+    "#{group.to_s.classify}Payload".normalize_keywords
   end
 
   # @example
@@ -390,7 +390,7 @@ class Template::TypescriptSource < Template::Base
   # @param [String] group
   # @return [String]
   def callback_props_group_type_name(group)
-    normalize_keywords("#{group.to_s.classify}PostMessageCallbackProps")
+    "#{group.to_s.classify}PostMessageCallbackProps".normalize_keywords
   end
 
   # @example
@@ -410,7 +410,7 @@ class Template::TypescriptSource < Template::Base
     if post_message.entity?
       "on#{enum_key(post_message)}"
     else
-      "on#{normalize_keywords(post_message.label.to_s.classify)}"
+      "on#{post_message.label.to_s.classify.normalize_keywords}"
     end
   end
 
@@ -422,7 +422,7 @@ class Template::TypescriptSource < Template::Base
   # @param [String] group
   # @return [String]
   def dispatch_location_change_function_name(group)
-    "dispatch#{normalize_keywords(group.to_s.classify)}LocationChangeEvent"
+    "dispatch#{group.to_s.classify.normalize_keywords}LocationChangeEvent"
   end
 
   # @example
@@ -433,7 +433,7 @@ class Template::TypescriptSource < Template::Base
   # @param [String] group
   # @return [String]
   def dispatch_post_message_function_name(group)
-    "dispatch#{normalize_keywords(group.to_s.classify)}PostMessageEvent"
+    "dispatch#{group.to_s.classify.normalize_keywords}PostMessageEvent"
   end
 
   # @example
@@ -444,7 +444,7 @@ class Template::TypescriptSource < Template::Base
   # @param [String] group
   # @return [String]
   def dispatch_internal_message_function_name(group)
-    "dispatch#{normalize_keywords(group.to_s.classify)}InternalMessage"
+    "dispatch#{group.to_s.classify.normalize_keywords}InternalMessage"
   end
 
   # @example
@@ -455,7 +455,7 @@ class Template::TypescriptSource < Template::Base
   # @param [String] group
   # @return [String]
   def widget_name(group)
-    "#{normalize_keywords(group.to_s.classify)} Widget"
+    "#{group.to_s.classify.normalize_keywords} Widget"
   end
 
   # @example
@@ -497,59 +497,6 @@ class Template::TypescriptSource < Template::Base
       props.surround("{ ", " }")
     else
       raise StandardError, "unable to convert `#{raw}` into TypeScript #{format}"
-    end
-  end
-
-  # @param [String] string
-  # @return [String]
-  def normalize_keywords(string)
-    string.to_s
-          .gsub("Oauth", "OAuth")
-          .gsub(/\soauth/i, " OAuth")
-          .gsub("Mfa", "MFA")
-          .gsub(/\smfa/i, " MFA")
-  end
-
-  # @return [Hash]
-  def entity_post_message_definitions
-    post_message_definitions_of_group(:entity)
-  end
-
-  # @return [Hash]
-  def generic_post_message_definitions
-    post_message_definitions_of_subgroup(:generic)
-  end
-
-  # @return [Hash]
-  def post_message_definitions_by_widget
-    post_message_definitions_of_group(:widget).filter do |post_message|
-      !post_message.generic?
-    end.group_by(&:subgroup)
-  end
-
-  # @return [Hash]
-  def post_message_definitions_by_group
-    post_message_definitions.group_by(&:group)
-  end
-
-  # @return [Hash]
-  def post_message_definitions_by_subgroup
-    post_message_definitions.group_by(&:subgroup)
-  end
-
-  # @return [Symbol] group
-  # @return [Array<PostMessageDefinition>]
-  def post_message_definitions_of_group(group)
-    post_message_definitions.filter do |post_message|
-      post_message.group == group
-    end
-  end
-
-  # @return [Symbol] subgroup
-  # @return [Array<PostMessageDefinition>]
-  def post_message_definitions_of_subgroup(subgroup)
-    post_message_definitions.filter do |post_message|
-      post_message.subgroup == subgroup
     end
   end
 end

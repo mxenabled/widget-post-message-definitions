@@ -69,5 +69,20 @@ module StringRefinement
     def surround(lhs, rhs = lhs)
       "#{lhs}#{self}#{rhs}"
     end
+
+    # @example
+    #
+    #   "on".normalize_keywords # => "\"age\""
+    #   "onMfa".normalize_keywords # => "\"onMFA\""
+    #   "onOauth".normalize_keywords # => "\"onOAuth\""
+    #
+    # @param [String] string
+    # @return [String]
+    def normalize_keywords
+      self.gsub("Oauth", "OAuth")
+          .gsub(/\soauth/i, " OAuth")
+          .gsub("Mfa", "MFA")
+          .gsub(/\smfa/i, " MFA")
+    end
   end
 end
