@@ -22,7 +22,7 @@ class Template::TypescriptDocumentation < Template::TypescriptSource
     |<%- post_messages.each do |post_message| -%>
     |<%- next unless post_message.documented? -%>
     |---
-    |### <%= normalize_keywords(post_message.label.to_s.titleize) %> (`<%= post_message %>`)
+    |### <%= post_message.label.to_s.titleize.normalize_keywords %> (`<%= post_message %>`)
     |
     |<%- if post_message.properties["warning"] -%>
     |**Warning**: <%= post_message.properties["warning"] %>
@@ -72,7 +72,7 @@ class Template::TypescriptDocumentation < Template::TypescriptSource
   # @param [String] group
   # @return [String]
   def widget_component(group)
-    "#{normalize_keywords(group.to_s.classify)}Widget"
+    "#{group.to_s.classify.normalize_keywords}Widget"
   end
 
   # @example
