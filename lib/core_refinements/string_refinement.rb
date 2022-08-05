@@ -26,6 +26,17 @@ module StringRefinement
 
     # @example
     #
+    #   "hi_there".camel_case # => "hiThere"
+    #   "hi_thereMan".camel_case # => "hiThereMan"
+    #
+    # @return [String]
+    def camel_case
+      word = self.classify
+      word[0].downcase + word.split("").drop(1).join
+    end
+
+    # @example
+    #
     #   classify("hi_there") # => "HiThere"
     #   classify("hi_thereMan") # => "HiThereMan"
     #
