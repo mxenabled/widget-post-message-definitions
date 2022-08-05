@@ -6,6 +6,7 @@ require_relative "./post_message_definition"
 
 require_relative "./template"
 require_relative "./template/base"
+require_relative "./template/swift_source"
 require_relative "./template/typescript_source"
 require_relative "./template/typescript_documentation"
 require_relative "./template/typescript_react_native_documentation"
