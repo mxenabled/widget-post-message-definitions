@@ -33,6 +33,7 @@ class PostMessageDefinition
     end
 
     # Returns the class type of the value representing the field's type.
+    #
     # @return [Symbol]
     def type_type
       type.class.to_s.downcase.to_sym

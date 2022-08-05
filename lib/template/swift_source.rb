@@ -23,13 +23,13 @@ class Template::SwiftSource < Template::Base
     |<%- post_message_definitions.each do |post_message| -%>
     |<%- post_message.payload.each do |field| -%>
     |<%- if field.enum? -%>
-    |public enum <%= enum_type_name(post_message, field) %> {
+    |public enum <%= payload_field_type_name(post_message, field) %> {
     |<%- field.type.each do |entry| -%>
     |    case <%= entry.camel_case %>
     |<%- end -%>
     |}
     |<%- elsif field.struct? %>
-    |public struct <%= enum_type_name(post_message, field) %> {
+    |public struct <%= payload_field_type_name(post_message, field) %> {
     |    <%- field.struct_fields.each do |field| -%>
     |    public let <%= payload_property_name(field) %>: <%= payload_property_type(post_message, field) %>
     |    <%- end -%>
@@ -82,14 +82,14 @@ class Template::SwiftSource < Template::Base
 
   # @example
   #
-  #   payload_type_name(PostMessageDefinition.new(:widget, :connect, :stepChange),
+  #   payload_type_name(PostMessageDefinition.new(:widget, :connect, :loaded),
   #                     PostMessageDefinition::PayloadField.new(:initial_step, ["step1", "step2"]))
-  #   # => "ConnectInitialStep"
+  #   # => "ConnectLoadedInitialStep"
   #
   # @param [PostMessageDefinition] post_message
   # @param [PostMessageDefinition::PayloadField] field
   # @return [String]
-  def enum_type_name(post_message, field)
+  def payload_field_type_name(post_message, field)
     "#{post_message.subgroup}_#{post_message.label}_#{field.name}".classify
   end
 
@@ -106,7 +106,7 @@ class Template::SwiftSource < Template::Base
     in ["number", :string, :type]
       "Double"
     in [_, :array | :hash, :type]
-      enum_type_name(post_message, field)
+      payload_field_type_name(post_message, field)
     else
       raise StandardError, "unable to do a Swift #{format} conversion on `#{field.type}`"
     end
