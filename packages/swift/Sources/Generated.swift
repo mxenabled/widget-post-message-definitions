@@ -156,7 +156,6 @@ public protocol WidgetEventDelegate: NSObjectProtocol {
     func widgetEvent(_ payload: WidgetEvent.Ping)
     func widgetEvent(_ payload: WidgetEvent.Navigation)
     func widgetEvent(_ payload: WidgetEvent.FocusTrap)
-    /* func widgetEvent(_ payload: AccountEvent.Created) */
 }
 
 public extension WidgetEventDelegate {
@@ -165,7 +164,6 @@ public extension WidgetEventDelegate {
     func widgetEvent(_: WidgetEvent.Ping) {}
     func widgetEvent(_: WidgetEvent.Navigation) {}
     func widgetEvent(_: WidgetEvent.FocusTrap) {}
-    /* func widgetEvent(_: AccountEvent.Created) {} */
 }
 
 public protocol ConnectWidgetEventDelegate: WidgetEventDelegate {
