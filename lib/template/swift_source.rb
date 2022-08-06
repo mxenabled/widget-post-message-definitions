@@ -4,6 +4,8 @@ class Template::SwiftSource < Template::Base
   # cspell: disable
   CONTENT = <<-CONTENT
     |public protocol Event {}
+    |
+    |/** Payloads **/
     |<% post_message_definitions_by_subgroup.each do |subgroup, post_message_definitions| %>
     |public enum <%= event_group_type_name(post_message_definitions.first) %> {
     |    <%- post_message_definitions.each do |post_message| -%>
@@ -37,6 +39,41 @@ class Template::SwiftSource < Template::Base
     |<%- end -%>
     |<%- end -%>
     |<%- end -%>
+    |
+    |/** Delegates **/
+    |
+    |public protocol <%= delegate_group_type_name(generic_post_message_definitions.sample) %>: NSObjectProtocol {
+    |    func widgetEvent(_ payload: Event)
+    |<%- generic_post_message_definitions.each do |post_message| -%>
+    |    func widgetEvent(_ payload: <%= event_group_type_name(post_message) %>.<%= payload_type_name(post_message) %>)
+    |<%- end -%>
+    |<%- entity_post_message_definitions.each do |post_message| -%>
+    |    func widgetEvent(_ payload: <%= event_group_type_name(post_message) %>.<%= payload_type_name(post_message) %>)
+    |<%- end -%>
+    |}
+    |
+    |public extension <%= delegate_group_type_name(generic_post_message_definitions.sample) %> {
+    |    func widgetEvent(_ payload: Event) {}
+    |<%- generic_post_message_definitions.each do |post_message| -%>
+    |    func widgetEvent(_: <%= event_group_type_name(post_message) %>.<%= payload_type_name(post_message) %>) {}
+    |<%- end -%>
+    |<%- entity_post_message_definitions.each do |post_message| -%>
+    |    func widgetEvent(_: <%= event_group_type_name(post_message) %>.<%= payload_type_name(post_message) %>) {}
+    |<%- end -%>
+    |}
+    |<%- post_message_definitions_by_widget.each do |subgroup, post_messages| %>
+    |public protocol <%= delegate_group_type_name(post_messages.first) %>: <%= delegate_group_type_name(generic_post_message_definitions.sample) %> {
+    |<%- post_messages.each do |post_message| -%>
+    |    func widgetEvent(_ payload: <%= event_group_type_name(post_message) %>.<%= payload_type_name(post_message) %>)
+    |<%- end -%>
+    |}
+    |
+    |public extension <%= delegate_group_type_name(post_messages.first) %> {
+    |<%- post_messages.each do |post_message| -%>
+    |    func widgetEvent(_: <%= event_group_type_name(post_message) %>.<%= payload_type_name(post_message) %>) {}
+    |<%- end -%>
+    |}
+    |<%- end -%>
   CONTENT
   # cspell: enable
 
@@ -61,6 +98,12 @@ class Template::SwiftSource < Template::Base
     else
       "#{post_message.subgroup.to_s.classify}Event"
     end
+  end
+
+  # @param [PostMessageDefinition] post_message
+  # @return [String]
+  def delegate_group_type_name(post_message)
+    "#{event_group_type_name(post_message)}Delegate"
   end
 
   # @example
