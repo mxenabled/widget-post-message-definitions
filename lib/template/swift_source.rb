@@ -48,7 +48,7 @@ class Template::SwiftSource < Template::Base
     |    func widgetEvent(_ payload: <%= event_group_type_name(post_message) %>.<%= payload_type_name(post_message) %>)
     |<%- end -%>
     |<%- entity_post_message_definitions.each do |post_message| -%>
-    |    func widgetEvent(_ payload: <%= event_group_type_name(post_message) %>.<%= payload_type_name(post_message) %>)
+    |    /* func widgetEvent(_ payload: <%= event_group_type_name(post_message) %>.<%= payload_type_name(post_message) %>) */
     |<%- end -%>
     |}
     |
@@ -58,7 +58,7 @@ class Template::SwiftSource < Template::Base
     |    func widgetEvent(_: <%= event_group_type_name(post_message) %>.<%= payload_type_name(post_message) %>) {}
     |<%- end -%>
     |<%- entity_post_message_definitions.each do |post_message| -%>
-    |    func widgetEvent(_: <%= event_group_type_name(post_message) %>.<%= payload_type_name(post_message) %>) {}
+    |    /* func widgetEvent(_: <%= event_group_type_name(post_message) %>.<%= payload_type_name(post_message) %>) {} */
     |<%- end -%>
     |}
     |<%- post_message_definitions_by_widget.each do |subgroup, post_messages| %>
