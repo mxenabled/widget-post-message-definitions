@@ -9,6 +9,8 @@
 
 public protocol Event {}
 
+/** Payloads **/
+
 public enum WidgetEvent {
     public struct Load: Event {
     }
@@ -144,4 +146,64 @@ public struct ConnectEnterCredentialsInstitution {
 public struct ConnectUpdateCredentialsInstitution {
     public let code: String
     public let guid: String
+}
+
+/** Delegates **/
+
+public protocol WidgetEventDelegate: NSObjectProtocol {
+    func widgetEvent(_ payload: Event)
+    func widgetEvent(_ payload: WidgetEvent.Load)
+    func widgetEvent(_ payload: WidgetEvent.Ping)
+    func widgetEvent(_ payload: WidgetEvent.Navigation)
+    func widgetEvent(_ payload: WidgetEvent.FocusTrap)
+}
+
+public extension WidgetEventDelegate {
+    func widgetEvent(_ payload: Event) {}
+    func widgetEvent(_: WidgetEvent.Load) {}
+    func widgetEvent(_: WidgetEvent.Ping) {}
+    func widgetEvent(_: WidgetEvent.Navigation) {}
+    func widgetEvent(_: WidgetEvent.FocusTrap) {}
+}
+
+public protocol ConnectWidgetEventDelegate: WidgetEventDelegate {
+    func widgetEvent(_ payload: ConnectWidgetEvent.Loaded)
+    func widgetEvent(_ payload: ConnectWidgetEvent.EnterCredentials)
+    func widgetEvent(_ payload: ConnectWidgetEvent.InstitutionSearch)
+    func widgetEvent(_ payload: ConnectWidgetEvent.SelectedInstitution)
+    func widgetEvent(_ payload: ConnectWidgetEvent.MemberConnected)
+    func widgetEvent(_ payload: ConnectWidgetEvent.ConnectedPrimaryAction)
+    func widgetEvent(_ payload: ConnectWidgetEvent.MemberDeleted)
+    func widgetEvent(_ payload: ConnectWidgetEvent.CreateMemberError)
+    func widgetEvent(_ payload: ConnectWidgetEvent.MemberStatusUpdate)
+    func widgetEvent(_ payload: ConnectWidgetEvent.OAuthError)
+    func widgetEvent(_ payload: ConnectWidgetEvent.OAuthRequested)
+    func widgetEvent(_ payload: ConnectWidgetEvent.StepChange)
+    func widgetEvent(_ payload: ConnectWidgetEvent.SubmitMFA)
+    func widgetEvent(_ payload: ConnectWidgetEvent.UpdateCredentials)
+}
+
+public extension ConnectWidgetEventDelegate {
+    func widgetEvent(_: ConnectWidgetEvent.Loaded) {}
+    func widgetEvent(_: ConnectWidgetEvent.EnterCredentials) {}
+    func widgetEvent(_: ConnectWidgetEvent.InstitutionSearch) {}
+    func widgetEvent(_: ConnectWidgetEvent.SelectedInstitution) {}
+    func widgetEvent(_: ConnectWidgetEvent.MemberConnected) {}
+    func widgetEvent(_: ConnectWidgetEvent.ConnectedPrimaryAction) {}
+    func widgetEvent(_: ConnectWidgetEvent.MemberDeleted) {}
+    func widgetEvent(_: ConnectWidgetEvent.CreateMemberError) {}
+    func widgetEvent(_: ConnectWidgetEvent.MemberStatusUpdate) {}
+    func widgetEvent(_: ConnectWidgetEvent.OAuthError) {}
+    func widgetEvent(_: ConnectWidgetEvent.OAuthRequested) {}
+    func widgetEvent(_: ConnectWidgetEvent.StepChange) {}
+    func widgetEvent(_: ConnectWidgetEvent.SubmitMFA) {}
+    func widgetEvent(_: ConnectWidgetEvent.UpdateCredentials) {}
+}
+
+public protocol PulseWidgetEventDelegate: WidgetEventDelegate {
+    func widgetEvent(_ payload: PulseWidgetEvent.OverdraftWarningCtaTransferFunds)
+}
+
+public extension PulseWidgetEventDelegate {
+    func widgetEvent(_: PulseWidgetEvent.OverdraftWarningCtaTransferFunds) {}
 }
