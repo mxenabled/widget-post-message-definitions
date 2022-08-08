@@ -25,7 +25,7 @@ class Template::SwiftSource < Template::Base
     |<%- post_message_definitions.each do |post_message| -%>
     |<%- post_message.payload.each do |field| -%>
     |<%- if field.enum? -%>
-    |public enum <%= payload_field_type_name(post_message, field) %>: Codable {
+    |public enum <%= payload_field_type_name(post_message, field) %>: String, Codable {
     |<%- field.type.each do |entry| -%>
     |    case <%= entry.camel_case %>
     |<%- end -%>
@@ -87,11 +87,9 @@ class Template::SwiftSource < Template::Base
     |
     |extension Dispatcher {
     |    func extractMetadata(_ url: URL) -> Data? {
-    |        let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
-    |        let parameter = components?.queryItems?.first(where: { item in item.name == "metadata" })
-    |        let metadata = parameter?.value?.data(using: .utf8)!
-    |
-    |        return metadata
+    |        return URLComponents(url: url, resolvingAgainstBaseURL: false)?
+    |            .queryItems?.first(where: { item in item.name == "metadata" })?
+    |            .value?.data(using: .utf8)
     |    }
     |
     |    func decode<T>(_ typ: T.Type, _ data: Data) throws -> T where T: Decodable {

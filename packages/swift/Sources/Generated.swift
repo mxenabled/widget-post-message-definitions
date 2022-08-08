@@ -128,7 +128,7 @@ public enum AccountEvent {
     }
 }
 
-public enum ConnectLoadedInitialStep: Codable {
+public enum ConnectLoadedInitialStep: String, Codable {
     case search
     case selectMember
     case enterCreds
@@ -216,11 +216,9 @@ protocol Dispatcher {
 
 extension Dispatcher {
     func extractMetadata(_ url: URL) -> Data? {
-        let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
-        let parameter = components?.queryItems?.first(where: { item in item.name == "metadata" })
-        let metadata = parameter?.value?.data(using: .utf8)!
-
-        return metadata
+        return URLComponents(url: url, resolvingAgainstBaseURL: false)?
+            .queryItems?.first(where: { item in item.name == "metadata" })?
+            .value?.data(using: .utf8)
     }
 
     func decode<T>(_ typ: T.Type, _ data: Data) throws -> T where T: Decodable {
