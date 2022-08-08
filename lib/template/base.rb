@@ -72,7 +72,7 @@ private
   # @return [Hash]
   def post_message_definitions_by_widget
     post_message_definitions_of_group(:widget).filter do |post_message|
-      !post_message.generic?
+      !post_message.generic? && !post_message.client?
     end.group_by(&:subgroup)
   end
 
