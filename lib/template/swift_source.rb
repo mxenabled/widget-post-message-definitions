@@ -3,7 +3,7 @@ class Template::SwiftSource < Template::Base
 
   # cspell: disable
   CONTENT = <<-CONTENT
-    |public protocol Event {}
+    |public protocol Event: Codable {}
     |
     |/** Payloads **/
     |<% post_message_definitions_by_subgroup.each do |subgroup, post_message_definitions| %>
@@ -12,9 +12,9 @@ class Template::SwiftSource < Template::Base
     |    public struct <%= payload_type_name(post_message) %>: Event {
     |        <%- post_message.payload.each do |field| -%>
     |        <%- if field.optional? -%>
-    |        public let <%= payload_property_name(field) %>: <%= payload_property_type(post_message, field) %>?
+    |        public var <%= payload_property_name(field) %>: <%= payload_property_type(post_message, field) %>?
     |        <%- else -%>
-    |        public let <%= payload_property_name(field) %>: <%= payload_property_type(post_message, field) %>
+    |        public var <%= payload_property_name(field) %>: <%= payload_property_type(post_message, field) %>
     |        <%- end -%>
     |        <%- end -%>
     |    }
@@ -25,13 +25,13 @@ class Template::SwiftSource < Template::Base
     |<%- post_message_definitions.each do |post_message| -%>
     |<%- post_message.payload.each do |field| -%>
     |<%- if field.enum? -%>
-    |public enum <%= payload_field_type_name(post_message, field) %> {
+    |public enum <%= payload_field_type_name(post_message, field) %>: Codable {
     |<%- field.type.each do |entry| -%>
     |    case <%= entry.camel_case %>
     |<%- end -%>
     |}
     |<%- elsif field.struct? %>
-    |public struct <%= payload_field_type_name(post_message, field) %> {
+    |public struct <%= payload_field_type_name(post_message, field) %>: Codable {
     |    <%- field.struct_fields.each do |field| -%>
     |    public let <%= payload_property_name(field) %>: <%= payload_property_type(post_message, field) %>
     |    <%- end -%>
