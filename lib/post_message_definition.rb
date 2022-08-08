@@ -21,6 +21,30 @@ class PostMessageDefinition
     def optional?
       @properties["optional"] == true
     end
+
+    # @return [Boolean]
+    def enum?
+      type_type == :array
+    end
+
+    # @return [Boolean]
+    def struct?
+      type_type == :hash
+    end
+
+    # Returns the class type of the value representing the field's type.
+    #
+    # @return [Symbol]
+    def type_type
+      type.class.to_s.downcase.to_sym
+    end
+
+    # @return [Array<PayloadField>]
+    def struct_fields
+      type.map do |(name, type)|
+        self.class.new(name, type)
+      end
+    end
   end
 
   # @param [Hash] definitions
@@ -75,6 +99,11 @@ class PostMessageDefinition
   end
 
   # @return [Boolean]
+  def client?
+    subgroup == :client
+  end
+
+  # @return [Boolean]
   def generic?
     subgroup == :generic
   end
@@ -82,6 +111,11 @@ class PostMessageDefinition
   # @return [Boolean]
   def entity?
     group == :entity
+  end
+
+  # @return [Boolean]
+  def widget?
+    group == :widget
   end
 
   def documented?
