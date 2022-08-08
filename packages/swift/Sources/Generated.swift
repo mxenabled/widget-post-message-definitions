@@ -7,7 +7,7 @@
  * project.
  */
 
-public protocol Event {}
+public protocol Event: Codable {}
 
 /** Payloads **/
 
@@ -15,120 +15,120 @@ public enum WidgetEvent {
     public struct Load: Event {
     }
     public struct Ping: Event {
-        public let userGuid: String
-        public let sessionGuid: String
+        public var userGuid: String
+        public var sessionGuid: String
     }
     public struct Navigation: Event {
-        public let userGuid: String
-        public let sessionGuid: String
-        public let didGoBack: Bool
+        public var userGuid: String
+        public var sessionGuid: String
+        public var didGoBack: Bool
     }
     public struct FocusTrap: Event {
-        public let userGuid: String
-        public let sessionGuid: String
+        public var userGuid: String
+        public var sessionGuid: String
     }
 }
 
 public enum ClientEvent {
     public struct OAuthComplete: Event {
-        public let url: String
+        public var url: String
     }
 }
 
 public enum ConnectWidgetEvent {
     public struct Loaded: Event {
-        public let userGuid: String
-        public let sessionGuid: String
-        public let initialStep: ConnectLoadedInitialStep
+        public var userGuid: String
+        public var sessionGuid: String
+        public var initialStep: ConnectLoadedInitialStep
     }
     public struct EnterCredentials: Event {
-        public let userGuid: String
-        public let sessionGuid: String
-        public let institution: ConnectEnterCredentialsInstitution
+        public var userGuid: String
+        public var sessionGuid: String
+        public var institution: ConnectEnterCredentialsInstitution
     }
     public struct InstitutionSearch: Event {
-        public let userGuid: String
-        public let sessionGuid: String
-        public let query: String
+        public var userGuid: String
+        public var sessionGuid: String
+        public var query: String
     }
     public struct SelectedInstitution: Event {
-        public let userGuid: String
-        public let sessionGuid: String
-        public let code: String
-        public let guid: String
-        public let name: String
-        public let url: String
+        public var userGuid: String
+        public var sessionGuid: String
+        public var code: String
+        public var guid: String
+        public var name: String
+        public var url: String
     }
     public struct MemberConnected: Event {
-        public let userGuid: String
-        public let sessionGuid: String
-        public let memberGuid: String
+        public var userGuid: String
+        public var sessionGuid: String
+        public var memberGuid: String
     }
     public struct ConnectedPrimaryAction: Event {
-        public let userGuid: String
-        public let sessionGuid: String
+        public var userGuid: String
+        public var sessionGuid: String
     }
     public struct MemberDeleted: Event {
-        public let userGuid: String
-        public let sessionGuid: String
-        public let memberGuid: String
+        public var userGuid: String
+        public var sessionGuid: String
+        public var memberGuid: String
     }
     public struct CreateMemberError: Event {
-        public let userGuid: String
-        public let sessionGuid: String
-        public let institutionGuid: String
-        public let institutionCode: String
+        public var userGuid: String
+        public var sessionGuid: String
+        public var institutionGuid: String
+        public var institutionCode: String
     }
     public struct MemberStatusUpdate: Event {
-        public let userGuid: String
-        public let sessionGuid: String
-        public let memberGuid: String
-        public let connectionStatus: Double
+        public var userGuid: String
+        public var sessionGuid: String
+        public var memberGuid: String
+        public var connectionStatus: Double
     }
     public struct OAuthError: Event {
-        public let userGuid: String
-        public let sessionGuid: String
-        public let memberGuid: String?
+        public var userGuid: String
+        public var sessionGuid: String
+        public var memberGuid: String?
     }
     public struct OAuthRequested: Event {
-        public let userGuid: String
-        public let sessionGuid: String
-        public let url: String
-        public let memberGuid: String
+        public var userGuid: String
+        public var sessionGuid: String
+        public var url: String
+        public var memberGuid: String
     }
     public struct StepChange: Event {
-        public let userGuid: String
-        public let sessionGuid: String
-        public let previous: String
-        public let current: String
+        public var userGuid: String
+        public var sessionGuid: String
+        public var previous: String
+        public var current: String
     }
     public struct SubmitMFA: Event {
-        public let userGuid: String
-        public let sessionGuid: String
-        public let memberGuid: String
+        public var userGuid: String
+        public var sessionGuid: String
+        public var memberGuid: String
     }
     public struct UpdateCredentials: Event {
-        public let userGuid: String
-        public let sessionGuid: String
-        public let memberGuid: String
-        public let institution: ConnectUpdateCredentialsInstitution
+        public var userGuid: String
+        public var sessionGuid: String
+        public var memberGuid: String
+        public var institution: ConnectUpdateCredentialsInstitution
     }
 }
 
 public enum PulseWidgetEvent {
     public struct OverdraftWarningCtaTransferFunds: Event {
-        public let accountGuid: String
-        public let amount: Double
+        public var accountGuid: String
+        public var amount: Double
     }
 }
 
 public enum AccountEvent {
     public struct Created: Event {
-        public let guid: String
+        public var guid: String
     }
 }
 
-public enum ConnectLoadedInitialStep {
+public enum ConnectLoadedInitialStep: Codable {
     case search
     case selectMember
     case enterCreds
@@ -138,12 +138,12 @@ public enum ConnectLoadedInitialStep {
     case disclosure
 }
 
-public struct ConnectEnterCredentialsInstitution {
+public struct ConnectEnterCredentialsInstitution: Codable {
     public let code: String
     public let guid: String
 }
 
-public struct ConnectUpdateCredentialsInstitution {
+public struct ConnectUpdateCredentialsInstitution: Codable {
     public let code: String
     public let guid: String
 }
