@@ -2,13 +2,12 @@ name: Build Swift Package
 
 on:
   pull_request:
-  # pull_request:
-  #   paths:
-  #   - packages/swift/**
-  #   - .github/workflows/build-swift-package.yml
-  # push:
-  #   branches:
-  #   - master
+    paths:
+    - packages/swift/**
+    - .github/workflows/build-swift-package.yml
+  push:
+    branches:
+    - master
 
 jobs:
   Build:
