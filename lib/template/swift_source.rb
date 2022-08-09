@@ -106,7 +106,22 @@ class Template::SwiftSource < Template::Base
     |        self.delegate = delegate
     |    }
     |
-    |    func dispatch(_ url: URL) {}
+    |    func dispatch(_ url: URL) {
+    |        guard let event = parse(url) else {
+    |            return
+    |        }
+    |
+    |        delegate.widgetEvent(event)
+    |
+    |        switch event {
+    |        <%- with_generic_post_messages(subgroup, post_messages).each do |post_message| -%>
+    |        case let event as <%= event_group_type_name(post_message) %>.<%= payload_type_name(post_message) %>:
+    |            delegate.widgetEvent(event)
+    |        <%- end -%>
+    |        default:
+    |            return
+    |        }
+    |    }
     |
     |    func parse(_ url: URL) -> Event? {
     |        guard let metadata = extractMetadata(url) else {
@@ -118,7 +133,8 @@ class Template::SwiftSource < Template::Base
     |        case ("<%= post_message_url_host(post_message) %>", "<%= post_message_url_path(post_message) %>"):
     |            return try? decode(<%= event_group_type_name(post_message) %>.<%= payload_type_name(post_message) %>.self, metadata)
     |        <%- end -%>
-    |        default: return .none
+    |        default:
+    |            return .none
     |        }
     |    }
     |}

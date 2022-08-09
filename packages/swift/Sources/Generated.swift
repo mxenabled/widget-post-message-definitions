@@ -235,7 +235,26 @@ class WidgetEventDispatcher: Dispatcher {
         self.delegate = delegate
     }
 
-    func dispatch(_ url: URL) {}
+    func dispatch(_ url: URL) {
+        guard let event = parse(url) else {
+            return
+        }
+
+        delegate.widgetEvent(event)
+
+        switch event {
+        case let event as WidgetEvent.Load:
+            delegate.widgetEvent(event)
+        case let event as WidgetEvent.Ping:
+            delegate.widgetEvent(event)
+        case let event as WidgetEvent.Navigation:
+            delegate.widgetEvent(event)
+        case let event as WidgetEvent.FocusTrap:
+            delegate.widgetEvent(event)
+        default:
+            return
+        }
+    }
 
     func parse(_ url: URL) -> Event? {
         guard let metadata = extractMetadata(url) else {
@@ -251,7 +270,8 @@ class WidgetEventDispatcher: Dispatcher {
             return try? decode(WidgetEvent.Navigation.self, metadata)
         case ("focusTrap", ""):
             return try? decode(WidgetEvent.FocusTrap.self, metadata)
-        default: return .none
+        default:
+            return .none
         }
     }
 }
@@ -263,7 +283,54 @@ class ConnectWidgetEventDispatcher: Dispatcher {
         self.delegate = delegate
     }
 
-    func dispatch(_ url: URL) {}
+    func dispatch(_ url: URL) {
+        guard let event = parse(url) else {
+            return
+        }
+
+        delegate.widgetEvent(event)
+
+        switch event {
+        case let event as WidgetEvent.Load:
+            delegate.widgetEvent(event)
+        case let event as WidgetEvent.Ping:
+            delegate.widgetEvent(event)
+        case let event as WidgetEvent.Navigation:
+            delegate.widgetEvent(event)
+        case let event as WidgetEvent.FocusTrap:
+            delegate.widgetEvent(event)
+        case let event as ConnectWidgetEvent.Loaded:
+            delegate.widgetEvent(event)
+        case let event as ConnectWidgetEvent.EnterCredentials:
+            delegate.widgetEvent(event)
+        case let event as ConnectWidgetEvent.InstitutionSearch:
+            delegate.widgetEvent(event)
+        case let event as ConnectWidgetEvent.SelectedInstitution:
+            delegate.widgetEvent(event)
+        case let event as ConnectWidgetEvent.MemberConnected:
+            delegate.widgetEvent(event)
+        case let event as ConnectWidgetEvent.ConnectedPrimaryAction:
+            delegate.widgetEvent(event)
+        case let event as ConnectWidgetEvent.MemberDeleted:
+            delegate.widgetEvent(event)
+        case let event as ConnectWidgetEvent.CreateMemberError:
+            delegate.widgetEvent(event)
+        case let event as ConnectWidgetEvent.MemberStatusUpdate:
+            delegate.widgetEvent(event)
+        case let event as ConnectWidgetEvent.OAuthError:
+            delegate.widgetEvent(event)
+        case let event as ConnectWidgetEvent.OAuthRequested:
+            delegate.widgetEvent(event)
+        case let event as ConnectWidgetEvent.StepChange:
+            delegate.widgetEvent(event)
+        case let event as ConnectWidgetEvent.SubmitMFA:
+            delegate.widgetEvent(event)
+        case let event as ConnectWidgetEvent.UpdateCredentials:
+            delegate.widgetEvent(event)
+        default:
+            return
+        }
+    }
 
     func parse(_ url: URL) -> Event? {
         guard let metadata = extractMetadata(url) else {
@@ -307,7 +374,8 @@ class ConnectWidgetEventDispatcher: Dispatcher {
             return try? decode(ConnectWidgetEvent.SubmitMFA.self, metadata)
         case ("connect", "/updateCredentials"):
             return try? decode(ConnectWidgetEvent.UpdateCredentials.self, metadata)
-        default: return .none
+        default:
+            return .none
         }
     }
 }
@@ -319,7 +387,28 @@ class PulseWidgetEventDispatcher: Dispatcher {
         self.delegate = delegate
     }
 
-    func dispatch(_ url: URL) {}
+    func dispatch(_ url: URL) {
+        guard let event = parse(url) else {
+            return
+        }
+
+        delegate.widgetEvent(event)
+
+        switch event {
+        case let event as WidgetEvent.Load:
+            delegate.widgetEvent(event)
+        case let event as WidgetEvent.Ping:
+            delegate.widgetEvent(event)
+        case let event as WidgetEvent.Navigation:
+            delegate.widgetEvent(event)
+        case let event as WidgetEvent.FocusTrap:
+            delegate.widgetEvent(event)
+        case let event as PulseWidgetEvent.OverdraftWarningCtaTransferFunds:
+            delegate.widgetEvent(event)
+        default:
+            return
+        }
+    }
 
     func parse(_ url: URL) -> Event? {
         guard let metadata = extractMetadata(url) else {
@@ -337,7 +426,8 @@ class PulseWidgetEventDispatcher: Dispatcher {
             return try? decode(WidgetEvent.FocusTrap.self, metadata)
         case ("pulse", "/overdraftWarning/cta/transferFunds"):
             return try? decode(PulseWidgetEvent.OverdraftWarningCtaTransferFunds.self, metadata)
-        default: return .none
+        default:
+            return .none
         }
     }
 }
