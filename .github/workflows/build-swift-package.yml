@@ -1,7 +1,7 @@
 name: Build Swift Package
 
 on:
-  - pull_request
+  pull_request:
   # pull_request:
   #   paths:
   #   - packages/swift/**
