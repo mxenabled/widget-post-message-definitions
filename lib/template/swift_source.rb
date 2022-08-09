@@ -3,6 +3,8 @@ class Template::SwiftSource < Template::Base
 
   # cspell: disable
   CONTENT = <<-CONTENT
+    |import Foundation
+    |
     |public protocol Event: Codable {}
     |
     |/** Payloads **/

@@ -7,6 +7,8 @@
  * project.
  */
 
+import Foundation
+
 public protocol Event: Codable {}
 
 /** Payloads **/
