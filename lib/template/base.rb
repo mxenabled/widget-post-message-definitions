@@ -76,6 +76,13 @@ private
     end.group_by(&:subgroup)
   end
 
+  # @return [Array<PostMessageDefinition>]
+  def widget_post_message_definitions_by_subgroup
+    post_message_definitions.filter do |post_message|
+      !post_message.client? && !post_message.entity?
+    end.group_by(&:subgroup)
+  end
+
   # @return [Hash]
   def post_message_definitions_by_group
     post_message_definitions.group_by(&:group)

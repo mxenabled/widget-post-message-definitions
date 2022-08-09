@@ -25,7 +25,7 @@ class Template::SwiftSource < Template::Base
     |<%- post_message_definitions.each do |post_message| -%>
     |<%- post_message.payload.each do |field| -%>
     |<%- if field.enum? -%>
-    |public enum <%= payload_field_type_name(post_message, field) %>: Codable {
+    |public enum <%= payload_field_type_name(post_message, field) %>: String, Codable {
     |<%- field.type.each do |entry| -%>
     |    case <%= entry.camel_case %>
     |<%- end -%>
@@ -78,6 +78,51 @@ class Template::SwiftSource < Template::Base
     |<%- end -%>
     |}
     |<%- end -%>
+    |
+    |/** Dispatchers **/
+    |
+    |protocol Dispatcher {
+    |    func dispatch(_: URL)
+    |}
+    |
+    |extension Dispatcher {
+    |    func extractMetadata(_ url: URL) -> Data? {
+    |        return URLComponents(url: url, resolvingAgainstBaseURL: false)?
+    |            .queryItems?.first(where: { item in item.name == "metadata" })?
+    |            .value?.data(using: .utf8)
+    |    }
+    |
+    |    func decode<T>(_ typ: T.Type, _ data: Data) throws -> T where T: Decodable {
+    |        let decoder = JSONDecoder()
+    |        decoder.keyDecodingStrategy = .convertFromSnakeCase
+    |        return try decoder.decode(typ, from: data)
+    |    }
+    |}
+    |<%- widget_post_message_definitions_by_subgroup.each do |subgroup, post_messages| %>
+    |class <%= dispatcher_group_type_name(post_messages.first) %>: Dispatcher {
+    |    let delegate: <%= delegate_group_type_name(post_messages.first) %>
+    |
+    |    init(_ delegate: <%= delegate_group_type_name(post_messages.first) %>) {
+    |        self.delegate = delegate
+    |    }
+    |
+    |    func dispatch(_ url: URL) {}
+    |
+    |    func parse(_ url: URL) -> Event? {
+    |        guard let metadata = extractMetadata(url) else {
+    |            return .none
+    |        }
+    |
+    |        switch (url.host, url.path) {
+    |        <%- with_generic_post_messages(subgroup, post_messages).each do |post_message| -%>
+    |        case ("<%= post_message_url_host(post_message) %>", "<%= post_message_url_path(post_message) %>"):
+    |            return try? decode(<%= event_group_type_name(post_message) %>.<%= payload_type_name(post_message) %>.self, metadata)
+    |        <%- end -%>
+    |        default: return .none
+    |        }
+    |    }
+    |}
+    |<%- end -%>
   CONTENT
   # cspell: enable
 
@@ -102,6 +147,12 @@ class Template::SwiftSource < Template::Base
     else
       "#{post_message.subgroup.to_s.classify}Event"
     end
+  end
+
+  # @param [PostMessageDefinition] post_message
+  # @return [String]
+  def dispatcher_group_type_name(post_message)
+    "#{event_group_type_name(post_message)}Dispatcher"
   end
 
   # @param [PostMessageDefinition] post_message
@@ -156,6 +207,51 @@ class Template::SwiftSource < Template::Base
       payload_field_type_name(post_message, field)
     else
       raise StandardError, "unable to do a Swift #{format} conversion on `#{field.type}`"
+    end
+  end
+
+  # The expected URL host for a given post message.
+  #
+  # @example
+  #
+  #   post_message_url_host(PostMessageDefinition.new(:widget, :generic, :ping))
+  #   # => "ping"
+  #   post_message_url_host(PostMessageDefinition.new(:widget, :connect, :memberDeleted))
+  #   # => "connect"
+  #
+  # @param [PostMessageDefinition] post_message
+  # @return [String]
+  def post_message_url_host(post_message)
+    post_message.generic? ? post_message.label.to_s : post_message.subgroup.to_s
+  end
+
+  # The expected URL path for a given post message.
+  #
+  # @example
+  #
+  #   post_message_url_path(PostMessageDefinition.new(:widget, :generic, :ping))
+  #   # => ""
+  #   post_message_url_path(PostMessageDefinition.new(:widget, :connect, :memberDeleted))
+  #   # => "/memberDeleted"
+  #
+  # @param [PostMessageDefinition] post_message
+  # @return [String]
+  def post_message_url_path(post_message)
+    post_message.generic? ? "" : "/#{post_message.label}"
+  end
+
+  # This method is used when you need to concatenate a list of widget specific
+  # post messages with the generic post messages. Useful when you need a list
+  # of all post messages that a widget _could_ possibly get.
+  #
+  # @param [Symbol] subgroup
+  # @param [Array<PostMessageDefinition>] post_message
+  # @return [Array<PostMessageDefinition>]
+  def with_generic_post_messages(subgroup, post_messages)
+    if subgroup == :generic
+      post_messages
+    else
+      generic_post_message_definitions + post_messages
     end
   end
 end

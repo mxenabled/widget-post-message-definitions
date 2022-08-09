@@ -128,7 +128,7 @@ public enum AccountEvent {
     }
 }
 
-public enum ConnectLoadedInitialStep: Codable {
+public enum ConnectLoadedInitialStep: String, Codable {
     case search
     case selectMember
     case enterCreds
@@ -206,4 +206,138 @@ public protocol PulseWidgetEventDelegate: WidgetEventDelegate {
 
 public extension PulseWidgetEventDelegate {
     func widgetEvent(_: PulseWidgetEvent.OverdraftWarningCtaTransferFunds) {}
+}
+
+/** Dispatchers **/
+
+protocol Dispatcher {
+    func dispatch(_: URL)
+}
+
+extension Dispatcher {
+    func extractMetadata(_ url: URL) -> Data? {
+        return URLComponents(url: url, resolvingAgainstBaseURL: false)?
+            .queryItems?.first(where: { item in item.name == "metadata" })?
+            .value?.data(using: .utf8)
+    }
+
+    func decode<T>(_ typ: T.Type, _ data: Data) throws -> T where T: Decodable {
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        return try decoder.decode(typ, from: data)
+    }
+}
+
+class WidgetEventDispatcher: Dispatcher {
+    let delegate: WidgetEventDelegate
+
+    init(_ delegate: WidgetEventDelegate) {
+        self.delegate = delegate
+    }
+
+    func dispatch(_ url: URL) {}
+
+    func parse(_ url: URL) -> Event? {
+        guard let metadata = extractMetadata(url) else {
+            return .none
+        }
+
+        switch (url.host, url.path) {
+        case ("load", ""):
+            return try? decode(WidgetEvent.Load.self, metadata)
+        case ("ping", ""):
+            return try? decode(WidgetEvent.Ping.self, metadata)
+        case ("navigation", ""):
+            return try? decode(WidgetEvent.Navigation.self, metadata)
+        case ("focusTrap", ""):
+            return try? decode(WidgetEvent.FocusTrap.self, metadata)
+        default: return .none
+        }
+    }
+}
+
+class ConnectWidgetEventDispatcher: Dispatcher {
+    let delegate: ConnectWidgetEventDelegate
+
+    init(_ delegate: ConnectWidgetEventDelegate) {
+        self.delegate = delegate
+    }
+
+    func dispatch(_ url: URL) {}
+
+    func parse(_ url: URL) -> Event? {
+        guard let metadata = extractMetadata(url) else {
+            return .none
+        }
+
+        switch (url.host, url.path) {
+        case ("load", ""):
+            return try? decode(WidgetEvent.Load.self, metadata)
+        case ("ping", ""):
+            return try? decode(WidgetEvent.Ping.self, metadata)
+        case ("navigation", ""):
+            return try? decode(WidgetEvent.Navigation.self, metadata)
+        case ("focusTrap", ""):
+            return try? decode(WidgetEvent.FocusTrap.self, metadata)
+        case ("connect", "/loaded"):
+            return try? decode(ConnectWidgetEvent.Loaded.self, metadata)
+        case ("connect", "/enterCredentials"):
+            return try? decode(ConnectWidgetEvent.EnterCredentials.self, metadata)
+        case ("connect", "/institutionSearch"):
+            return try? decode(ConnectWidgetEvent.InstitutionSearch.self, metadata)
+        case ("connect", "/selectedInstitution"):
+            return try? decode(ConnectWidgetEvent.SelectedInstitution.self, metadata)
+        case ("connect", "/memberConnected"):
+            return try? decode(ConnectWidgetEvent.MemberConnected.self, metadata)
+        case ("connect", "/connected/primaryAction"):
+            return try? decode(ConnectWidgetEvent.ConnectedPrimaryAction.self, metadata)
+        case ("connect", "/memberDeleted"):
+            return try? decode(ConnectWidgetEvent.MemberDeleted.self, metadata)
+        case ("connect", "/createMemberError"):
+            return try? decode(ConnectWidgetEvent.CreateMemberError.self, metadata)
+        case ("connect", "/memberStatusUpdate"):
+            return try? decode(ConnectWidgetEvent.MemberStatusUpdate.self, metadata)
+        case ("connect", "/oauthError"):
+            return try? decode(ConnectWidgetEvent.OAuthError.self, metadata)
+        case ("connect", "/oauthRequested"):
+            return try? decode(ConnectWidgetEvent.OAuthRequested.self, metadata)
+        case ("connect", "/stepChange"):
+            return try? decode(ConnectWidgetEvent.StepChange.self, metadata)
+        case ("connect", "/submitMFA"):
+            return try? decode(ConnectWidgetEvent.SubmitMFA.self, metadata)
+        case ("connect", "/updateCredentials"):
+            return try? decode(ConnectWidgetEvent.UpdateCredentials.self, metadata)
+        default: return .none
+        }
+    }
+}
+
+class PulseWidgetEventDispatcher: Dispatcher {
+    let delegate: PulseWidgetEventDelegate
+
+    init(_ delegate: PulseWidgetEventDelegate) {
+        self.delegate = delegate
+    }
+
+    func dispatch(_ url: URL) {}
+
+    func parse(_ url: URL) -> Event? {
+        guard let metadata = extractMetadata(url) else {
+            return .none
+        }
+
+        switch (url.host, url.path) {
+        case ("load", ""):
+            return try? decode(WidgetEvent.Load.self, metadata)
+        case ("ping", ""):
+            return try? decode(WidgetEvent.Ping.self, metadata)
+        case ("navigation", ""):
+            return try? decode(WidgetEvent.Navigation.self, metadata)
+        case ("focusTrap", ""):
+            return try? decode(WidgetEvent.FocusTrap.self, metadata)
+        case ("pulse", "/overdraftWarning/cta/transferFunds"):
+            return try? decode(PulseWidgetEvent.OverdraftWarningCtaTransferFunds.self, metadata)
+        default: return .none
+        }
+    }
 }
