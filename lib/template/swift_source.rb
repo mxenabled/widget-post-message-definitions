@@ -19,6 +19,13 @@ class Template::SwiftSource < Template::Base
     |        public var <%= payload_property_name(field) %>: <%= payload_property_type(post_message, field) %>
     |        <%- end -%>
     |        <%- end -%>
+    |
+    |        public static func == (lhs: <%= event_group_type_name(post_message) %>.<%= payload_type_name(post_message) %>, rhs: <%= event_group_type_name(post_message) %>.<%= payload_type_name(post_message) %>) -> Bool {
+    |            return true
+    |                <%- post_message.payload.each do |field| -%>
+    |                && lhs.<%= payload_property_name(field) %> == rhs.<%= payload_property_name(field) %>
+    |                <%- end -%>
+    |        }
     |    }
     |    <%- end -%>
     |}
@@ -37,6 +44,13 @@ class Template::SwiftSource < Template::Base
     |    <%- field.struct_fields.each do |field| -%>
     |    public let <%= payload_property_name(field) %>: <%= payload_property_type(post_message, field) %>
     |    <%- end -%>
+    |
+    |    public static func == (lhs: <%= payload_field_type_name(post_message, field) %>, rhs: <%= payload_field_type_name(post_message, field) %>) -> Bool {
+    |        return true
+    |            <%- field.struct_fields.each do |subfield| -%>
+    |            && lhs.<%= payload_property_name(subfield) %> == rhs.<%= payload_property_name(subfield) %>
+    |            <%- end -%>
+    |    }
     |}
     |<%- end -%>
     |<%- end -%>
@@ -44,7 +58,7 @@ class Template::SwiftSource < Template::Base
     |
     |/** Delegates **/
     |
-    |public protocol <%= delegate_group_type_name(generic_post_message_definitions.sample) %>: NSObjectProtocol {
+    |public protocol <%= delegate_group_type_name(generic_post_message_definitions.sample) %> {
     |    func widgetEvent(_ payload: Event)
     |<%- generic_post_message_definitions.each do |post_message| -%>
     |    func widgetEvent(_ payload: <%= event_group_type_name(post_message) %>.<%= payload_type_name(post_message) %>)
@@ -57,7 +71,7 @@ class Template::SwiftSource < Template::Base
     |}
     |
     |public extension <%= delegate_group_type_name(generic_post_message_definitions.sample) %> {
-    |    func widgetEvent(_ payload: Event) {}
+    |    func widgetEvent(_: Event) {}
     |<%- generic_post_message_definitions.each do |post_message| -%>
     |    func widgetEvent(_: <%= event_group_type_name(post_message) %>.<%= payload_type_name(post_message) %>) {}
     |<%- end -%>
@@ -94,7 +108,7 @@ class Template::SwiftSource < Template::Base
     |            .value?.data(using: .utf8)
     |    }
     |
-    |    func decode<T>(_ typ: T.Type, _ data: Data) throws -> T where T: Decodable {
+    |    func decode<T: Decodable>(_ typ: T.Type, _ data: Data) throws -> T {
     |        let decoder = JSONDecoder()
     |        decoder.keyDecodingStrategy = .convertFromSnakeCase
     |        return try decoder.decode(typ, from: data)
