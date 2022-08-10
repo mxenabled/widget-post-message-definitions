@@ -59,6 +59,23 @@ class DispatchingEventsToDelegateTests: QuickSpec {
             dispatcher.dispatch(url("connect/oauthError", payload))
             verify(delegate.widgetEvent(any(where: { $0 == payload }))).wasCalled()
         }
+
+        context("PulseWidgetEventDelegate") {
+            var delegate: PulseWidgetEventDelegateMock!
+            var dispatcher: PulseWidgetEventDispatcher!
+
+            beforeEach {
+                delegate = mock(PulseWidgetEventDelegate.self)
+                dispatcher = PulseWidgetEventDispatcher(delegate)
+            }
+
+            it("is able to dispatch an event with a complex path") {
+                let payload = PulseWidgetEvent.OverdraftWarningCtaTransferFunds(accountGuid: "ACT-123",
+                                                                                amount: 321)
+                dispatcher.dispatch(url("pulse/overdraftWarning/cta/transferFunds", payload))
+                verify(delegate.widgetEvent(any(where: { $0 == payload }))).wasCalled()
+            }
+        }
     }
 }
 
