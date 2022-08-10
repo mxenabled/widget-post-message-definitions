@@ -1,6 +1,6 @@
 # Widget Post Message Definitions
 
-## Overview
+## Overviji
 
 This project defines and generates the Post Message handling code for our
 various Widget SDKs. The documentation for Post Messages and their payloads can
