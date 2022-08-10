@@ -15,6 +15,15 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - uses: actions/cache@v3
+      with:
+        path: packages/swift/.build
+        key: ${{ runner.os }}-spm-${{ hashFiles('packages/swift/Package.resolved') }}
+        restore-keys: |
+          ${{ runner.os }}-spm-
+
+    - run: swift build
+      working-directory: packages/swift
 
     - run: swift build
       working-directory: packages/swift
