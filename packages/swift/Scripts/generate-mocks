@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -eux
+
+swift build
+swift package describe --type json > .build/project.json
+
+.build/checkouts/mockingbird/mockingbird generate --project .build/project.json \
+    --outputs Tests/Generated/Mocks.swift \
+    --testbundle MXPostMessageDefinitionsTests \
+    --targets MXPostMessageDefinitions
