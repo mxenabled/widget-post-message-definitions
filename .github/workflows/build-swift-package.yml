@@ -25,5 +25,5 @@ jobs:
     - run: swift build
       working-directory: packages/swift
 
-    - run: swift build
+    - run: swift test
       working-directory: packages/swift
