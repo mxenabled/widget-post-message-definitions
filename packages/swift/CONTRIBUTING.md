@@ -14,9 +14,9 @@ are commands that you will need to know about:
 - `Scripts/generate-mocks` to re-generate mocks. See the [mocking in unit
   tests](#mocking-in-unit-tests) section below for additional information.
 
-As mentioned above, any changes that need to be done to the generated code in
-the `Sources` directory should be done by updating the definitions file or the
-template generator in [Widget Post Message
+Any changes that need to be done to the generated code in the `Sources`
+directory should be done by updating the definitions file or the template
+generator in [Widget Post Message
 Definitions](https://github.com/mxenabled/widget-post-message-definitions).
 
 
