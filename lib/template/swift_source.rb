@@ -21,10 +21,17 @@ class Template::SwiftSource < Template::Base
     |        <%- end -%>
     |
     |        public static func == (lhs: <%= event_group_type_name(post_message) %>.<%= payload_type_name(post_message) %>, rhs: <%= event_group_type_name(post_message) %>.<%= payload_type_name(post_message) %>) -> Bool {
+    |            <%- if post_message.payload.empty? -%>
     |            return true
-    |                <%- post_message.payload.each do |field| -%>
+    |            <%- else -%>
+    |            <%- post_message.payload.each do |field| -%>
+    |            <%- if field == post_message.payload.first -%>
+    |            return lhs.<%= payload_property_name(field) %> == rhs.<%= payload_property_name(field) %>
+    |            <%- else -%>
     |                && lhs.<%= payload_property_name(field) %> == rhs.<%= payload_property_name(field) %>
-    |                <%- end -%>
+    |            <%- end -%>
+    |            <%- end -%>
+    |            <%- end -%>
     |        }
     |    }
     |    <%- end -%>
@@ -46,10 +53,17 @@ class Template::SwiftSource < Template::Base
     |    <%- end -%>
     |
     |    public static func == (lhs: <%= payload_field_type_name(post_message, field) %>, rhs: <%= payload_field_type_name(post_message, field) %>) -> Bool {
+    |        <%- if field.struct_fields.empty? -%>
     |        return true
-    |            <%- field.struct_fields.each do |subfield| -%>
+    |        <%- else -%>
+    |        <%- field.struct_fields.each do |subfield| -%>
+    |        <%- if subfield == field.struct_fields.first -%>
+    |        return lhs.<%= payload_property_name(subfield) %> == rhs.<%= payload_property_name(subfield) %>
+    |        <%- else -%>
     |            && lhs.<%= payload_property_name(subfield) %> == rhs.<%= payload_property_name(subfield) %>
-    |            <%- end -%>
+    |        <%- end -%>
+    |        <%- end -%>
+    |        <%- end -%>
     |    }
     |}
     |<%- end -%>

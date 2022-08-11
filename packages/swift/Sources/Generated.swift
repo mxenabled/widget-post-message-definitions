@@ -25,8 +25,7 @@ public enum WidgetEvent {
         public var sessionGuid: String
 
         public static func == (lhs: WidgetEvent.Ping, rhs: WidgetEvent.Ping) -> Bool {
-            return true
-                && lhs.userGuid == rhs.userGuid
+            return lhs.userGuid == rhs.userGuid
                 && lhs.sessionGuid == rhs.sessionGuid
         }
     }
@@ -36,8 +35,7 @@ public enum WidgetEvent {
         public var didGoBack: Bool
 
         public static func == (lhs: WidgetEvent.Navigation, rhs: WidgetEvent.Navigation) -> Bool {
-            return true
-                && lhs.userGuid == rhs.userGuid
+            return lhs.userGuid == rhs.userGuid
                 && lhs.sessionGuid == rhs.sessionGuid
                 && lhs.didGoBack == rhs.didGoBack
         }
@@ -47,8 +45,7 @@ public enum WidgetEvent {
         public var sessionGuid: String
 
         public static func == (lhs: WidgetEvent.FocusTrap, rhs: WidgetEvent.FocusTrap) -> Bool {
-            return true
-                && lhs.userGuid == rhs.userGuid
+            return lhs.userGuid == rhs.userGuid
                 && lhs.sessionGuid == rhs.sessionGuid
         }
     }
@@ -59,8 +56,7 @@ public enum ClientEvent {
         public var url: String
 
         public static func == (lhs: ClientEvent.OAuthComplete, rhs: ClientEvent.OAuthComplete) -> Bool {
-            return true
-                && lhs.url == rhs.url
+            return lhs.url == rhs.url
         }
     }
 }
@@ -72,8 +68,7 @@ public enum ConnectWidgetEvent {
         public var initialStep: ConnectLoadedInitialStep
 
         public static func == (lhs: ConnectWidgetEvent.Loaded, rhs: ConnectWidgetEvent.Loaded) -> Bool {
-            return true
-                && lhs.userGuid == rhs.userGuid
+            return lhs.userGuid == rhs.userGuid
                 && lhs.sessionGuid == rhs.sessionGuid
                 && lhs.initialStep == rhs.initialStep
         }
@@ -84,8 +79,7 @@ public enum ConnectWidgetEvent {
         public var institution: ConnectEnterCredentialsInstitution
 
         public static func == (lhs: ConnectWidgetEvent.EnterCredentials, rhs: ConnectWidgetEvent.EnterCredentials) -> Bool {
-            return true
-                && lhs.userGuid == rhs.userGuid
+            return lhs.userGuid == rhs.userGuid
                 && lhs.sessionGuid == rhs.sessionGuid
                 && lhs.institution == rhs.institution
         }
@@ -96,8 +90,7 @@ public enum ConnectWidgetEvent {
         public var query: String
 
         public static func == (lhs: ConnectWidgetEvent.InstitutionSearch, rhs: ConnectWidgetEvent.InstitutionSearch) -> Bool {
-            return true
-                && lhs.userGuid == rhs.userGuid
+            return lhs.userGuid == rhs.userGuid
                 && lhs.sessionGuid == rhs.sessionGuid
                 && lhs.query == rhs.query
         }
@@ -111,8 +104,7 @@ public enum ConnectWidgetEvent {
         public var url: String
 
         public static func == (lhs: ConnectWidgetEvent.SelectedInstitution, rhs: ConnectWidgetEvent.SelectedInstitution) -> Bool {
-            return true
-                && lhs.userGuid == rhs.userGuid
+            return lhs.userGuid == rhs.userGuid
                 && lhs.sessionGuid == rhs.sessionGuid
                 && lhs.code == rhs.code
                 && lhs.guid == rhs.guid
@@ -126,8 +118,7 @@ public enum ConnectWidgetEvent {
         public var memberGuid: String
 
         public static func == (lhs: ConnectWidgetEvent.MemberConnected, rhs: ConnectWidgetEvent.MemberConnected) -> Bool {
-            return true
-                && lhs.userGuid == rhs.userGuid
+            return lhs.userGuid == rhs.userGuid
                 && lhs.sessionGuid == rhs.sessionGuid
                 && lhs.memberGuid == rhs.memberGuid
         }
@@ -137,8 +128,7 @@ public enum ConnectWidgetEvent {
         public var sessionGuid: String
 
         public static func == (lhs: ConnectWidgetEvent.ConnectedPrimaryAction, rhs: ConnectWidgetEvent.ConnectedPrimaryAction) -> Bool {
-            return true
-                && lhs.userGuid == rhs.userGuid
+            return lhs.userGuid == rhs.userGuid
                 && lhs.sessionGuid == rhs.sessionGuid
         }
     }
@@ -148,8 +138,7 @@ public enum ConnectWidgetEvent {
         public var memberGuid: String
 
         public static func == (lhs: ConnectWidgetEvent.MemberDeleted, rhs: ConnectWidgetEvent.MemberDeleted) -> Bool {
-            return true
-                && lhs.userGuid == rhs.userGuid
+            return lhs.userGuid == rhs.userGuid
                 && lhs.sessionGuid == rhs.sessionGuid
                 && lhs.memberGuid == rhs.memberGuid
         }
@@ -161,8 +150,7 @@ public enum ConnectWidgetEvent {
         public var institutionCode: String
 
         public static func == (lhs: ConnectWidgetEvent.CreateMemberError, rhs: ConnectWidgetEvent.CreateMemberError) -> Bool {
-            return true
-                && lhs.userGuid == rhs.userGuid
+            return lhs.userGuid == rhs.userGuid
                 && lhs.sessionGuid == rhs.sessionGuid
                 && lhs.institutionGuid == rhs.institutionGuid
                 && lhs.institutionCode == rhs.institutionCode
@@ -175,8 +163,7 @@ public enum ConnectWidgetEvent {
         public var connectionStatus: Double
 
         public static func == (lhs: ConnectWidgetEvent.MemberStatusUpdate, rhs: ConnectWidgetEvent.MemberStatusUpdate) -> Bool {
-            return true
-                && lhs.userGuid == rhs.userGuid
+            return lhs.userGuid == rhs.userGuid
                 && lhs.sessionGuid == rhs.sessionGuid
                 && lhs.memberGuid == rhs.memberGuid
                 && lhs.connectionStatus == rhs.connectionStatus
@@ -188,8 +175,7 @@ public enum ConnectWidgetEvent {
         public var memberGuid: String?
 
         public static func == (lhs: ConnectWidgetEvent.OAuthError, rhs: ConnectWidgetEvent.OAuthError) -> Bool {
-            return true
-                && lhs.userGuid == rhs.userGuid
+            return lhs.userGuid == rhs.userGuid
                 && lhs.sessionGuid == rhs.sessionGuid
                 && lhs.memberGuid == rhs.memberGuid
         }
@@ -201,8 +187,7 @@ public enum ConnectWidgetEvent {
         public var memberGuid: String
 
         public static func == (lhs: ConnectWidgetEvent.OAuthRequested, rhs: ConnectWidgetEvent.OAuthRequested) -> Bool {
-            return true
-                && lhs.userGuid == rhs.userGuid
+            return lhs.userGuid == rhs.userGuid
                 && lhs.sessionGuid == rhs.sessionGuid
                 && lhs.url == rhs.url
                 && lhs.memberGuid == rhs.memberGuid
@@ -215,8 +200,7 @@ public enum ConnectWidgetEvent {
         public var current: String
 
         public static func == (lhs: ConnectWidgetEvent.StepChange, rhs: ConnectWidgetEvent.StepChange) -> Bool {
-            return true
-                && lhs.userGuid == rhs.userGuid
+            return lhs.userGuid == rhs.userGuid
                 && lhs.sessionGuid == rhs.sessionGuid
                 && lhs.previous == rhs.previous
                 && lhs.current == rhs.current
@@ -228,8 +212,7 @@ public enum ConnectWidgetEvent {
         public var memberGuid: String
 
         public static func == (lhs: ConnectWidgetEvent.SubmitMFA, rhs: ConnectWidgetEvent.SubmitMFA) -> Bool {
-            return true
-                && lhs.userGuid == rhs.userGuid
+            return lhs.userGuid == rhs.userGuid
                 && lhs.sessionGuid == rhs.sessionGuid
                 && lhs.memberGuid == rhs.memberGuid
         }
@@ -241,8 +224,7 @@ public enum ConnectWidgetEvent {
         public var institution: ConnectUpdateCredentialsInstitution
 
         public static func == (lhs: ConnectWidgetEvent.UpdateCredentials, rhs: ConnectWidgetEvent.UpdateCredentials) -> Bool {
-            return true
-                && lhs.userGuid == rhs.userGuid
+            return lhs.userGuid == rhs.userGuid
                 && lhs.sessionGuid == rhs.sessionGuid
                 && lhs.memberGuid == rhs.memberGuid
                 && lhs.institution == rhs.institution
@@ -256,8 +238,7 @@ public enum PulseWidgetEvent {
         public var amount: Double
 
         public static func == (lhs: PulseWidgetEvent.OverdraftWarningCtaTransferFunds, rhs: PulseWidgetEvent.OverdraftWarningCtaTransferFunds) -> Bool {
-            return true
-                && lhs.accountGuid == rhs.accountGuid
+            return lhs.accountGuid == rhs.accountGuid
                 && lhs.amount == rhs.amount
         }
     }
@@ -268,8 +249,7 @@ public enum AccountEvent {
         public var guid: String
 
         public static func == (lhs: AccountEvent.Created, rhs: AccountEvent.Created) -> Bool {
-            return true
-                && lhs.guid == rhs.guid
+            return lhs.guid == rhs.guid
         }
     }
 }
@@ -289,8 +269,7 @@ public struct ConnectEnterCredentialsInstitution: Codable {
     public let guid: String
 
     public static func == (lhs: ConnectEnterCredentialsInstitution, rhs: ConnectEnterCredentialsInstitution) -> Bool {
-        return true
-            && lhs.code == rhs.code
+        return lhs.code == rhs.code
             && lhs.guid == rhs.guid
     }
 }
@@ -300,8 +279,7 @@ public struct ConnectUpdateCredentialsInstitution: Codable {
     public let guid: String
 
     public static func == (lhs: ConnectUpdateCredentialsInstitution, rhs: ConnectUpdateCredentialsInstitution) -> Bool {
-        return true
-            && lhs.code == rhs.code
+        return lhs.code == rhs.code
             && lhs.guid == rhs.guid
     }
 }
