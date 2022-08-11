@@ -98,10 +98,6 @@ func url<T: Encodable>(_ hostAndPath: String, _ metadata: T) -> URL {
     return URL(string: "mx://\(hostAndPath)?metadata=\(encode(metadata))")!
 }
 
-func encode(_ string: String) -> String {
-    return string.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-}
-
 func encode<T: Encodable>(_ value: T) -> String {
     let encoder = JSONEncoder()
     encoder.keyEncodingStrategy = .convertToSnakeCase
