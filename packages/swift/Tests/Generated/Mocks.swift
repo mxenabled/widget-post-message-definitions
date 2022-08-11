@@ -542,3 +542,182 @@ public final class ConnectWidgetEventDelegateMock: MXPostMessageDefinitions.Conn
 public func mock(_ type: MXPostMessageDefinitions.ConnectWidgetEventDelegate.Protocol, file: StaticString = #file, line: UInt = #line) -> ConnectWidgetEventDelegateMock {
   return ConnectWidgetEventDelegateMock(sourceLocation: Mockingbird.SourceLocation(file, line))
 }
+
+// MARK: - Mocked PulseWidgetEventDelegate
+public final class PulseWidgetEventDelegateMock: MXPostMessageDefinitions.PulseWidgetEventDelegate, Mockingbird.Mock {
+  typealias MockingbirdSupertype = MXPostMessageDefinitions.PulseWidgetEventDelegate
+  static let staticMock = Mockingbird.StaticMock()
+  public let mockingbirdContext = Mockingbird.Context(["generator_version": "0.19.2", "module_name": "MXPostMessageDefinitions"])
+
+  fileprivate init(sourceLocation: Mockingbird.SourceLocation) {
+    self.mockingbirdContext.sourceLocation = sourceLocation
+    PulseWidgetEventDelegateMock.staticMock.mockingbirdContext.sourceLocation = sourceLocation
+  }
+
+  // MARK: Mocked `widgetEvent`(_ `payload`: MXPostMessageDefinitions.Event)
+  public func `widgetEvent`(_ `payload`: MXPostMessageDefinitions.Event) -> Void {
+    return self.mockingbirdContext.mocking.didInvoke(Mockingbird.SwiftInvocation(selectorName: "`widgetEvent`(_ `payload`: MXPostMessageDefinitions.Event) -> Void", selectorType: Mockingbird.SelectorType.method, arguments: [Mockingbird.ArgumentMatcher(`payload`)], returnType: Swift.ObjectIdentifier((Void).self))) {
+      self.mockingbirdContext.recordInvocation($0)
+      let mkbImpl = self.mockingbirdContext.stubbing.implementation(for: $0)
+      if let mkbImpl = mkbImpl as? (MXPostMessageDefinitions.Event) -> Void { return mkbImpl(`payload`) }
+      if let mkbImpl = mkbImpl as? () -> Void { return mkbImpl() }
+      for mkbTargetBox in self.mockingbirdContext.proxy.targets(for: $0) {
+        switch mkbTargetBox.target {
+        case .super:
+          break
+        case .object(let mkbObject):
+          guard var mkbObject = mkbObject as? MockingbirdSupertype else { break }
+          let mkbValue: Void = mkbObject.`widgetEvent`(`payload`)
+          self.mockingbirdContext.proxy.updateTarget(&mkbObject, in: mkbTargetBox)
+          return mkbValue
+        }
+      }
+      if let mkbValue = self.mockingbirdContext.stubbing.defaultValueProvider.value.provideValue(for: (Void).self) { return mkbValue }
+      self.mockingbirdContext.stubbing.failTest(for: $0, at: self.mockingbirdContext.sourceLocation)
+    }
+  }
+
+  public func `widgetEvent`(_ `payload`: @autoclosure () -> MXPostMessageDefinitions.Event) -> Mockingbird.Mockable<Mockingbird.FunctionDeclaration, (MXPostMessageDefinitions.Event) -> Void, Void> {
+    return Mockingbird.Mockable<Mockingbird.FunctionDeclaration, (MXPostMessageDefinitions.Event) -> Void, Void>(mock: self, invocation: Mockingbird.SwiftInvocation(selectorName: "`widgetEvent`(_ `payload`: MXPostMessageDefinitions.Event) -> Void", selectorType: Mockingbird.SelectorType.method, arguments: [Mockingbird.resolve(`payload`)], returnType: Swift.ObjectIdentifier((Void).self)))
+  }
+
+  // MARK: Mocked `widgetEvent`(_ `payload`: MXPostMessageDefinitions.PulseWidgetEvent.OverdraftWarningCtaTransferFunds)
+  public func `widgetEvent`(_ `payload`: MXPostMessageDefinitions.PulseWidgetEvent.OverdraftWarningCtaTransferFunds) -> Void {
+    return self.mockingbirdContext.mocking.didInvoke(Mockingbird.SwiftInvocation(selectorName: "`widgetEvent`(_ `payload`: MXPostMessageDefinitions.PulseWidgetEvent.OverdraftWarningCtaTransferFunds) -> Void", selectorType: Mockingbird.SelectorType.method, arguments: [Mockingbird.ArgumentMatcher(`payload`)], returnType: Swift.ObjectIdentifier((Void).self))) {
+      self.mockingbirdContext.recordInvocation($0)
+      let mkbImpl = self.mockingbirdContext.stubbing.implementation(for: $0)
+      if let mkbImpl = mkbImpl as? (MXPostMessageDefinitions.PulseWidgetEvent.OverdraftWarningCtaTransferFunds) -> Void { return mkbImpl(`payload`) }
+      if let mkbImpl = mkbImpl as? () -> Void { return mkbImpl() }
+      for mkbTargetBox in self.mockingbirdContext.proxy.targets(for: $0) {
+        switch mkbTargetBox.target {
+        case .super:
+          break
+        case .object(let mkbObject):
+          guard var mkbObject = mkbObject as? MockingbirdSupertype else { break }
+          let mkbValue: Void = mkbObject.`widgetEvent`(`payload`)
+          self.mockingbirdContext.proxy.updateTarget(&mkbObject, in: mkbTargetBox)
+          return mkbValue
+        }
+      }
+      if let mkbValue = self.mockingbirdContext.stubbing.defaultValueProvider.value.provideValue(for: (Void).self) { return mkbValue }
+      self.mockingbirdContext.stubbing.failTest(for: $0, at: self.mockingbirdContext.sourceLocation)
+    }
+  }
+
+  public func `widgetEvent`(_ `payload`: @autoclosure () -> MXPostMessageDefinitions.PulseWidgetEvent.OverdraftWarningCtaTransferFunds) -> Mockingbird.Mockable<Mockingbird.FunctionDeclaration, (MXPostMessageDefinitions.PulseWidgetEvent.OverdraftWarningCtaTransferFunds) -> Void, Void> {
+    return Mockingbird.Mockable<Mockingbird.FunctionDeclaration, (MXPostMessageDefinitions.PulseWidgetEvent.OverdraftWarningCtaTransferFunds) -> Void, Void>(mock: self, invocation: Mockingbird.SwiftInvocation(selectorName: "`widgetEvent`(_ `payload`: MXPostMessageDefinitions.PulseWidgetEvent.OverdraftWarningCtaTransferFunds) -> Void", selectorType: Mockingbird.SelectorType.method, arguments: [Mockingbird.resolve(`payload`)], returnType: Swift.ObjectIdentifier((Void).self)))
+  }
+
+  // MARK: Mocked `widgetEvent`(_ `payload`: MXPostMessageDefinitions.WidgetEvent.FocusTrap)
+  public func `widgetEvent`(_ `payload`: MXPostMessageDefinitions.WidgetEvent.FocusTrap) -> Void {
+    return self.mockingbirdContext.mocking.didInvoke(Mockingbird.SwiftInvocation(selectorName: "`widgetEvent`(_ `payload`: MXPostMessageDefinitions.WidgetEvent.FocusTrap) -> Void", selectorType: Mockingbird.SelectorType.method, arguments: [Mockingbird.ArgumentMatcher(`payload`)], returnType: Swift.ObjectIdentifier((Void).self))) {
+      self.mockingbirdContext.recordInvocation($0)
+      let mkbImpl = self.mockingbirdContext.stubbing.implementation(for: $0)
+      if let mkbImpl = mkbImpl as? (MXPostMessageDefinitions.WidgetEvent.FocusTrap) -> Void { return mkbImpl(`payload`) }
+      if let mkbImpl = mkbImpl as? () -> Void { return mkbImpl() }
+      for mkbTargetBox in self.mockingbirdContext.proxy.targets(for: $0) {
+        switch mkbTargetBox.target {
+        case .super:
+          break
+        case .object(let mkbObject):
+          guard var mkbObject = mkbObject as? MockingbirdSupertype else { break }
+          let mkbValue: Void = mkbObject.`widgetEvent`(`payload`)
+          self.mockingbirdContext.proxy.updateTarget(&mkbObject, in: mkbTargetBox)
+          return mkbValue
+        }
+      }
+      if let mkbValue = self.mockingbirdContext.stubbing.defaultValueProvider.value.provideValue(for: (Void).self) { return mkbValue }
+      self.mockingbirdContext.stubbing.failTest(for: $0, at: self.mockingbirdContext.sourceLocation)
+    }
+  }
+
+  public func `widgetEvent`(_ `payload`: @autoclosure () -> MXPostMessageDefinitions.WidgetEvent.FocusTrap) -> Mockingbird.Mockable<Mockingbird.FunctionDeclaration, (MXPostMessageDefinitions.WidgetEvent.FocusTrap) -> Void, Void> {
+    return Mockingbird.Mockable<Mockingbird.FunctionDeclaration, (MXPostMessageDefinitions.WidgetEvent.FocusTrap) -> Void, Void>(mock: self, invocation: Mockingbird.SwiftInvocation(selectorName: "`widgetEvent`(_ `payload`: MXPostMessageDefinitions.WidgetEvent.FocusTrap) -> Void", selectorType: Mockingbird.SelectorType.method, arguments: [Mockingbird.resolve(`payload`)], returnType: Swift.ObjectIdentifier((Void).self)))
+  }
+
+  // MARK: Mocked `widgetEvent`(_ `payload`: MXPostMessageDefinitions.WidgetEvent.Load)
+  public func `widgetEvent`(_ `payload`: MXPostMessageDefinitions.WidgetEvent.Load) -> Void {
+    return self.mockingbirdContext.mocking.didInvoke(Mockingbird.SwiftInvocation(selectorName: "`widgetEvent`(_ `payload`: MXPostMessageDefinitions.WidgetEvent.Load) -> Void", selectorType: Mockingbird.SelectorType.method, arguments: [Mockingbird.ArgumentMatcher(`payload`)], returnType: Swift.ObjectIdentifier((Void).self))) {
+      self.mockingbirdContext.recordInvocation($0)
+      let mkbImpl = self.mockingbirdContext.stubbing.implementation(for: $0)
+      if let mkbImpl = mkbImpl as? (MXPostMessageDefinitions.WidgetEvent.Load) -> Void { return mkbImpl(`payload`) }
+      if let mkbImpl = mkbImpl as? () -> Void { return mkbImpl() }
+      for mkbTargetBox in self.mockingbirdContext.proxy.targets(for: $0) {
+        switch mkbTargetBox.target {
+        case .super:
+          break
+        case .object(let mkbObject):
+          guard var mkbObject = mkbObject as? MockingbirdSupertype else { break }
+          let mkbValue: Void = mkbObject.`widgetEvent`(`payload`)
+          self.mockingbirdContext.proxy.updateTarget(&mkbObject, in: mkbTargetBox)
+          return mkbValue
+        }
+      }
+      if let mkbValue = self.mockingbirdContext.stubbing.defaultValueProvider.value.provideValue(for: (Void).self) { return mkbValue }
+      self.mockingbirdContext.stubbing.failTest(for: $0, at: self.mockingbirdContext.sourceLocation)
+    }
+  }
+
+  public func `widgetEvent`(_ `payload`: @autoclosure () -> MXPostMessageDefinitions.WidgetEvent.Load) -> Mockingbird.Mockable<Mockingbird.FunctionDeclaration, (MXPostMessageDefinitions.WidgetEvent.Load) -> Void, Void> {
+    return Mockingbird.Mockable<Mockingbird.FunctionDeclaration, (MXPostMessageDefinitions.WidgetEvent.Load) -> Void, Void>(mock: self, invocation: Mockingbird.SwiftInvocation(selectorName: "`widgetEvent`(_ `payload`: MXPostMessageDefinitions.WidgetEvent.Load) -> Void", selectorType: Mockingbird.SelectorType.method, arguments: [Mockingbird.resolve(`payload`)], returnType: Swift.ObjectIdentifier((Void).self)))
+  }
+
+  // MARK: Mocked `widgetEvent`(_ `payload`: MXPostMessageDefinitions.WidgetEvent.Navigation)
+  public func `widgetEvent`(_ `payload`: MXPostMessageDefinitions.WidgetEvent.Navigation) -> Void {
+    return self.mockingbirdContext.mocking.didInvoke(Mockingbird.SwiftInvocation(selectorName: "`widgetEvent`(_ `payload`: MXPostMessageDefinitions.WidgetEvent.Navigation) -> Void", selectorType: Mockingbird.SelectorType.method, arguments: [Mockingbird.ArgumentMatcher(`payload`)], returnType: Swift.ObjectIdentifier((Void).self))) {
+      self.mockingbirdContext.recordInvocation($0)
+      let mkbImpl = self.mockingbirdContext.stubbing.implementation(for: $0)
+      if let mkbImpl = mkbImpl as? (MXPostMessageDefinitions.WidgetEvent.Navigation) -> Void { return mkbImpl(`payload`) }
+      if let mkbImpl = mkbImpl as? () -> Void { return mkbImpl() }
+      for mkbTargetBox in self.mockingbirdContext.proxy.targets(for: $0) {
+        switch mkbTargetBox.target {
+        case .super:
+          break
+        case .object(let mkbObject):
+          guard var mkbObject = mkbObject as? MockingbirdSupertype else { break }
+          let mkbValue: Void = mkbObject.`widgetEvent`(`payload`)
+          self.mockingbirdContext.proxy.updateTarget(&mkbObject, in: mkbTargetBox)
+          return mkbValue
+        }
+      }
+      if let mkbValue = self.mockingbirdContext.stubbing.defaultValueProvider.value.provideValue(for: (Void).self) { return mkbValue }
+      self.mockingbirdContext.stubbing.failTest(for: $0, at: self.mockingbirdContext.sourceLocation)
+    }
+  }
+
+  public func `widgetEvent`(_ `payload`: @autoclosure () -> MXPostMessageDefinitions.WidgetEvent.Navigation) -> Mockingbird.Mockable<Mockingbird.FunctionDeclaration, (MXPostMessageDefinitions.WidgetEvent.Navigation) -> Void, Void> {
+    return Mockingbird.Mockable<Mockingbird.FunctionDeclaration, (MXPostMessageDefinitions.WidgetEvent.Navigation) -> Void, Void>(mock: self, invocation: Mockingbird.SwiftInvocation(selectorName: "`widgetEvent`(_ `payload`: MXPostMessageDefinitions.WidgetEvent.Navigation) -> Void", selectorType: Mockingbird.SelectorType.method, arguments: [Mockingbird.resolve(`payload`)], returnType: Swift.ObjectIdentifier((Void).self)))
+  }
+
+  // MARK: Mocked `widgetEvent`(_ `payload`: MXPostMessageDefinitions.WidgetEvent.Ping)
+  public func `widgetEvent`(_ `payload`: MXPostMessageDefinitions.WidgetEvent.Ping) -> Void {
+    return self.mockingbirdContext.mocking.didInvoke(Mockingbird.SwiftInvocation(selectorName: "`widgetEvent`(_ `payload`: MXPostMessageDefinitions.WidgetEvent.Ping) -> Void", selectorType: Mockingbird.SelectorType.method, arguments: [Mockingbird.ArgumentMatcher(`payload`)], returnType: Swift.ObjectIdentifier((Void).self))) {
+      self.mockingbirdContext.recordInvocation($0)
+      let mkbImpl = self.mockingbirdContext.stubbing.implementation(for: $0)
+      if let mkbImpl = mkbImpl as? (MXPostMessageDefinitions.WidgetEvent.Ping) -> Void { return mkbImpl(`payload`) }
+      if let mkbImpl = mkbImpl as? () -> Void { return mkbImpl() }
+      for mkbTargetBox in self.mockingbirdContext.proxy.targets(for: $0) {
+        switch mkbTargetBox.target {
+        case .super:
+          break
+        case .object(let mkbObject):
+          guard var mkbObject = mkbObject as? MockingbirdSupertype else { break }
+          let mkbValue: Void = mkbObject.`widgetEvent`(`payload`)
+          self.mockingbirdContext.proxy.updateTarget(&mkbObject, in: mkbTargetBox)
+          return mkbValue
+        }
+      }
+      if let mkbValue = self.mockingbirdContext.stubbing.defaultValueProvider.value.provideValue(for: (Void).self) { return mkbValue }
+      self.mockingbirdContext.stubbing.failTest(for: $0, at: self.mockingbirdContext.sourceLocation)
+    }
+  }
+
+  public func `widgetEvent`(_ `payload`: @autoclosure () -> MXPostMessageDefinitions.WidgetEvent.Ping) -> Mockingbird.Mockable<Mockingbird.FunctionDeclaration, (MXPostMessageDefinitions.WidgetEvent.Ping) -> Void, Void> {
+    return Mockingbird.Mockable<Mockingbird.FunctionDeclaration, (MXPostMessageDefinitions.WidgetEvent.Ping) -> Void, Void>(mock: self, invocation: Mockingbird.SwiftInvocation(selectorName: "`widgetEvent`(_ `payload`: MXPostMessageDefinitions.WidgetEvent.Ping) -> Void", selectorType: Mockingbird.SelectorType.method, arguments: [Mockingbird.resolve(`payload`)], returnType: Swift.ObjectIdentifier((Void).self)))
+  }
+}
+
+/// Returns a concrete mock of `PulseWidgetEventDelegate`.
+public func mock(_ type: MXPostMessageDefinitions.PulseWidgetEventDelegate.Protocol, file: StaticString = #file, line: UInt = #line) -> PulseWidgetEventDelegateMock {
+  return PulseWidgetEventDelegateMock(sourceLocation: Mockingbird.SourceLocation(file, line))
+}
