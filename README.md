@@ -81,3 +81,4 @@ Refer to [CONTRIBUTING.md](/CONTRIBUTING.md) for details.
 
 [![Build Ruby Generator](https://github.com/mxenabled/widget-post-message-definitions/actions/workflows/build-ruby-generator.yml/badge.svg)](https://github.com/mxenabled/widget-post-message-definitions/actions/workflows/build-ruby-generator.yml)
 [![Build TypeScript Package](https://github.com/mxenabled/widget-post-message-definitions/actions/workflows/build-typescript-package.yml/badge.svg)](https://github.com/mxenabled/widget-post-message-definitions/actions/workflows/build-typescript-package.yml)
+[![Build Swift Package](https://github.com/mxenabled/widget-post-message-definitions/actions/workflows/build-swift-package.yml/badge.svg)](https://github.com/mxenabled/widget-post-message-definitions/actions/workflows/build-swift-package.yml)
