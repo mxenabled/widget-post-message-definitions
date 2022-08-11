@@ -41,7 +41,7 @@ class PostMessageDefinition
 
     # @return [Array<PayloadField>]
     def struct_fields
-      type.map do |(name, type)|
+      @struct_fields ||= type.map do |(name, type)|
         self.class.new(name, type)
       end
     end

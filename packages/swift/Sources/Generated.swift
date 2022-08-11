@@ -15,25 +15,49 @@ public protocol Event: Codable {}
 
 public enum WidgetEvent {
     public struct Load: Event {
+
+        public static func == (lhs: WidgetEvent.Load, rhs: WidgetEvent.Load) -> Bool {
+            return true
+        }
     }
     public struct Ping: Event {
         public var userGuid: String
         public var sessionGuid: String
+
+        public static func == (lhs: WidgetEvent.Ping, rhs: WidgetEvent.Ping) -> Bool {
+            return lhs.userGuid == rhs.userGuid
+                && lhs.sessionGuid == rhs.sessionGuid
+        }
     }
     public struct Navigation: Event {
         public var userGuid: String
         public var sessionGuid: String
         public var didGoBack: Bool
+
+        public static func == (lhs: WidgetEvent.Navigation, rhs: WidgetEvent.Navigation) -> Bool {
+            return lhs.userGuid == rhs.userGuid
+                && lhs.sessionGuid == rhs.sessionGuid
+                && lhs.didGoBack == rhs.didGoBack
+        }
     }
     public struct FocusTrap: Event {
         public var userGuid: String
         public var sessionGuid: String
+
+        public static func == (lhs: WidgetEvent.FocusTrap, rhs: WidgetEvent.FocusTrap) -> Bool {
+            return lhs.userGuid == rhs.userGuid
+                && lhs.sessionGuid == rhs.sessionGuid
+        }
     }
 }
 
 public enum ClientEvent {
     public struct OAuthComplete: Event {
         public var url: String
+
+        public static func == (lhs: ClientEvent.OAuthComplete, rhs: ClientEvent.OAuthComplete) -> Bool {
+            return lhs.url == rhs.url
+        }
     }
 }
 
@@ -42,16 +66,34 @@ public enum ConnectWidgetEvent {
         public var userGuid: String
         public var sessionGuid: String
         public var initialStep: ConnectLoadedInitialStep
+
+        public static func == (lhs: ConnectWidgetEvent.Loaded, rhs: ConnectWidgetEvent.Loaded) -> Bool {
+            return lhs.userGuid == rhs.userGuid
+                && lhs.sessionGuid == rhs.sessionGuid
+                && lhs.initialStep == rhs.initialStep
+        }
     }
     public struct EnterCredentials: Event {
         public var userGuid: String
         public var sessionGuid: String
         public var institution: ConnectEnterCredentialsInstitution
+
+        public static func == (lhs: ConnectWidgetEvent.EnterCredentials, rhs: ConnectWidgetEvent.EnterCredentials) -> Bool {
+            return lhs.userGuid == rhs.userGuid
+                && lhs.sessionGuid == rhs.sessionGuid
+                && lhs.institution == rhs.institution
+        }
     }
     public struct InstitutionSearch: Event {
         public var userGuid: String
         public var sessionGuid: String
         public var query: String
+
+        public static func == (lhs: ConnectWidgetEvent.InstitutionSearch, rhs: ConnectWidgetEvent.InstitutionSearch) -> Bool {
+            return lhs.userGuid == rhs.userGuid
+                && lhs.sessionGuid == rhs.sessionGuid
+                && lhs.query == rhs.query
+        }
     }
     public struct SelectedInstitution: Event {
         public var userGuid: String
@@ -60,60 +102,133 @@ public enum ConnectWidgetEvent {
         public var guid: String
         public var name: String
         public var url: String
+
+        public static func == (lhs: ConnectWidgetEvent.SelectedInstitution, rhs: ConnectWidgetEvent.SelectedInstitution) -> Bool {
+            return lhs.userGuid == rhs.userGuid
+                && lhs.sessionGuid == rhs.sessionGuid
+                && lhs.code == rhs.code
+                && lhs.guid == rhs.guid
+                && lhs.name == rhs.name
+                && lhs.url == rhs.url
+        }
     }
     public struct MemberConnected: Event {
         public var userGuid: String
         public var sessionGuid: String
         public var memberGuid: String
+
+        public static func == (lhs: ConnectWidgetEvent.MemberConnected, rhs: ConnectWidgetEvent.MemberConnected) -> Bool {
+            return lhs.userGuid == rhs.userGuid
+                && lhs.sessionGuid == rhs.sessionGuid
+                && lhs.memberGuid == rhs.memberGuid
+        }
     }
     public struct ConnectedPrimaryAction: Event {
         public var userGuid: String
         public var sessionGuid: String
+
+        public static func == (lhs: ConnectWidgetEvent.ConnectedPrimaryAction, rhs: ConnectWidgetEvent.ConnectedPrimaryAction) -> Bool {
+            return lhs.userGuid == rhs.userGuid
+                && lhs.sessionGuid == rhs.sessionGuid
+        }
     }
     public struct MemberDeleted: Event {
         public var userGuid: String
         public var sessionGuid: String
         public var memberGuid: String
+
+        public static func == (lhs: ConnectWidgetEvent.MemberDeleted, rhs: ConnectWidgetEvent.MemberDeleted) -> Bool {
+            return lhs.userGuid == rhs.userGuid
+                && lhs.sessionGuid == rhs.sessionGuid
+                && lhs.memberGuid == rhs.memberGuid
+        }
     }
     public struct CreateMemberError: Event {
         public var userGuid: String
         public var sessionGuid: String
         public var institutionGuid: String
         public var institutionCode: String
+
+        public static func == (lhs: ConnectWidgetEvent.CreateMemberError, rhs: ConnectWidgetEvent.CreateMemberError) -> Bool {
+            return lhs.userGuid == rhs.userGuid
+                && lhs.sessionGuid == rhs.sessionGuid
+                && lhs.institutionGuid == rhs.institutionGuid
+                && lhs.institutionCode == rhs.institutionCode
+        }
     }
     public struct MemberStatusUpdate: Event {
         public var userGuid: String
         public var sessionGuid: String
         public var memberGuid: String
         public var connectionStatus: Double
+
+        public static func == (lhs: ConnectWidgetEvent.MemberStatusUpdate, rhs: ConnectWidgetEvent.MemberStatusUpdate) -> Bool {
+            return lhs.userGuid == rhs.userGuid
+                && lhs.sessionGuid == rhs.sessionGuid
+                && lhs.memberGuid == rhs.memberGuid
+                && lhs.connectionStatus == rhs.connectionStatus
+        }
     }
     public struct OAuthError: Event {
         public var userGuid: String
         public var sessionGuid: String
         public var memberGuid: String?
+
+        public static func == (lhs: ConnectWidgetEvent.OAuthError, rhs: ConnectWidgetEvent.OAuthError) -> Bool {
+            return lhs.userGuid == rhs.userGuid
+                && lhs.sessionGuid == rhs.sessionGuid
+                && lhs.memberGuid == rhs.memberGuid
+        }
     }
     public struct OAuthRequested: Event {
         public var userGuid: String
         public var sessionGuid: String
         public var url: String
         public var memberGuid: String
+
+        public static func == (lhs: ConnectWidgetEvent.OAuthRequested, rhs: ConnectWidgetEvent.OAuthRequested) -> Bool {
+            return lhs.userGuid == rhs.userGuid
+                && lhs.sessionGuid == rhs.sessionGuid
+                && lhs.url == rhs.url
+                && lhs.memberGuid == rhs.memberGuid
+        }
     }
     public struct StepChange: Event {
         public var userGuid: String
         public var sessionGuid: String
         public var previous: String
         public var current: String
+
+        public static func == (lhs: ConnectWidgetEvent.StepChange, rhs: ConnectWidgetEvent.StepChange) -> Bool {
+            return lhs.userGuid == rhs.userGuid
+                && lhs.sessionGuid == rhs.sessionGuid
+                && lhs.previous == rhs.previous
+                && lhs.current == rhs.current
+        }
     }
     public struct SubmitMFA: Event {
         public var userGuid: String
         public var sessionGuid: String
         public var memberGuid: String
+
+        public static func == (lhs: ConnectWidgetEvent.SubmitMFA, rhs: ConnectWidgetEvent.SubmitMFA) -> Bool {
+            return lhs.userGuid == rhs.userGuid
+                && lhs.sessionGuid == rhs.sessionGuid
+                && lhs.memberGuid == rhs.memberGuid
+        }
     }
     public struct UpdateCredentials: Event {
         public var userGuid: String
         public var sessionGuid: String
         public var memberGuid: String
         public var institution: ConnectUpdateCredentialsInstitution
+
+        public static func == (lhs: ConnectWidgetEvent.UpdateCredentials, rhs: ConnectWidgetEvent.UpdateCredentials) -> Bool {
+            return lhs.userGuid == rhs.userGuid
+                && lhs.sessionGuid == rhs.sessionGuid
+                && lhs.memberGuid == rhs.memberGuid
+                && lhs.institution == rhs.institution
+        }
     }
 }
 
@@ -121,12 +236,21 @@ public enum PulseWidgetEvent {
     public struct OverdraftWarningCtaTransferFunds: Event {
         public var accountGuid: String
         public var amount: Double
+
+        public static func == (lhs: PulseWidgetEvent.OverdraftWarningCtaTransferFunds, rhs: PulseWidgetEvent.OverdraftWarningCtaTransferFunds) -> Bool {
+            return lhs.accountGuid == rhs.accountGuid
+                && lhs.amount == rhs.amount
+        }
     }
 }
 
 public enum AccountEvent {
     public struct Created: Event {
         public var guid: String
+
+        public static func == (lhs: AccountEvent.Created, rhs: AccountEvent.Created) -> Bool {
+            return lhs.guid == rhs.guid
+        }
     }
 }
 
@@ -143,16 +267,26 @@ public enum ConnectLoadedInitialStep: String, Codable {
 public struct ConnectEnterCredentialsInstitution: Codable {
     public let code: String
     public let guid: String
+
+    public static func == (lhs: ConnectEnterCredentialsInstitution, rhs: ConnectEnterCredentialsInstitution) -> Bool {
+        return lhs.code == rhs.code
+            && lhs.guid == rhs.guid
+    }
 }
 
 public struct ConnectUpdateCredentialsInstitution: Codable {
     public let code: String
     public let guid: String
+
+    public static func == (lhs: ConnectUpdateCredentialsInstitution, rhs: ConnectUpdateCredentialsInstitution) -> Bool {
+        return lhs.code == rhs.code
+            && lhs.guid == rhs.guid
+    }
 }
 
 /** Delegates **/
 
-public protocol WidgetEventDelegate: NSObjectProtocol {
+public protocol WidgetEventDelegate {
     func widgetEvent(_ payload: Event)
     func widgetEvent(_ payload: WidgetEvent.Load)
     func widgetEvent(_ payload: WidgetEvent.Ping)
@@ -161,7 +295,7 @@ public protocol WidgetEventDelegate: NSObjectProtocol {
 }
 
 public extension WidgetEventDelegate {
-    func widgetEvent(_ payload: Event) {}
+    func widgetEvent(_: Event) {}
     func widgetEvent(_: WidgetEvent.Load) {}
     func widgetEvent(_: WidgetEvent.Ping) {}
     func widgetEvent(_: WidgetEvent.Navigation) {}
@@ -223,7 +357,7 @@ extension Dispatcher {
             .value?.data(using: .utf8)
     }
 
-    func decode<T>(_ typ: T.Type, _ data: Data) throws -> T where T: Decodable {
+    func decode<T: Decodable>(_ typ: T.Type, _ data: Data) throws -> T {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         return try decoder.decode(typ, from: data)
