@@ -28,8 +28,8 @@ class DispatchingEventsToDelegateTests: QuickSpec {
 
             context("when the post message event is invalid and cannot be parsed") {
                 it("calls the generic widgetEvent handler but not the event specific handler") {
-                    dispatcher.dispatch(url("connect/institutionSearch", "badbadbad"))
-                    verify(delegate.widgetEvent(URL(string: "mx://connect/institutionSearch?metadata=%22badbadbad%22")!)).wasCalled()
+                    dispatcher.dispatch(url("connect/institutionSearch", "badToTheBone"))
+                    verify(delegate.widgetEvent(URL(string: "mx://connect/institutionSearch?metadata=%22badToTheBone%22")!)).wasCalled()
                     verify(delegate.widgetEvent(any(ConnectWidgetEvent.InstitutionSearch.self))).wasNeverCalled()
                 }
             }
