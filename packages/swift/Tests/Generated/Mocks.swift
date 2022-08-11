@@ -402,6 +402,33 @@ public final class ConnectWidgetEventDelegateMock: MXPostMessageDefinitions.Conn
     return Mockingbird.Mockable<Mockingbird.FunctionDeclaration, (MXPostMessageDefinitions.ConnectWidgetEvent.UpdateCredentials) -> Void, Void>(mock: self, invocation: Mockingbird.SwiftInvocation(selectorName: "`widgetEvent`(_ `payload`: MXPostMessageDefinitions.ConnectWidgetEvent.UpdateCredentials) -> Void", selectorType: Mockingbird.SelectorType.method, arguments: [Mockingbird.resolve(`payload`)], returnType: Swift.ObjectIdentifier((Void).self)))
   }
 
+  // MARK: Mocked `widgetEvent`(_ `error`: MXPostMessageDefinitions.EventError)
+  public func `widgetEvent`(_ `error`: MXPostMessageDefinitions.EventError) -> Void {
+    return self.mockingbirdContext.mocking.didInvoke(Mockingbird.SwiftInvocation(selectorName: "`widgetEvent`(_ `error`: MXPostMessageDefinitions.EventError) -> Void", selectorType: Mockingbird.SelectorType.method, arguments: [Mockingbird.ArgumentMatcher(`error`)], returnType: Swift.ObjectIdentifier((Void).self))) {
+      self.mockingbirdContext.recordInvocation($0)
+      let mkbImpl = self.mockingbirdContext.stubbing.implementation(for: $0)
+      if let mkbImpl = mkbImpl as? (MXPostMessageDefinitions.EventError) -> Void { return mkbImpl(`error`) }
+      if let mkbImpl = mkbImpl as? () -> Void { return mkbImpl() }
+      for mkbTargetBox in self.mockingbirdContext.proxy.targets(for: $0) {
+        switch mkbTargetBox.target {
+        case .super:
+          break
+        case .object(let mkbObject):
+          guard var mkbObject = mkbObject as? MockingbirdSupertype else { break }
+          let mkbValue: Void = mkbObject.`widgetEvent`(`error`)
+          self.mockingbirdContext.proxy.updateTarget(&mkbObject, in: mkbTargetBox)
+          return mkbValue
+        }
+      }
+      if let mkbValue = self.mockingbirdContext.stubbing.defaultValueProvider.value.provideValue(for: (Void).self) { return mkbValue }
+      self.mockingbirdContext.stubbing.failTest(for: $0, at: self.mockingbirdContext.sourceLocation)
+    }
+  }
+
+  public func `widgetEvent`(_ `error`: @autoclosure () -> MXPostMessageDefinitions.EventError) -> Mockingbird.Mockable<Mockingbird.FunctionDeclaration, (MXPostMessageDefinitions.EventError) -> Void, Void> {
+    return Mockingbird.Mockable<Mockingbird.FunctionDeclaration, (MXPostMessageDefinitions.EventError) -> Void, Void>(mock: self, invocation: Mockingbird.SwiftInvocation(selectorName: "`widgetEvent`(_ `error`: MXPostMessageDefinitions.EventError) -> Void", selectorType: Mockingbird.SelectorType.method, arguments: [Mockingbird.resolve(`error`)], returnType: Swift.ObjectIdentifier((Void).self)))
+  }
+
   // MARK: Mocked `widgetEvent`(_ `payload`: MXPostMessageDefinitions.WidgetEvent.FocusTrap)
   public func `widgetEvent`(_ `payload`: MXPostMessageDefinitions.WidgetEvent.FocusTrap) -> Void {
     return self.mockingbirdContext.mocking.didInvoke(Mockingbird.SwiftInvocation(selectorName: "`widgetEvent`(_ `payload`: MXPostMessageDefinitions.WidgetEvent.FocusTrap) -> Void", selectorType: Mockingbird.SelectorType.method, arguments: [Mockingbird.ArgumentMatcher(`payload`)], returnType: Swift.ObjectIdentifier((Void).self))) {
@@ -552,6 +579,33 @@ public final class PulseWidgetEventDelegateMock: MXPostMessageDefinitions.PulseW
   fileprivate init(sourceLocation: Mockingbird.SourceLocation) {
     self.mockingbirdContext.sourceLocation = sourceLocation
     PulseWidgetEventDelegateMock.staticMock.mockingbirdContext.sourceLocation = sourceLocation
+  }
+
+  // MARK: Mocked `widgetEvent`(_ `error`: MXPostMessageDefinitions.EventError)
+  public func `widgetEvent`(_ `error`: MXPostMessageDefinitions.EventError) -> Void {
+    return self.mockingbirdContext.mocking.didInvoke(Mockingbird.SwiftInvocation(selectorName: "`widgetEvent`(_ `error`: MXPostMessageDefinitions.EventError) -> Void", selectorType: Mockingbird.SelectorType.method, arguments: [Mockingbird.ArgumentMatcher(`error`)], returnType: Swift.ObjectIdentifier((Void).self))) {
+      self.mockingbirdContext.recordInvocation($0)
+      let mkbImpl = self.mockingbirdContext.stubbing.implementation(for: $0)
+      if let mkbImpl = mkbImpl as? (MXPostMessageDefinitions.EventError) -> Void { return mkbImpl(`error`) }
+      if let mkbImpl = mkbImpl as? () -> Void { return mkbImpl() }
+      for mkbTargetBox in self.mockingbirdContext.proxy.targets(for: $0) {
+        switch mkbTargetBox.target {
+        case .super:
+          break
+        case .object(let mkbObject):
+          guard var mkbObject = mkbObject as? MockingbirdSupertype else { break }
+          let mkbValue: Void = mkbObject.`widgetEvent`(`error`)
+          self.mockingbirdContext.proxy.updateTarget(&mkbObject, in: mkbTargetBox)
+          return mkbValue
+        }
+      }
+      if let mkbValue = self.mockingbirdContext.stubbing.defaultValueProvider.value.provideValue(for: (Void).self) { return mkbValue }
+      self.mockingbirdContext.stubbing.failTest(for: $0, at: self.mockingbirdContext.sourceLocation)
+    }
+  }
+
+  public func `widgetEvent`(_ `error`: @autoclosure () -> MXPostMessageDefinitions.EventError) -> Mockingbird.Mockable<Mockingbird.FunctionDeclaration, (MXPostMessageDefinitions.EventError) -> Void, Void> {
+    return Mockingbird.Mockable<Mockingbird.FunctionDeclaration, (MXPostMessageDefinitions.EventError) -> Void, Void>(mock: self, invocation: Mockingbird.SwiftInvocation(selectorName: "`widgetEvent`(_ `error`: MXPostMessageDefinitions.EventError) -> Void", selectorType: Mockingbird.SelectorType.method, arguments: [Mockingbird.resolve(`error`)], returnType: Swift.ObjectIdentifier((Void).self)))
   }
 
   // MARK: Mocked `widgetEvent`(_ `payload`: MXPostMessageDefinitions.PulseWidgetEvent.OverdraftWarningCtaTransferFunds)

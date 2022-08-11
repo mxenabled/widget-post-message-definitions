@@ -7,6 +7,10 @@ class Template::SwiftSource < Template::Base
     |
     |public protocol Event: Codable {}
     |
+    |public enum EventError: Error, Equatable {
+    |    case invalidEventURL(url: URL)
+    |}
+    |
     |/** Payloads **/
     |<% post_message_definitions_by_subgroup.each do |subgroup, post_message_definitions| %>
     |public enum <%= event_group_type_name(post_message_definitions.first) %> {
@@ -74,6 +78,7 @@ class Template::SwiftSource < Template::Base
     |
     |public protocol <%= delegate_group_type_name(generic_post_message_definitions.sample) %> {
     |    func widgetEvent(_ url: URL)
+    |    func widgetEvent(_ error: EventError)
     |<%- generic_post_message_definitions.each do |post_message| -%>
     |    func widgetEvent(_ payload: <%= event_group_type_name(post_message) %>.<%= payload_type_name(post_message) %>)
     |<%- end -%>
@@ -86,6 +91,7 @@ class Template::SwiftSource < Template::Base
     |
     |public extension <%= delegate_group_type_name(generic_post_message_definitions.sample) %> {
     |    func widgetEvent(_: URL) {}
+    |    func widgetEvent(_: EventError) {}
     |<%- generic_post_message_definitions.each do |post_message| -%>
     |    func widgetEvent(_: <%= event_group_type_name(post_message) %>.<%= payload_type_name(post_message) %>) {}
     |<%- end -%>
@@ -140,6 +146,7 @@ class Template::SwiftSource < Template::Base
     |        delegate.widgetEvent(url)
     |
     |        guard let event = parse(url) else {
+    |            delegate.widgetEvent(.invalidEventURL(url: url))
     |            return
     |        }
     |
@@ -149,6 +156,7 @@ class Template::SwiftSource < Template::Base
     |            delegate.widgetEvent(event)
     |        <%- end -%>
     |        default:
+    |            // Unreachable
     |            return
     |        }
     |    }

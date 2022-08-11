@@ -11,6 +11,10 @@ import Foundation
 
 public protocol Event: Codable {}
 
+public enum EventError: Error, Equatable {
+    case invalidEventURL(url: URL)
+}
+
 /** Payloads **/
 
 public enum WidgetEvent {
@@ -288,6 +292,7 @@ public struct ConnectUpdateCredentialsInstitution: Codable {
 
 public protocol WidgetEventDelegate {
     func widgetEvent(_ url: URL)
+    func widgetEvent(_ error: EventError)
     func widgetEvent(_ payload: WidgetEvent.Load)
     func widgetEvent(_ payload: WidgetEvent.Ping)
     func widgetEvent(_ payload: WidgetEvent.Navigation)
@@ -296,6 +301,7 @@ public protocol WidgetEventDelegate {
 
 public extension WidgetEventDelegate {
     func widgetEvent(_: URL) {}
+    func widgetEvent(_: EventError) {}
     func widgetEvent(_: WidgetEvent.Load) {}
     func widgetEvent(_: WidgetEvent.Ping) {}
     func widgetEvent(_: WidgetEvent.Navigation) {}
@@ -375,6 +381,7 @@ class WidgetEventDispatcher: Dispatcher {
         delegate.widgetEvent(url)
 
         guard let event = parse(url) else {
+            delegate.widgetEvent(.invalidEventURL(url: url))
             return
         }
 
@@ -388,6 +395,7 @@ class WidgetEventDispatcher: Dispatcher {
         case let event as WidgetEvent.FocusTrap:
             delegate.widgetEvent(event)
         default:
+            // Unreachable
             return
         }
     }
@@ -423,6 +431,7 @@ class ConnectWidgetEventDispatcher: Dispatcher {
         delegate.widgetEvent(url)
 
         guard let event = parse(url) else {
+            delegate.widgetEvent(.invalidEventURL(url: url))
             return
         }
 
@@ -464,6 +473,7 @@ class ConnectWidgetEventDispatcher: Dispatcher {
         case let event as ConnectWidgetEvent.UpdateCredentials:
             delegate.widgetEvent(event)
         default:
+            // Unreachable
             return
         }
     }
@@ -527,6 +537,7 @@ class PulseWidgetEventDispatcher: Dispatcher {
         delegate.widgetEvent(url)
 
         guard let event = parse(url) else {
+            delegate.widgetEvent(.invalidEventURL(url: url))
             return
         }
 
@@ -542,6 +553,7 @@ class PulseWidgetEventDispatcher: Dispatcher {
         case let event as PulseWidgetEvent.OverdraftWarningCtaTransferFunds:
             delegate.widgetEvent(event)
         default:
+            // Unreachable
             return
         }
     }
