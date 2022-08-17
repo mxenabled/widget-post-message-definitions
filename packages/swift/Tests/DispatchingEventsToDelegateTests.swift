@@ -35,6 +35,13 @@ class DispatchingEventsToDelegateTests: QuickSpec {
             }
         }
 
+        describe("Error widgetEvent handler") {
+            it("calls the error handler when unable to parse the event URL") {
+                dispatcher.dispatch(url("bad", "toTheBone"))
+                verify(delegate.widgetEvent(.invalidEventURL(url: URL(string: "mx://bad?metadata=%22toTheBone%22")!))).wasCalled()
+            }
+        }
+
         it("calls the specific widgetEvent handler") {
             let payload = ConnectWidgetEvent.InstitutionSearch(userGuid: "USR-123",
                                                                sessionGuid: "SES-123",
