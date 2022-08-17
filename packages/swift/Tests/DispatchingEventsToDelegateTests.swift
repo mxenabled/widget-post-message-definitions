@@ -14,10 +14,25 @@ class DispatchingEventsToDelegateTests: QuickSpec {
             dispatcher = ConnectWidgetEventDispatcher(delegate)
         }
 
-        it("calls the generic widgetEvent handler") {
-            let payload = WidgetEvent.Load()
-            dispatcher.dispatch(url("load", payload))
-            verify(delegate.widgetEvent(any(WidgetEvent.Load.self))).wasCalled()
+        describe("Generic widgetEvent handler") {
+            context("when the post message event is valid") {
+                it("calls the generic widgetEvent handler and the event specific handler") {
+                    let payload = ConnectWidgetEvent.InstitutionSearch(userGuid: "USR-123",
+                                                                       sessionGuid: "SES-123",
+                                                                       query: "Epic")
+                    dispatcher.dispatch(url("connect/institutionSearch", payload))
+                    verify(delegate.widgetEvent(URL(string: "mx://connect/institutionSearch?metadata=\(encode(payload))")!)).wasCalled()
+                    verify(delegate.widgetEvent(any(ConnectWidgetEvent.InstitutionSearch.self))).wasCalled()
+                }
+            }
+
+            context("when the post message event is invalid and cannot be parsed") {
+                it("calls the generic widgetEvent handler but not the event specific handler") {
+                    dispatcher.dispatch(url("connect/institutionSearch", "badToTheBone"))
+                    verify(delegate.widgetEvent(URL(string: "mx://connect/institutionSearch?metadata=%22badToTheBone%22")!)).wasCalled()
+                    verify(delegate.widgetEvent(any(ConnectWidgetEvent.InstitutionSearch.self))).wasNeverCalled()
+                }
+            }
         }
 
         it("calls the specific widgetEvent handler") {
@@ -81,10 +96,6 @@ class DispatchingEventsToDelegateTests: QuickSpec {
 
 func url<T: Encodable>(_ hostAndPath: String, _ metadata: T) -> URL {
     return URL(string: "mx://\(hostAndPath)?metadata=\(encode(metadata))")!
-}
-
-func encode(_ string: String) -> String {
-    return string.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
 }
 
 func encode<T: Encodable>(_ value: T) -> String {

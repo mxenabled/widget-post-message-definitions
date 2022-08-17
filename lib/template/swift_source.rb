@@ -73,7 +73,7 @@ class Template::SwiftSource < Template::Base
     |/** Delegates **/
     |
     |public protocol <%= delegate_group_type_name(generic_post_message_definitions.sample) %> {
-    |    func widgetEvent(_ payload: Event)
+    |    func widgetEvent(_ url: URL)
     |<%- generic_post_message_definitions.each do |post_message| -%>
     |    func widgetEvent(_ payload: <%= event_group_type_name(post_message) %>.<%= payload_type_name(post_message) %>)
     |<%- end -%>
@@ -85,7 +85,7 @@ class Template::SwiftSource < Template::Base
     |}
     |
     |public extension <%= delegate_group_type_name(generic_post_message_definitions.sample) %> {
-    |    func widgetEvent(_: Event) {}
+    |    func widgetEvent(_: URL) {}
     |<%- generic_post_message_definitions.each do |post_message| -%>
     |    func widgetEvent(_: <%= event_group_type_name(post_message) %>.<%= payload_type_name(post_message) %>) {}
     |<%- end -%>
@@ -137,11 +137,11 @@ class Template::SwiftSource < Template::Base
     |    }
     |
     |    func dispatch(_ url: URL) {
+    |        delegate.widgetEvent(url)
+    |
     |        guard let event = parse(url) else {
     |            return
     |        }
-    |
-    |        delegate.widgetEvent(event)
     |
     |        switch event {
     |        <%- with_generic_post_messages(subgroup, post_messages).each do |post_message| -%>

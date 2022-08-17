@@ -287,7 +287,7 @@ public struct ConnectUpdateCredentialsInstitution: Codable {
 /** Delegates **/
 
 public protocol WidgetEventDelegate {
-    func widgetEvent(_ payload: Event)
+    func widgetEvent(_ url: URL)
     func widgetEvent(_ payload: WidgetEvent.Load)
     func widgetEvent(_ payload: WidgetEvent.Ping)
     func widgetEvent(_ payload: WidgetEvent.Navigation)
@@ -295,7 +295,7 @@ public protocol WidgetEventDelegate {
 }
 
 public extension WidgetEventDelegate {
-    func widgetEvent(_: Event) {}
+    func widgetEvent(_: URL) {}
     func widgetEvent(_: WidgetEvent.Load) {}
     func widgetEvent(_: WidgetEvent.Ping) {}
     func widgetEvent(_: WidgetEvent.Navigation) {}
@@ -372,11 +372,11 @@ class WidgetEventDispatcher: Dispatcher {
     }
 
     func dispatch(_ url: URL) {
+        delegate.widgetEvent(url)
+
         guard let event = parse(url) else {
             return
         }
-
-        delegate.widgetEvent(event)
 
         switch event {
         case let event as WidgetEvent.Load:
@@ -420,11 +420,11 @@ class ConnectWidgetEventDispatcher: Dispatcher {
     }
 
     func dispatch(_ url: URL) {
+        delegate.widgetEvent(url)
+
         guard let event = parse(url) else {
             return
         }
-
-        delegate.widgetEvent(event)
 
         switch event {
         case let event as WidgetEvent.Load:
@@ -524,11 +524,11 @@ class PulseWidgetEventDispatcher: Dispatcher {
     }
 
     func dispatch(_ url: URL) {
+        delegate.widgetEvent(url)
+
         guard let event = parse(url) else {
             return
         }
-
-        delegate.widgetEvent(event)
 
         switch event {
         case let event as WidgetEvent.Load:
