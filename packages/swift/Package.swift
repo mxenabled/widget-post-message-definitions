@@ -6,6 +6,9 @@ let package = Package(
     platforms: [
         .iOS(.v12),
     ],
+    products: [
+        .library(name: "MXPostMessageDefinitions", targets: ["MXPostMessageDefinitions"]),
+    ],
     dependencies: [
         .package(url: "https://github.com/Quick/Quick", from: "5.0.0"),
         .package(name: "Mockingbird", url: "https://github.com/birdrides/mockingbird", from: "0.19.0"),
