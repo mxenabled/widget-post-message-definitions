@@ -42,47 +42,49 @@ class DispatchingEventsToDelegateTests: QuickSpec {
             }
         }
 
-        it("calls the specific widgetEvent handler") {
-            let payload = ConnectWidgetEvent.InstitutionSearch(userGuid: "USR-123",
-                                                               sessionGuid: "SES-123",
-                                                               query: "Epic")
-            dispatcher.dispatch(url("connect/institutionSearch", payload))
-            verify(delegate.widgetEvent(any(where: { $0 == payload }))).wasCalled()
-        }
+        describe("ConnectWidgetEventDelegate") {
+            it("calls the specific widgetEvent handler") {
+                let payload = ConnectWidgetEvent.InstitutionSearch(userGuid: "USR-123",
+                                                                   sessionGuid: "SES-123",
+                                                                   query: "Epic")
+                dispatcher.dispatch(url("connect/institutionSearch", payload))
+                verify(delegate.widgetEvent(any(where: { $0 == payload }))).wasCalled()
+            }
 
-        it("is able to dispatch an event that includes an enum value") {
-            let payload = ConnectWidgetEvent.Loaded(userGuid: "USR-123",
-                                                    sessionGuid: "SES-123",
-                                                    initialStep: .search)
-            dispatcher.dispatch(url("connect/loaded", payload))
-            verify(delegate.widgetEvent(any(where: { $0 == payload }))).wasCalled()
-        }
-
-        it("is able to dispatch an event that includes a struct value") {
-            let payload = ConnectWidgetEvent.EnterCredentials(userGuid: "USR-123",
-                                                              sessionGuid: "SES-123",
-                                                              institution: ConnectEnterCredentialsInstitution(code: "i-code",
-                                                                                                              guid: "INS-123"))
-            dispatcher.dispatch(url("connect/enterCredentials", payload))
-            verify(delegate.widgetEvent(any(where: { $0 == payload }))).wasCalled()
-        }
-
-        it("is able to dispatch an event that includes an optional field") {
-            let payload = ConnectWidgetEvent.OAuthError(userGuid: "USR-123",
+            it("is able to dispatch an event that includes an enum value") {
+                let payload = ConnectWidgetEvent.Loaded(userGuid: "USR-123",
                                                         sessionGuid: "SES-123",
-                                                        memberGuid: "MBR-123")
-            dispatcher.dispatch(url("connect/oauthError", payload))
-            verify(delegate.widgetEvent(any(where: { $0 == payload }))).wasCalled()
+                                                        initialStep: .search)
+                dispatcher.dispatch(url("connect/loaded", payload))
+                verify(delegate.widgetEvent(any(where: { $0 == payload }))).wasCalled()
+            }
+
+            it("is able to dispatch an event that includes a struct value") {
+                let payload = ConnectWidgetEvent.EnterCredentials(userGuid: "USR-123",
+                                                                  sessionGuid: "SES-123",
+                                                                  institution: ConnectEnterCredentialsInstitution(code: "i-code",
+                                                                                                                  guid: "INS-123"))
+                dispatcher.dispatch(url("connect/enterCredentials", payload))
+                verify(delegate.widgetEvent(any(where: { $0 == payload }))).wasCalled()
+            }
+
+            it("is able to dispatch an event that includes an optional field") {
+                let payload = ConnectWidgetEvent.OAuthError(userGuid: "USR-123",
+                                                            sessionGuid: "SES-123",
+                                                            memberGuid: "MBR-123")
+                dispatcher.dispatch(url("connect/oauthError", payload))
+                verify(delegate.widgetEvent(any(where: { $0 == payload }))).wasCalled()
+            }
+
+            it("is able to dispatch an event that excludes an optional field") {
+                let payload = ConnectWidgetEvent.OAuthError(userGuid: "USR-123",
+                                                            sessionGuid: "SES-123")
+                dispatcher.dispatch(url("connect/oauthError", payload))
+                verify(delegate.widgetEvent(any(where: { $0 == payload }))).wasCalled()
+            }
         }
 
-        it("is able to dispatch an event that excludes an optional field") {
-            let payload = ConnectWidgetEvent.OAuthError(userGuid: "USR-123",
-                                                        sessionGuid: "SES-123")
-            dispatcher.dispatch(url("connect/oauthError", payload))
-            verify(delegate.widgetEvent(any(where: { $0 == payload }))).wasCalled()
-        }
-
-        context("PulseWidgetEventDelegate") {
+        describe("PulseWidgetEventDelegate") {
             var delegate: PulseWidgetEventDelegateMock!
             var dispatcher: PulseWidgetEventDispatcher!
 
