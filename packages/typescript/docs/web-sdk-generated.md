@@ -21,12 +21,11 @@ project.
     - `initial_step` (`string`)
         - One of:
             - `"search"`
-            - `"selectMember"`
+            - `"verifyExistingMember"`
             - `"enterCreds"`
             - `"mfa"`
             - `"connected"`
             - `"loginError"`
-            - `"disclosure"`
 
 <details>
 <summary>Click here to view a sample usage of <code>onLoaded</code>.</summary>

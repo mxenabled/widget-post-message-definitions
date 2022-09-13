@@ -42,12 +42,11 @@ post_messages:
           initial_step:
             type:
               - search
-              - selectMember
+              - verifyExistingMember
               - enterCreds
               - mfa
               - connected
               - loginError
-              - disclosure
       enterCredentials:
         payload:
           <<: *user_session_properties

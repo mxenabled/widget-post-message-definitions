@@ -113,7 +113,7 @@ export type ConnectLoadedPayload = {
   type: Type.ConnectLoaded,
   user_guid: string,
   session_guid: string,
-  initial_step: "search" | "selectMember" | "enterCreds" | "mfa" | "connected" | "loginError" | "disclosure",
+  initial_step: "search" | "verifyExistingMember" | "enterCreds" | "mfa" | "connected" | "loginError",
 }
 
 export type ConnectEnterCredentialsPayload = {
@@ -314,13 +314,13 @@ function buildPayload(type: Type, metadata: Metadata): Payload {
     case Type.ConnectLoaded:
       assertMessageProp(metadata, "mx/connect/loaded", "user_guid", "string")
       assertMessageProp(metadata, "mx/connect/loaded", "session_guid", "string")
-      assertMessageProp(metadata, "mx/connect/loaded", "initial_step", ["search", "selectMember", "enterCreds", "mfa", "connected", "loginError", "disclosure"])
+      assertMessageProp(metadata, "mx/connect/loaded", "initial_step", ["search", "verifyExistingMember", "enterCreds", "mfa", "connected", "loginError"])
 
       return {
         type,
         user_guid: metadata.user_guid as string,
         session_guid: metadata.session_guid as string,
-        initial_step: metadata.initial_step as "search" | "selectMember" | "enterCreds" | "mfa" | "connected" | "loginError" | "disclosure",
+        initial_step: metadata.initial_step as "search" | "verifyExistingMember" | "enterCreds" | "mfa" | "connected" | "loginError",
       }
 
     case Type.ConnectEnterCredentials:

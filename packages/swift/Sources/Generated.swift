@@ -260,12 +260,11 @@ public enum AccountEvent {
 
 public enum ConnectLoadedInitialStep: String, Codable {
     case search
-    case selectMember
+    case verifyExistingMember
     case enterCreds
     case mfa
     case connected
     case loginError
-    case disclosure
 }
 
 public struct ConnectEnterCredentialsInstitution: Codable {
