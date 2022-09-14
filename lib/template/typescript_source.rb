@@ -189,14 +189,18 @@ class Template::TypescriptSource < Template::Base
     | * widget. Does not handle widget specific post messages. See other dispatch
     | * methods for widget specific dispatching.
     | */
-    |export function <%= dispatch_location_change_function_name(:widget) %>(url: string, callbacks: <%= callback_props_group_type_name(:widget) %><string>) {
+    |export function <%= dispatch_location_change_function_name(:widget) %>(url: string, callbacks: <%= callback_props_group_type_name(:widget) %><string>): Payload | undefined {
+    |  let payload: Payload | undefined
+    |
     |  try {
     |    dispatchOnMessage(url, callbacks)
-    |    const payload = buildPayloadFromUrl(url)
+    |    payload = buildPayloadFromUrl(url)
     |    <%= dispatch_internal_message_function_name(:widget) %>(payload, callbacks)
     |  } catch (error) {
     |    dispatchError(url, error, callbacks)
     |  }
+    |
+    |  return payload
     |}
     |
     |/**
@@ -204,14 +208,18 @@ class Template::TypescriptSource < Template::Base
     | * widget. Does not handle widget specific post messages. See other dispatch
     | * methods for widget specific dispatching.
     | */
-    |export function <%= dispatch_post_message_function_name(:widget) %>(event: MessageEvent<MessageEventData>, callbacks: <%= callback_props_group_type_name(:widget) %><MessageEvent<MessageEventData>>) {
+    |export function <%= dispatch_post_message_function_name(:widget) %>(event: MessageEvent<MessageEventData>, callbacks: <%= callback_props_group_type_name(:widget) %><MessageEvent<MessageEventData>>): Payload | undefined {
+    |  let payload: Payload | undefined
+    |
     |  try {
     |    dispatchOnMessage(event, callbacks)
-    |    const payload = buildPayloadFromPostMessageEventData(event.data)
+    |    payload = buildPayloadFromPostMessageEventData(event.data)
     |    <%= dispatch_internal_message_function_name(:widget) %>(payload, callbacks)
     |  } catch (error) {
     |    dispatchError(event, error, callbacks)
     |  }
+    |
+    |  return payload
     |}
     |
     |/**
@@ -235,28 +243,36 @@ class Template::TypescriptSource < Template::Base
     | * Dispatch a post message event that we got from a url change event for the
     | * <%= widget_name(subgroup) %>.
     | */
-    |export function <%= dispatch_location_change_function_name(subgroup) %>(url: string, callbacks: <%= callback_props_group_type_name(subgroup) %><string>) {
+    |export function <%= dispatch_location_change_function_name(subgroup) %>(url: string, callbacks: <%= callback_props_group_type_name(subgroup) %><string>): Payload | undefined {
+    |  let payload: Payload | undefined
+    |
     |  try {
     |    dispatchOnMessage(url, callbacks)
-    |    const payload = buildPayloadFromUrl(url)
+    |    payload = buildPayloadFromUrl(url)
     |    <%= dispatch_internal_message_function_name(subgroup) %>(payload, callbacks)
     |  } catch (error) {
     |    dispatchError(url, error, callbacks)
     |  }
+    |
+    |    return payload
     |}
     |
     |/**
     | * Dispatch a post message event that we got from a window/document message for the
     | * <%= widget_name(subgroup) %>.
     | */
-    |export function <%= dispatch_post_message_function_name(subgroup) %>(event: MessageEvent<MessageEventData>, callbacks: <%= callback_props_group_type_name(subgroup) %><MessageEvent<MessageEventData>>) {
+    |export function <%= dispatch_post_message_function_name(subgroup) %>(event: MessageEvent<MessageEventData>, callbacks: <%= callback_props_group_type_name(subgroup) %><MessageEvent<MessageEventData>>): Payload | undefined {
+    |  let payload: Payload | undefined
+    |
     |  try {
     |    dispatchOnMessage(event, callbacks)
-    |    const payload = buildPayloadFromPostMessageEventData(event.data)
+    |    payload = buildPayloadFromPostMessageEventData(event.data)
     |    <%= dispatch_internal_message_function_name(subgroup) %>(payload, callbacks)
     |  } catch (error) {
     |    dispatchError(event, error, callbacks)
     |  }
+    |
+    |    return payload
     |}
     |
     |/**

@@ -629,14 +629,18 @@ function dispatchOnMessage<T>(message: T, callbacks: BasePostMessageCallbackProp
  * widget. Does not handle widget specific post messages. See other dispatch
  * methods for widget specific dispatching.
  */
-export function dispatchWidgetLocationChangeEvent(url: string, callbacks: WidgetPostMessageCallbackProps<string>) {
+export function dispatchWidgetLocationChangeEvent(url: string, callbacks: WidgetPostMessageCallbackProps<string>): Payload | undefined {
+  let payload: Payload | undefined
+
   try {
     dispatchOnMessage(url, callbacks)
-    const payload = buildPayloadFromUrl(url)
+    payload = buildPayloadFromUrl(url)
     dispatchWidgetInternalMessage(payload, callbacks)
   } catch (error) {
     dispatchError(url, error, callbacks)
   }
+
+  return payload
 }
 
 /**
@@ -644,14 +648,18 @@ export function dispatchWidgetLocationChangeEvent(url: string, callbacks: Widget
  * widget. Does not handle widget specific post messages. See other dispatch
  * methods for widget specific dispatching.
  */
-export function dispatchWidgetPostMessageEvent(event: MessageEvent<MessageEventData>, callbacks: WidgetPostMessageCallbackProps<MessageEvent<MessageEventData>>) {
+export function dispatchWidgetPostMessageEvent(event: MessageEvent<MessageEventData>, callbacks: WidgetPostMessageCallbackProps<MessageEvent<MessageEventData>>): Payload | undefined {
+  let payload: Payload | undefined
+
   try {
     dispatchOnMessage(event, callbacks)
-    const payload = buildPayloadFromPostMessageEventData(event.data)
+    payload = buildPayloadFromPostMessageEventData(event.data)
     dispatchWidgetInternalMessage(payload, callbacks)
   } catch (error) {
     dispatchError(event, error, callbacks)
   }
+
+  return payload
 }
 
 /**
@@ -689,28 +697,36 @@ function dispatchWidgetInternalMessage<T>(payload: Payload, callbacks: WidgetPos
  * Dispatch a post message event that we got from a url change event for the
  * Connect Widget.
  */
-export function dispatchConnectLocationChangeEvent(url: string, callbacks: ConnectPostMessageCallbackProps<string>) {
+export function dispatchConnectLocationChangeEvent(url: string, callbacks: ConnectPostMessageCallbackProps<string>): Payload | undefined {
+  let payload: Payload | undefined
+
   try {
     dispatchOnMessage(url, callbacks)
-    const payload = buildPayloadFromUrl(url)
+    payload = buildPayloadFromUrl(url)
     dispatchConnectInternalMessage(payload, callbacks)
   } catch (error) {
     dispatchError(url, error, callbacks)
   }
+
+    return payload
 }
 
 /**
  * Dispatch a post message event that we got from a window/document message for the
  * Connect Widget.
  */
-export function dispatchConnectPostMessageEvent(event: MessageEvent<MessageEventData>, callbacks: ConnectPostMessageCallbackProps<MessageEvent<MessageEventData>>) {
+export function dispatchConnectPostMessageEvent(event: MessageEvent<MessageEventData>, callbacks: ConnectPostMessageCallbackProps<MessageEvent<MessageEventData>>): Payload | undefined {
+  let payload: Payload | undefined
+
   try {
     dispatchOnMessage(event, callbacks)
-    const payload = buildPayloadFromPostMessageEventData(event.data)
+    payload = buildPayloadFromPostMessageEventData(event.data)
     dispatchConnectInternalMessage(payload, callbacks)
   } catch (error) {
     dispatchError(event, error, callbacks)
   }
+
+    return payload
 }
 
 /**
@@ -803,28 +819,36 @@ function dispatchConnectInternalMessage<T>(payload: Payload, callbacks: ConnectP
  * Dispatch a post message event that we got from a url change event for the
  * Pulse Widget.
  */
-export function dispatchPulseLocationChangeEvent(url: string, callbacks: PulsePostMessageCallbackProps<string>) {
+export function dispatchPulseLocationChangeEvent(url: string, callbacks: PulsePostMessageCallbackProps<string>): Payload | undefined {
+  let payload: Payload | undefined
+
   try {
     dispatchOnMessage(url, callbacks)
-    const payload = buildPayloadFromUrl(url)
+    payload = buildPayloadFromUrl(url)
     dispatchPulseInternalMessage(payload, callbacks)
   } catch (error) {
     dispatchError(url, error, callbacks)
   }
+
+    return payload
 }
 
 /**
  * Dispatch a post message event that we got from a window/document message for the
  * Pulse Widget.
  */
-export function dispatchPulsePostMessageEvent(event: MessageEvent<MessageEventData>, callbacks: PulsePostMessageCallbackProps<MessageEvent<MessageEventData>>) {
+export function dispatchPulsePostMessageEvent(event: MessageEvent<MessageEventData>, callbacks: PulsePostMessageCallbackProps<MessageEvent<MessageEventData>>): Payload | undefined {
+  let payload: Payload | undefined
+
   try {
     dispatchOnMessage(event, callbacks)
-    const payload = buildPayloadFromPostMessageEventData(event.data)
+    payload = buildPayloadFromPostMessageEventData(event.data)
     dispatchPulseInternalMessage(payload, callbacks)
   } catch (error) {
     dispatchError(event, error, callbacks)
   }
+
+    return payload
 }
 
 /**
