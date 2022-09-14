@@ -54,7 +54,7 @@ class DispatchingEventsToDelegateTests: QuickSpec {
             it("is able to dispatch an event that includes an enum value") {
                 let payload = ConnectWidgetEvent.Loaded(userGuid: "USR-123",
                                                         sessionGuid: "SES-123",
-                                                        initialStep: .search)
+                                                        initialStep: "search")
                 dispatcher.dispatch(url("connect/loaded", payload))
                 verify(delegate.widgetEvent(any(where: { $0 == payload }))).wasCalled()
             }
