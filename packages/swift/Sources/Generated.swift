@@ -69,7 +69,7 @@ public enum ConnectWidgetEvent {
     public struct Loaded: Event {
         public var userGuid: String
         public var sessionGuid: String
-        public var initialStep: ConnectLoadedInitialStep
+        public var initialStep: String
 
         public static func == (lhs: ConnectWidgetEvent.Loaded, rhs: ConnectWidgetEvent.Loaded) -> Bool {
             return lhs.userGuid == rhs.userGuid
@@ -258,14 +258,6 @@ public enum AccountEvent {
     }
 }
 
-public enum ConnectLoadedInitialStep: String, Codable {
-    case search
-    case verifyExistingMember
-    case enterCreds
-    case mfa
-    case connected
-    case loginError
-}
 
 public struct ConnectEnterCredentialsInstitution: Codable {
     public let code: String
