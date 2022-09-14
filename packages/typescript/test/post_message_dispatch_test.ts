@@ -1,4 +1,6 @@
 import {
+  Payload,
+  Type,
   WidgetPostMessageCallbackProps,
   dispatchConnectLocationChangeEvent,
   dispatchConnectPostMessageEvent,
@@ -107,7 +109,7 @@ const account = {
 const accountCreatedUrl = genPostMessageUrl("ms://account/created", account)
 
 const testSharedCallbacks = (
-  dispatch: (url: string, callbacks: WidgetPostMessageCallbackProps<string>) => void,
+  dispatch: (url: string, callbacks: WidgetPostMessageCallbackProps<string>) => Payload | undefined,
 ) => {
   describe("onMessage", () => {
     test("callback is called with valid post message", () => {
@@ -233,6 +235,15 @@ const testSharedCallbacks = (
           expect(payload.guid).toBe(accountGuid)
         },
       })
+    })
+  })
+
+  describe("return values", () => {
+    test("the parsed payload is returned", () => {
+      const event = dispatch(pingUrl, {})
+
+      expect(event).toBeDefined()
+      expect(event?.type).toBe(Type.Ping)
     })
   })
 }

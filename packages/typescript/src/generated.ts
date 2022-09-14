@@ -702,7 +702,7 @@ export function dispatchConnectLocationChangeEvent(url: string, callbacks: Conne
 
   try {
     dispatchOnMessage(url, callbacks)
-    const payload = buildPayloadFromUrl(url)
+    payload = buildPayloadFromUrl(url)
     dispatchConnectInternalMessage(payload, callbacks)
   } catch (error) {
     dispatchError(url, error, callbacks)
@@ -720,7 +720,7 @@ export function dispatchConnectPostMessageEvent(event: MessageEvent<MessageEvent
 
   try {
     dispatchOnMessage(event, callbacks)
-    const payload = buildPayloadFromPostMessageEventData(event.data)
+    payload = buildPayloadFromPostMessageEventData(event.data)
     dispatchConnectInternalMessage(payload, callbacks)
   } catch (error) {
     dispatchError(event, error, callbacks)
@@ -824,7 +824,7 @@ export function dispatchPulseLocationChangeEvent(url: string, callbacks: PulsePo
 
   try {
     dispatchOnMessage(url, callbacks)
-    const payload = buildPayloadFromUrl(url)
+    payload = buildPayloadFromUrl(url)
     dispatchPulseInternalMessage(payload, callbacks)
   } catch (error) {
     dispatchError(url, error, callbacks)
@@ -842,7 +842,7 @@ export function dispatchPulsePostMessageEvent(event: MessageEvent<MessageEventDa
 
   try {
     dispatchOnMessage(event, callbacks)
-    const payload = buildPayloadFromPostMessageEventData(event.data)
+    payload = buildPayloadFromPostMessageEventData(event.data)
     dispatchPulseInternalMessage(payload, callbacks)
   } catch (error) {
     dispatchError(event, error, callbacks)

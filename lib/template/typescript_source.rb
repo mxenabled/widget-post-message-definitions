@@ -248,7 +248,7 @@ class Template::TypescriptSource < Template::Base
     |
     |  try {
     |    dispatchOnMessage(url, callbacks)
-    |    const payload = buildPayloadFromUrl(url)
+    |    payload = buildPayloadFromUrl(url)
     |    <%= dispatch_internal_message_function_name(subgroup) %>(payload, callbacks)
     |  } catch (error) {
     |    dispatchError(url, error, callbacks)
@@ -266,7 +266,7 @@ class Template::TypescriptSource < Template::Base
     |
     |  try {
     |    dispatchOnMessage(event, callbacks)
-    |    const payload = buildPayloadFromPostMessageEventData(event.data)
+    |    payload = buildPayloadFromPostMessageEventData(event.data)
     |    <%= dispatch_internal_message_function_name(subgroup) %>(payload, callbacks)
     |  } catch (error) {
     |    dispatchError(event, error, callbacks)
