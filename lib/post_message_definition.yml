@@ -39,15 +39,7 @@ post_messages:
       loaded:
         payload:
           <<: *user_session_properties
-          initial_step:
-            type:
-              - search
-              - selectMember
-              - enterCreds
-              - mfa
-              - connected
-              - loginError
-              - disclosure
+          initial_step: string
       enterCredentials:
         payload:
           <<: *user_session_properties
