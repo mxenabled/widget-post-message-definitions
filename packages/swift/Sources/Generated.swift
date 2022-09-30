@@ -344,7 +344,7 @@ public extension PulseWidgetEventDelegate {
 /** Dispatchers **/
 
 protocol Dispatcher {
-    func dispatch(_: URL)
+    func dispatch(_: URL) -> Event?
 }
 
 extension Dispatcher {
@@ -368,12 +368,12 @@ class WidgetEventDispatcher: Dispatcher {
         self.delegate = delegate
     }
 
-    func dispatch(_ url: URL) {
+    func dispatch(_ url: URL) -> Event? {
         delegate.widgetEvent(url)
 
         guard let event = parse(url) else {
             delegate.widgetEvent(.invalidEventURL(url: url))
-            return
+            return nil
         }
 
         switch event {
@@ -387,8 +387,10 @@ class WidgetEventDispatcher: Dispatcher {
             delegate.widgetEvent(event)
         default:
             // Unreachable
-            return
+            return nil
         }
+
+        return event
     }
 
     func parse(_ url: URL) -> Event? {
@@ -418,12 +420,12 @@ class ConnectWidgetEventDispatcher: Dispatcher {
         self.delegate = delegate
     }
 
-    func dispatch(_ url: URL) {
+    func dispatch(_ url: URL) -> Event? {
         delegate.widgetEvent(url)
 
         guard let event = parse(url) else {
             delegate.widgetEvent(.invalidEventURL(url: url))
-            return
+            return nil
         }
 
         switch event {
@@ -465,8 +467,10 @@ class ConnectWidgetEventDispatcher: Dispatcher {
             delegate.widgetEvent(event)
         default:
             // Unreachable
-            return
+            return nil
         }
+
+        return event
     }
 
     func parse(_ url: URL) -> Event? {
@@ -524,12 +528,12 @@ class PulseWidgetEventDispatcher: Dispatcher {
         self.delegate = delegate
     }
 
-    func dispatch(_ url: URL) {
+    func dispatch(_ url: URL) -> Event? {
         delegate.widgetEvent(url)
 
         guard let event = parse(url) else {
             delegate.widgetEvent(.invalidEventURL(url: url))
-            return
+            return nil
         }
 
         switch event {
@@ -545,8 +549,10 @@ class PulseWidgetEventDispatcher: Dispatcher {
             delegate.widgetEvent(event)
         default:
             // Unreachable
-            return
+            return nil
         }
+
+        return event
     }
 
     func parse(_ url: URL) -> Event? {

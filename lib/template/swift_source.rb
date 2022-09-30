@@ -118,7 +118,7 @@ class Template::SwiftSource < Template::Base
     |/** Dispatchers **/
     |
     |protocol Dispatcher {
-    |    func dispatch(_: URL)
+    |    func dispatch(_: URL) -> Event?
     |}
     |
     |extension Dispatcher {
@@ -142,12 +142,12 @@ class Template::SwiftSource < Template::Base
     |        self.delegate = delegate
     |    }
     |
-    |    func dispatch(_ url: URL) {
+    |    func dispatch(_ url: URL) -> Event? {
     |        delegate.widgetEvent(url)
     |
     |        guard let event = parse(url) else {
     |            delegate.widgetEvent(.invalidEventURL(url: url))
-    |            return
+    |            return nil
     |        }
     |
     |        switch event {
@@ -157,8 +157,10 @@ class Template::SwiftSource < Template::Base
     |        <%- end -%>
     |        default:
     |            // Unreachable
-    |            return
+    |            return nil
     |        }
+    |
+    |        return event
     |    }
     |
     |    func parse(_ url: URL) -> Event? {
