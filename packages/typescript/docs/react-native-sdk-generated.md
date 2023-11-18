@@ -436,3 +436,31 @@ import { ConnectWidget } from "@mxenabled/react-native-widget-sdk"
 
 </details>
 
+---
+### Back to search (`mx/connect/backToSearch`)
+
+- Widget callback prop name: `onBackToSearch`
+- Payload fields:
+    - `user_guid` (`string`)
+    - `session_guid` (`string`)
+    - `context` (`string`)
+
+<details>
+<summary>Click here to view a sample usage of <code>onBackToSearch</code>.</summary>
+
+```jsx
+import { ConnectWidget } from "@mxenabled/react-native-widget-sdk"
+
+<ConnectWidget
+  url="https://widgets.moneydesktop.com/md/connect/..."
+
+  onBackToSearch={(payload) => {
+    console.log(`User guid: ${payload.user_guid}`)
+    console.log(`Session guid: ${payload.session_guid}`)
+    console.log(`Context: ${payload.context}`)
+  }
+/>
+```
+
+</details>
+
