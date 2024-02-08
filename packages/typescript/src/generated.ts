@@ -221,7 +221,7 @@ export type ConnectBackToSearchPayload = {
   type: Type.ConnectBackToSearch,
   user_guid: string,
   session_guid: string,
-  context: string,
+  context?: string,
 }
 
 export type PulseOverdraftWarningCtaTransferFundsPayload = {
@@ -509,13 +509,15 @@ function buildPayload(type: Type, metadata: Metadata): Payload {
     case Type.ConnectBackToSearch:
       assertMessageProp(metadata, "mx/connect/backToSearch", "user_guid", "string")
       assertMessageProp(metadata, "mx/connect/backToSearch", "session_guid", "string")
-      assertMessageProp(metadata, "mx/connect/backToSearch", "context", "string")
+      assertMessageProp(metadata, "mx/connect/backToSearch", "context", "string", {
+        optional: true,
+      })
 
       return {
         type,
         user_guid: metadata.user_guid as string,
         session_guid: metadata.session_guid as string,
-        context: metadata.context as string,
+        context: metadata.context as string | undefined,
       }
 
     case Type.PulseOverdraftWarningCtaTransferFunds:

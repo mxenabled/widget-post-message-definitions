@@ -237,7 +237,7 @@ public enum ConnectWidgetEvent {
     public struct BackToSearch: Event {
         public var userGuid: String
         public var sessionGuid: String
-        public var context: String
+        public var context: String?
 
         public static func == (lhs: ConnectWidgetEvent.BackToSearch, rhs: ConnectWidgetEvent.BackToSearch) -> Bool {
             return lhs.userGuid == rhs.userGuid

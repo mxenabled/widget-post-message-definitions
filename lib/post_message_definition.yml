@@ -125,7 +125,9 @@ post_messages:
       backToSearch:
         payload:
           <<: *user_session_properties
-          context: string
+          context:
+            type: string
+            optional: true
     pulse:
       overdraftWarning/cta/transferFunds:
         payload:
