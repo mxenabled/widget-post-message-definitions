@@ -415,7 +415,7 @@ const widget = widgetSdk.ConnectWidget({
 - Payload fields:
     - `user_guid` (`string`)
     - `session_guid` (`string`)
-    - `context` (`string`)
+    - `context` (optional) (`string`)
 
 <details>
 <summary>Click here to view a sample usage of <code>onBackToSearch</code>.</summary>
