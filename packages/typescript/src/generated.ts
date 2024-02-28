@@ -37,6 +37,7 @@ export enum Type {
   ConnectSubmitMFA = "mx/connect/submitMFA",
   ConnectUpdateCredentials = "mx/connect/updateCredentials",
   ConnectBackToSearch = "mx/connect/backToSearch",
+  ConnectInvalidData = "mx/connect/invalidData",
   PulseOverdraftWarningCtaTransferFunds = "mx/pulse/overdraftWarning/cta/transferFunds",
   AccountCreated = "mx/account/created",
 }
@@ -78,6 +79,8 @@ const typeLookup: Record<string, Type> = {
   "mx/connect/updatecredentials": Type.ConnectUpdateCredentials, // cspell:disable-line
   [Type.ConnectBackToSearch]: Type.ConnectBackToSearch,
   "mx/connect/backtosearch": Type.ConnectBackToSearch, // cspell:disable-line
+  [Type.ConnectInvalidData]: Type.ConnectInvalidData,
+  "mx/connect/invaliddata": Type.ConnectInvalidData, // cspell:disable-line
   [Type.PulseOverdraftWarningCtaTransferFunds]: Type.PulseOverdraftWarningCtaTransferFunds,
   "mx/pulse/overdraftwarning/cta/transferfunds": Type.PulseOverdraftWarningCtaTransferFunds, // cspell:disable-line
   [Type.AccountCreated]: Type.AccountCreated,
@@ -224,6 +227,14 @@ export type ConnectBackToSearchPayload = {
   context?: string,
 }
 
+export type ConnectInvalidDataPayload = {
+  type: Type.ConnectInvalidData,
+  user_guid: string,
+  session_guid: string,
+  member_guid: string,
+  code: number,
+}
+
 export type PulseOverdraftWarningCtaTransferFundsPayload = {
   type: Type.PulseOverdraftWarningCtaTransferFunds,
   account_guid: string,
@@ -257,6 +268,7 @@ export type WidgetPayload =
   | ConnectSubmitMFAPayload
   | ConnectUpdateCredentialsPayload
   | ConnectBackToSearchPayload
+  | ConnectInvalidDataPayload
   | PulseOverdraftWarningCtaTransferFundsPayload
 
 export type EntityPayload =
@@ -520,6 +532,20 @@ function buildPayload(type: Type, metadata: Metadata): Payload {
         context: metadata.context as string | undefined,
       }
 
+    case Type.ConnectInvalidData:
+      assertMessageProp(metadata, "mx/connect/invalidData", "user_guid", "string")
+      assertMessageProp(metadata, "mx/connect/invalidData", "session_guid", "string")
+      assertMessageProp(metadata, "mx/connect/invalidData", "member_guid", "string")
+      assertMessageProp(metadata, "mx/connect/invalidData", "code", "number")
+
+      return {
+        type,
+        user_guid: metadata.user_guid as string,
+        session_guid: metadata.session_guid as string,
+        member_guid: metadata.member_guid as string,
+        code: metadata.code as number,
+      }
+
     case Type.PulseOverdraftWarningCtaTransferFunds:
       assertMessageProp(metadata, "mx/pulse/overdraftWarning/cta/transferFunds", "account_guid", "string")
       assertMessageProp(metadata, "mx/pulse/overdraftWarning/cta/transferFunds", "amount", "number")
@@ -621,6 +647,7 @@ export type ConnectPostMessageCallbackProps<T> = WidgetPostMessageCallbackProps<
   onSubmitMFA?: (payload: ConnectSubmitMFAPayload) => void
   onUpdateCredentials?: (payload: ConnectUpdateCredentialsPayload) => void
   onBackToSearch?: (payload: ConnectBackToSearchPayload) => void
+  onInvalidData?: (payload: ConnectInvalidDataPayload) => void
 }
 
 export type PulsePostMessageCallbackProps<T> = WidgetPostMessageCallbackProps<T> & {
@@ -838,6 +865,10 @@ function dispatchConnectInternalMessage<T>(payload: Payload, callbacks: ConnectP
 
     case Type.ConnectBackToSearch:
       callbacks.onBackToSearch?.(payload)
+      break
+
+    case Type.ConnectInvalidData:
+      callbacks.onInvalidData?.(payload)
       break
 
     default:

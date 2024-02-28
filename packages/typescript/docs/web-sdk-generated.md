@@ -434,3 +434,31 @@ const widget = widgetSdk.ConnectWidget({
 
 </details>
 
+---
+### Invalid data (`mx/connect/invalidData`)
+
+- Widget callback prop name: `onInvalidData`
+- Payload fields:
+    - `user_guid` (`string`)
+    - `session_guid` (`string`)
+    - `member_guid` (`string`)
+    - `code` (`number`)
+
+<details>
+<summary>Click here to view a sample usage of <code>onInvalidData</code>.</summary>
+
+```javascript
+const widget = widgetSdk.ConnectWidget({
+  url: "https://widgets.moneydesktop.com/md/connect/...",
+
+  onInvalidData: (payload) => {
+    console.log(`User guid: ${payload.user_guid}`)
+    console.log(`Session guid: ${payload.session_guid}`)
+    console.log(`Member guid: ${payload.member_guid}`)
+    console.log(`Code: ${payload.code}`)
+  }
+})
+```
+
+</details>
+

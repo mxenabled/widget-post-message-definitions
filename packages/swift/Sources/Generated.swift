@@ -245,6 +245,19 @@ public enum ConnectWidgetEvent {
                 && lhs.context == rhs.context
         }
     }
+    public struct InvalidData: Event {
+        public var userGuid: String
+        public var sessionGuid: String
+        public var memberGuid: String
+        public var code: Double
+
+        public static func == (lhs: ConnectWidgetEvent.InvalidData, rhs: ConnectWidgetEvent.InvalidData) -> Bool {
+            return lhs.userGuid == rhs.userGuid
+                && lhs.sessionGuid == rhs.sessionGuid
+                && lhs.memberGuid == rhs.memberGuid
+                && lhs.code == rhs.code
+        }
+    }
 }
 
 public enum PulseWidgetEvent {
@@ -326,6 +339,7 @@ public protocol ConnectWidgetEventDelegate: WidgetEventDelegate {
     func widgetEvent(_ payload: ConnectWidgetEvent.SubmitMFA)
     func widgetEvent(_ payload: ConnectWidgetEvent.UpdateCredentials)
     func widgetEvent(_ payload: ConnectWidgetEvent.BackToSearch)
+    func widgetEvent(_ payload: ConnectWidgetEvent.InvalidData)
 }
 
 public extension ConnectWidgetEventDelegate {
@@ -344,6 +358,7 @@ public extension ConnectWidgetEventDelegate {
     func widgetEvent(_: ConnectWidgetEvent.SubmitMFA) {}
     func widgetEvent(_: ConnectWidgetEvent.UpdateCredentials) {}
     func widgetEvent(_: ConnectWidgetEvent.BackToSearch) {}
+    func widgetEvent(_: ConnectWidgetEvent.InvalidData) {}
 }
 
 public protocol PulseWidgetEventDelegate: WidgetEventDelegate {
@@ -480,6 +495,8 @@ class ConnectWidgetEventDispatcher: Dispatcher {
             delegate.widgetEvent(event)
         case let event as ConnectWidgetEvent.BackToSearch:
             delegate.widgetEvent(event)
+        case let event as ConnectWidgetEvent.InvalidData:
+            delegate.widgetEvent(event)
         default:
             // Unreachable
             return nil
@@ -532,6 +549,8 @@ class ConnectWidgetEventDispatcher: Dispatcher {
             return try? decode(ConnectWidgetEvent.UpdateCredentials.self, metadata)
         case ("connect", "/backToSearch"):
             return try? decode(ConnectWidgetEvent.BackToSearch.self, metadata)
+        case ("connect", "/invalidData"):
+            return try? decode(ConnectWidgetEvent.InvalidData.self, metadata)
         default:
             return .none
         }
